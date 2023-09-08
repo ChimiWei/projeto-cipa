@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Home'}); %>
+   <!-- datepicker  -->
+   <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap-datepicker.css'>
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+   <script src='js/bootstrap-datepicker.min.js'></script>
+</head>
+<body>
+    <%- include('partials/header'); %>
+    <section class="my-3">
+        <h1>  </h1>
+        <% if (user) { %>
+            <h1 class="display-5 my-3"> Olá <%= user.name %> </h1>
+        <% } %>   
+    <% if (locals.cipa[0]) { %>
+        <%- include('components/inscricao/viewInscricao', {cipa: cipa[0]}); %>
+    <% } else { %>
+    <%- include('components/inscricao/addInscricao' ); %>
+    <% } %> 
+    
+    </section>    
+    <%- include('partials/footer'); %>
+    <script src='js/app.js'></script>
+
+
+</body>
+</html>

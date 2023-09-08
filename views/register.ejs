@@ -1,0 +1,50 @@
+<%- include('partials/head', {title: 'Register'}); %>
+<body class="bg-darkpurple">
+ <section class="st-section">
+     <div class="container ">
+        <div class="row justify-content-center "> 
+        <div class="col-md-6 text-center mb-5">
+           <h2 class="title brand text-darkgreen"> CIPA </h2> 
+        </div>
+        <div class="row justify-content-center"> 
+            <div class="col-md-6 shadow rounded bg-white">
+                <h2 class=" my-4"> Novo Usuário </h2>
+                <div class="login-wrap  p-md-3">
+                    <!-- Início Form -->
+                    <form action="/register" method="POST" id="registerForm"  class="singin-form">
+                        <div class="form-group ">
+                            <input name="name" type="text" placeholder="Usuário" class="form-control mb-4" required>
+                        </div>
+                        <div class="form-group ">
+                            <input name="email" name="email" type="email" placeholder="Email" class="form-control mb-4" required>
+                        </div>
+                        <div class="form-group">
+                            <input name="password" id="password" type="password" class="form-control mb-4" placeholder="Senha"  required>
+                        </div>
+                        <div class="form-group">
+                            <input id="confirm_password" type="password" class="form-control" placeholder="Confirme sua senha"  onkeyup="check();" required>
+                            <span id="message"></span>
+                        <div class="form-group text-center">
+                            <button  type="submit" class="form-control btn btn-color rounded submit mt-3"> Cadastrar </button>
+                        </div>
+                            
+                        </div>
+                        <div class="form-group text-center mt-5">
+                            <span> Já tem uma conta? <a href="/login"> Entrar </a> </span>
+
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+            
+        </div>
+        </div>
+     </div>
+    </div>
+ </section>
+
+ <script src='js/register.js'></script>
+ <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
+</body>
+</html>

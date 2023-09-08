@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Cadastrar Candidato'}); %>
+</head>
+<body>
+    <%- include('partials/header'); %>  
+    <section> 
+    <div class="container bg-white rounded p-2 mt-2">
+        <div class="row">
+            <div class="col text-center">
+                <h3> Cadastrar Candidato para Cipa <%= gestao %> </h3>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-sm-3  rounded">
+                    <form action="/cadastro_candidato" method="GET" id="searchFunc"  style="max-width: 210px">
+                            <input name="chapa" type="number" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" required />
+                            <button  type="submit" class="input-style btn-color rounded submit"> Procurar... </button>
+                    </form>
+                </div>
+            </div>
+            <% if (locals.func) { %>
+            <div class="row  mt-2">
+                <div class="col-2">
+                    <img src=<%= func.foto %> class="img-thumbnail"/>
+                </div>
+                <div class="col">
+                    <ul class="list-group">
+                      <li class="list-item">Funcionario: <%= func.CHAPA %> <%= func.NOME  %> </li>
+                      <li class="list-item">Função: <%= func.FUNCAO %> </li>
+                      <li class="list-item">Setor: <%= func.SECAO %> </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col text-center">
+                <a href="/fichaCandidato/<%= func.CHAPA %>" class="btn btn-color"> Gerar Ficha </a>
+            </div>
+            <% } %> 
+        </div>
+    </div>
+    </section>
+    <%- include('partials/footer'); %>
+</body>
+</html>

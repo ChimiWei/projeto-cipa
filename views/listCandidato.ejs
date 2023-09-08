@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Candidatos'}); %>
+   <!-- datepicker  -->
+   <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap-datepicker.css'>
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+   <script src='js/bootstrap-datepicker.min.js'></script>
+</head>
+<body>
+    <%- include('partials/header'); %>
+    <% if (user) { %>
+    <section class="container my-3">
+        <h1 class="display-5 my-3"> Olá <%= user.name %> </h1>
+    </section> 
+    <% } %>   
+    <section class="container bg-white rounded p-2 mt-2"> 
+        <div class="row">
+            <div class="col text-center">
+                <h3> Candidatos </h3>
+            </div>
+        </div>
+        <div>
+            <% if (locals.candidatos) { %>
+                <% candidatos.forEach(func => { %>
+                <div class="row justify-content-center mt-2">
+                    <div class="col-sm-auto">
+                        <img class="img-small " src=<%= func.foto %>  />
+                    </div>
+                        <div class="col-sm-4">
+                            <ul class="list-group">
+                            <li class="list-item-pd-0">Funcionario: <%= func.chapa %> <%= func.nome  %> </li>
+                            <li class="list-item-pd-0">Setor: <%= func.setor %> </li>
+                            <li class="list-item-pd-0">Número de Votação: </li>
+                            </ul>
+                        </div>
+                    <div class="col-sm-1">
+                        <span class="display-5"> 0</span>
+                    </div>
+                </div>
+                <% }) %> 
+            <% } %> 
+        </div>
+    </section>
+    <%- include('partials/footer'); %>
+    <script src='js/app.js'></script>
+
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<%- include('partials/head', {title: 'Login'}); %>
+   
+
+<body class="bg-darkpurple">
+ <section class="st-section">
+     <div class="container ">
+        <div class="row justify-content-center "> 
+        <div class="col-md-6 text-center mb-5">
+           <h2 class="title brand text-darkgreen text-shadow"> CIPA </h2> 
+        </div>
+        <div class="row justify-content-center"> 
+            <div class="col-md-6 shadow rounded bg-white">
+                <h2 class=" mb-4"> Entrar </h2>
+                <div class="login-wrap  p-md-3">
+                   
+                    <form action="/login" method="POST" class="singin-form">
+                        <div class="form-group ">
+                            <input name="email" type="text" placeholder="Email" class="form-control mb-4" required>
+                           
+                        </div>
+                        <div class="form-group">
+                            <input name="password" type="password" class="form-control" placeholder="Senha" id="password" required>
+                            <span id="showPassword" class="fa-regular fa-eye-slash field-icon1" > </span>
+                        </div>
+                        <div class="my-1 ps-2">
+                            <% if (messages.error) { %>
+                                <%= messages.error %>
+                                <% } %> 
+                        </div>
+                        <div class="form-group text-center">
+                            <button type="submit" class="form-control btn btn-color rounded submit mt-3"> Entrar </button>
+                        </div>
+                    </form>
+                        <div class="row mt-4">
+                            <div class="col-6 text-left ">
+                                <label class="checkbox-container" > Lembrar usuário
+                                    <input type="checkbox" unchecked>
+                                    <span class="checkmark">  </span>   
+                                </label>
+                                
+                            </div>
+                            <div class="col-6 text-right">
+                                <a  href="#">Esqueci minha senha </a>
+                            </div>
+                        </div>
+                        <div class="form-group text-center mt-5">
+                            <span> Não possui uma conta? <a href="/register">Cadastre-se</a> </span>
+
+                        </div>
+                   
+                </div>
+                
+            </div>
+            
+        </div>
+        </div>
+     </div>
+    </div>
+ </section>
+    
+ <script src='js/login.js'></script>
+ <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
+</body>
+</html>

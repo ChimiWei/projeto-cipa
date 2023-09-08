@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Ficha de Registro'}); %>
+</head>
+<body>
+    <%- include('partials/header'); %>
+    <% if (locals.func) { %>
+    <section >
+    <div class="container bg-white rounded mt-2 pt-2 pb-2">
+        <div class="row">
+            <div class="col-sm-2 text-center align-text-bottom">
+                <img src='/cipa.png' class="w-75"/>
+            </div>
+            <div class="col-sm-8 ">
+                <div class="text-center ">
+                    <h1> <%= func.GCNOME %></h1>
+                    <p> <%= func.GCRUA %>,<%= func.GCNUMERO %> - <%= func.GCBAIRRO %> - <%= func.GCCIDADE %>/<%= func.GCESTADO %> </p>
+                    <p> C.G.C: <%= func.GCCGC %> Fone: <%= func.GCTELEFONE %> </p>
+                    <h2>Comissão Interna de Prevenção de Acidentes</h3>
+                    <h4> FICHA DE INSCRIÇÃO </h4>
+                </div>
+                <ul class="list-group">
+                    <li class="list-item heavy-fontweight">Nome: <%= func.NOME  %> </li>
+                    <li class="list-item heavy-fontweight">Nº de Votação: </li>
+                    <li class="list-item heavy-fontweight">Setor: <%= func.SECAO %> </li>
+                    <li class="list-item heavy-fontweight">Matrícula: <%= func.CHAPA %> </li>
+                  </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center pt-2">
+            <div class="col-sm-9">
+                <p style="font-weight:bold; padding-bottom: 8px;">  
+                    Declaro estar ciente de minha inscrição no processo eleitoral para Membro de 
+                    Comissão Interna de Prevenção de Acidentes (CIPA) e das obrigações de um cipeiro 
+                    caso venha a ser eleito, abaixo assinando juntamente com o Membro da Comissão
+                    eleitoral firmando assim a minha inscrição. 
+                </p>
+            </div>
+        </div>
+        <div class="row text-center ">
+            <div class="col-md-6">
+                <p> ___________________________________________________ </p>
+                <p class="fw-bold"> <%= func.NOME  %>  </p>
+            </div>
+            <div class="col-md-6">
+                <p> ___________________________________________________ </p>
+                <p class="fw-bold"> SESMT</p>
+            </div>
+        </div>
+        <div class="text-end"> Recife, <%= hoje %> </div>
+        <div class="container mt-4">
+            <p class="text-center"><img src="/tesoura.gif" class="w-75 mx-auto" alt="tesoura"></p>
+            <table  class="w-75 m-auto ">
+                <tr> 
+                  <td width="232" > <div align="right"><img src="/ELEICOES.JPG" width="232" height="50"></div></td>
+                  <td   > <div align="center"> <h1> <%= func.GCNOME %></h1> </div></td>
+                </tr>
+                <tr>
+                  <td colspan="10"><div align="center" class="heavy-fontweight"><strong>Comprovante 
+                      de Inscri&ccedil;&atilde;o - Cipa Gest&atilde;o 2022 / 2023</strong> 
+                  </div></td>
+                </tr>
+                <tr>
+                    <td >
+                        <div class="border border-dark p-1  fw-normal">
+                            Matrícula: <%= func.CHAPA %>
+                         </div>
+                    </td>
+                    <td>
+                        <div class="border border-dark p-1  fw-normal">
+                            Número de Votação: 
+                         </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="border border-dark p-1  fw-normal">
+                           Nome:  <%= func.NOME %>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="border border-dark p-1  fw-normal">
+                            Seção: <%= func.SECAO %>
+                         </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="border border-dark p-1  fw-normal">
+                            Função: <%= func.FUNCAO %>
+                         </div>
+                    </td>
+                    <td>
+                        <div class="border border-dark p-1  fw-normal">
+                            Data: <%= hoje %>
+                         </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="text-center py-4">
+                <p> Esta inscrição só terá validade após assinatura e carimbo do SESMT </p>
+            </div>
+            <div class="row text-center ">
+                <div class="col-md-6">
+                    <p> ___________________________________________________ </p>
+                    <p class="fw-bold"> <%= func.NOME  %>  </p>
+                </div>
+                <div class="col-md-6">
+                    <p> ___________________________________________________ </p>
+                    <p class="fw-bold"> SESMT</p>
+                </div>
+            </div>               
+        </div>
+    </div>
+    </section>
+    <% } %>
+    <%- include('partials/footer'); %>
+</body>
+</html>

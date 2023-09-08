@@ -1,0 +1,333 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+body {
+    background-color: #48c5389f!important;
+    padding-bottom: 100px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+table, tr, td {
+    border: 1px solid #212529!important;
+}
+
+td {
+    padding: 3px;
+}
+
+form { 
+    display: inline;
+}
+
+h5 {
+    font-size: 1.03em !important;
+    font-weight: 370 !important;
+}
+
+.title {
+    font-size: 3em;
+    font-weight: 250;
+
+}
+
+/* Tela de Login - início */ 
+.st-section {
+    padding: 3em 0;
+    display: block;
+
+}
+
+.heavy-fontweight {
+    font-weight: 400 !important;
+}
+
+.login-wrap {
+    position: relative;
+}
+/* icon do cadastro  */
+.field-icon {
+    position: absolute;
+    top: 31%;
+    right: 26px;
+    
+}
+/* icon do login  */
+.field-icon1 {
+    position: absolute;
+    top: 29%;
+    right: 26px;
+    
+}
+
+@media screen and (max-width: 800px) {
+    .field-icon1{
+        position: absolute;
+        top: 27%;
+        right: 20px;
+    }
+    
+}
+
+
+.btn {
+    max-width: 380px;
+}
+
+.btn-color {
+    color: white !important;
+    background-color: #5C6F68 !important;
+    border-color: #5C6F68  !important;
+}
+
+
+.checkbox-container {
+    position: absolute;
+    padding-left: 24px;
+    cursor: pointer;
+  
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+    background-color: darkgrey;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background-color: rgb(255, 176, 80);
+}
+
+
+.checkmark {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    background-color: grey;
+}
+
+.checkmark:after {
+    content:"";
+    position: absolute;
+    display:none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display:block;
+}
+
+.container .checkmark:after {
+    left: 5px;
+    top: 3px; 
+    width: 5px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+
+}
+
+/* Tela de Login - fim */ 
+
+/* Tela de usuário - início */ 
+
+.img-style {
+    border-radius: 50%; 
+    
+}
+
+.inline {
+    display: inline-block;
+}
+
+.list-item {
+    position: relative;
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #212529;
+    text-decoration: none;
+    background-color: #fff;
+    
+}
+
+.list-item-pd-0 {
+    position: relative;
+    display: block;
+    color: #212529;
+    text-decoration: none;
+}
+
+.candidato {
+    transition: all ease-in-out 0.5s;
+    &:hover{
+        background-color: #b1c7b8da!important;
+        cursor: pointer;
+        
+    }
+}
+
+.voto-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+  .voto-modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+
+  .show {
+    display: block!important;
+  }
+
+  .close {
+    color: #aaaaaa;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+
+.img-small {
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    width: 71px;
+    height: 71px;
+}
+
+.input-style {
+    width: 100px;
+    height: 29px;
+    text-align: center;
+    font-weight: 400;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.input-style:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.input-style[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.input-sm {
+    max-width: 10em;
+}
+
+.title-style {
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+/* Tela de usuário - fim */
+/* Header */
+.container-nav {
+    display: flex;
+    flex-wrap: inherit;
+    align-items: center;
+    padding-right: var(--bs-gutter-x,.75rem);
+    padding-left: var(--bs-gutter-x,.75rem);
+
+    
+}
+
+.brand {
+    padding-bottom: 0.3125rem;
+    margin-right: 1rem;
+    text-align: center;
+    font-size: 2.25rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.brand-color {
+    color: rgb(88, 215, 108) !important;
+}
+
+.brand-color:hover {
+    color: rgb(41, 112, 69) !important;
+}
+
+.text-darkgreen {
+    color: rgb(0, 116, 46) !important;
+}
+.bg-darkpurple {
+    background-color: #240115;
+}
+
+/* Tela de index - inicio */
+
+/* Footer */
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: #240115;
+}
+/* Tela de index - fim */
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.bg-grey {
+    background-color: grey;
+}
+
+
+
+
