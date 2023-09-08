@@ -14,8 +14,8 @@
         <% if (user) { %>
             <h1 class="display-5 my-3"> Olá <%= user.name %> </h1>
         <% } %>   
-    <% if (locals.cipa[0]) { %>
-        <%- include('components/inscricao/viewInscricao', {cipa: cipa[0]}); %>
+    <% if (locals.cipa) { %>
+        <%- include('components/inscricao/viewInscricao', {cipa: cipa}); %>
     <% } else { %>
     <%- include('components/inscricao/addInscricao' ); %>
     <% } %> 

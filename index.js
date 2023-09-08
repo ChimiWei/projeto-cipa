@@ -71,7 +71,7 @@ const getUsers = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
     cipaativa = await JSON.parse(JSON.stringify(rows[0]))
     console.log('cipa ativa:')
-    console.log(cipaativa.id)
+    console.log(cipaativa)
     getCandidatos()
     
  }
