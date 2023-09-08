@@ -130,9 +130,11 @@ app.post('/cipaconfig', async (req, res) => {
 
 app.get('/cadastro_candidato', /*checkAuthenticated,*/ async (req, res) => {
     if(req.query.chapa) {
-        const func = await mssqlQuery(consulta.funcionario(req.query.chapa)) //consulta o funcionário pela chapa
+        const chapa = req.query.chapa
+        const func = await mssqlQuery(consulta.funcionario(chapa)) //consulta o funcionário pela chapa
+        const candidato = candidatos.find(func => func.matricula === chapa) // checa se o funcionário já está inscrito
         console.log(func) 
-        res.render('addCandidato.ejs', {user: req.user, gestao: gestao, func: func[0], chapa: req.query.chapa})
+        res.render('addCandidato.ejs', {user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato})
     } else {
     res.render('addCandidato.ejs', {user: req.user, gestao: gestao})
     }

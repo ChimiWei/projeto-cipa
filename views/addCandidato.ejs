@@ -35,7 +35,11 @@
                 </div>
             </div>
             <div class="col text-center">
-                <a href="/fichaCandidato/<%= func.CHAPA %>" class="btn btn-color"> Gerar Ficha </a>
+                <% if (locals.candidato) { %>
+                    <h4 class="text-danger text-shadow"> Funcionário já cadastrado! </h4>
+                <% } else { %>
+                    <a href="/fichaCandidato/<%= func.CHAPA %>" class="btn btn-color"> Gerar Ficha </a> 
+                    <% } %> 
             </div>
             <% } %> 
         </div>
