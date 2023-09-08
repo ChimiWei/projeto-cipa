@@ -69,7 +69,7 @@ const getUsers = async () => {
 
  const getCipaAtiva = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
-    cipaativa = await JSON.parse(JSON.stringify(rows[0]))
+    cipaativa = await JSON.parse(JSON.stringify(rows))[0] // recebe a primeira linha 
     console.log('cipa ativa:')
     console.log(cipaativa)
     getCandidatos()
@@ -80,6 +80,7 @@ const getUsers = async () => {
 
 
  const getCandidatos = async () => {
+    if (!cipaativa) return // interrompe a função se não houver uma cipa ativa
     try {
         const [rows, fields] = await promiseMysql.query(`select n_votacao, matricula, nome, funcao, secao from inscritos where cipaid = ${cipaativa.id}`)
         candidatos = await JSON.parse(JSON.stringify(rows))
@@ -114,11 +115,10 @@ app.get('/', /*checkAuthenticated,*/ (req, res) => {
 })
 
 app.post('/cipaconfig', async (req, res) => {
-    if (cipaativa.length) return res.send('ja existe uma cipa ativa')
+    if (cipaativa) return res.send('ja existe uma cipa ativa')
     try {
-        let sql = `INSERT INTO cipaconfig VALUES 
-        (default, default, '${ano}', '${req.body.inscricaoini}', '${req.body.inscricaofim}', '${req.body.votacaoini}', '${req.body.votacaofim}', '${req.body.resultado}', default)`
-        await promiseMysql.query(sql)
+        await promiseMysql.query(consulta.cadastrarCipa(ano, req.body.inscricaoini, req.body.inscricaofim,
+             req.body.votacaoini, req.body.votacaofim, req.body.resultado))
         console.log('cipa cadastrada com sucesso')
         getCipaAtiva()
         res.redirect('/')
@@ -152,8 +152,8 @@ app.get('/votacao', async (req, res) => {
 app.post('/solicitar_alteracao', async (req, res) => {
     try {
         const cipaid = req.body.deletedcipaid
-        let sql = `DELETE FROM cipaconfig WHERE id = '${cipaid}'`
-        await promiseMysql.query(sql)
+        await promiseMysql.query(consulta.deleteInscritos(cipaid))
+        await promiseMysql.query(consulta.deleteCipa(cipaid))
         getCipaAtiva()
         res.redirect('/')
     } catch(e) {
