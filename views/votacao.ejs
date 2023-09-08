@@ -19,15 +19,15 @@
             <% if (locals.candidatos) { %>
                 <% candidatos.forEach(func => { %>
                 <div class="row w-50 candidato justify-content-center mt-2 mx-auto border p-1 rounded bg-light" 
-                onclick="candidatoModal('<%= func.CHAPA %>', '<%= func.NOME %>', '<%= func.SECAO %>', '<%= func.N_VOTACAO %>')">
+                onclick="candidatoModal('<%= func.matricula %>', '<%= func.nome %>', '<%= func.secao %>', '<%= func.n_votacao %>')">
                     <div class="col-sm-auto">
                         <img class="img-small " src='eu.jpg'  />
                     </div>
                     <div class="col-sm-8">
                         <ul class="list-group">
-                            <li class="list-item-pd-0 ">Funcionario: <%= func.CHAPA %> <%= func.NOME  %> </li>
-                            <li class="list-item-pd-0">Setor: <%= func.SECAO %> </li>
-                            <li class="list-item-pd-0 ">Número de Votação: <text class="text-success fw-bold"><%= func.N_VOTACAO %></text></li>
+                            <li class="list-item-pd-0 ">Funcionario: <%= func.matricula %> - <%= func.nome  %> </li>
+                            <li class="list-item-pd-0">Setor: <%= func.secao %> </li>
+                            <li class="list-item-pd-0 ">Número de Votação: <text class="text-success fw-bold"><%= func.n_votacao %></text></li>
                         </ul>
                     </div>
                 </div>
