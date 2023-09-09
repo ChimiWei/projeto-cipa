@@ -61,7 +61,7 @@ const getUsers = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from usuario`)
     users = await JSON.parse(JSON.stringify(rows))
     console.log('usuários no sistema:')
-    console.log(rows)
+    console.log(users)
  }
 
  getUsers()
@@ -82,10 +82,11 @@ const getUsers = async () => {
  const getCandidatos = async () => {
     if (!cipaativa) return // interrompe a função se não houver uma cipa ativa
     try {
-        const [rows, fields] = await promiseMysql.query(`select n_votacao, matricula, nome, funcao, secao from inscritos where cipaid = ${cipaativa.id}`)
+        const [rows] = await promiseMysql.query(`select n_votacao, matricula, nome, funcao, secao from inscritos where cipaid = ${cipaativa.id}`)
         candidatos = await JSON.parse(JSON.stringify(rows))
         console.log('candidatos:')
         console.log(candidatos)
+        return rows
     } catch (e) {
         console.log(e)
     }
@@ -141,11 +142,41 @@ app.get('/cadastro_candidato', /*checkAuthenticated,*/ async (req, res) => {
 })
 
 app.get('/fichaCandidato/:chapa', async (req, res) => {
-    const func = await mssqlQuery(consulta.funcComColigada(req.params.chapa))
-    res.render('fichaCandidato.ejs', {func: func[0], hoje: hoje})
+    try {
+        const chapa = req.params.chapa
+        if (candidatos.find(func => func.matricula === chapa)) res.send('Funcionário já cadastrado!')
+        const [rows] = await promiseMysql.query(consulta.maxNVotacao())
+        const maxNVotacao = rows[0].maxnvotacao
+        console.log(maxNVotacao)
+        const func = await mssqlQuery(consulta.funcComColigada(chapa))
+        res.render('fichaCandidato.ejs', {func: func[0], n_votacao: maxNVotacao, hoje: hoje})
+    } catch (e) {
+        console.log(e)
+    }
+    
+})
+
+app.post('/fichaCandidato', async (req, res) => {
+    try {
+        await getCandidatos()
+        const chapa = req.body.chapa
+        const nvotacao = req.body.nvotacao 
+        if (candidatos.find(func => func.matricula === chapa)) res.send('Funcionário já cadastrado!')
+        if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
+        const rows = await mssqlQuery(consulta.funcionario(chapa))
+        const func = rows[0]
+        console.log(nvotacao)
+        await promiseMysql.query(consulta.cadastrarCandidato(func.CHAPA, cipaativa.id, nvotacao, func.NOME, func.FUNCAO, func.SECAO, ano))
+        res.redirect('/votacao')
+    } catch (e) {
+        console.log(e)
+    }
+    
+
 })
 
 app.get('/votacao', async (req, res) => {
+    await getCandidatos()
     res.render('votacao.ejs', {candidatos: candidatos})
 })
 

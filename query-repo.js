@@ -5,6 +5,21 @@ const cadastrarCipa = (ano, inscricaoini, inscricaofim, votacaoini, votacaofim, 
 
     return query
 }
+
+const cadastrarCandidato = (chapa, cipaid, n_votacao, nome, funcao, secao, gestao) => {
+    const query = `
+    insert into inscritos values (default, '${chapa}', ${cipaid}, '${n_votacao}', '${nome}',
+     default, '${funcao}', '${secao}', default, '', default, ${gestao});
+    `
+    return query
+}
+
+const maxNVotacao = () => {
+    const query = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos`
+
+    return query
+}
+
 const funcionario = (chapa) => { // Dados do Funcionário
     const query = `
     select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
@@ -47,8 +62,10 @@ const deleteInscritos = (cipaid) => {
 
 module.exports = {
     cadastrarCipa,
+    cadastrarCandidato,
     funcionario,
     funcComColigada,
     deleteCipa,
-    deleteInscritos
+    deleteInscritos,
+    maxNVotacao
 }

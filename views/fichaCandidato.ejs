@@ -22,9 +22,9 @@
                 </div>
                 <ul class="list-group">
                     <li class="list-item heavy-fontweight">Nome: <%= func.NOME  %> </li>
-                    <li class="list-item heavy-fontweight">Nº de Votação: </li>
+                    <li class="list-item heavy-fontweight">Nº de Votação: <%= n_votacao %> </li>
                     <li class="list-item heavy-fontweight">Setor: <%= func.SECAO %> </li>
-                    <li class="list-item heavy-fontweight">Matrícula: <%= func.CHAPA %> </li>
+                    <li class="list-item heavy-fontweight ">Matrícula: <%= func.CHAPA %> </li>
                   </ul>
             </div>
         </div>
@@ -115,6 +115,13 @@
             </div>               
         </div>
     </div>
+    <div class="container mt-2 text-center">
+        <form method="POST" action="/fichaCandidato">
+            <input type="hidden" id="chapa" name="chapa" value="<%= func.CHAPA %>">
+            <input type="hidden" id="nvotacao" name="nvotacao" value="<%= n_votacao %>">
+            <button class="btn btn-color"> Confirmar Cadastro </button>
+        </form>
+    </div>  
     </section>
     <% } %>
     <%- include('partials/footer'); %>
