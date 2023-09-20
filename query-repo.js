@@ -32,6 +32,24 @@ const funcionario = (chapa) => { // Dados do Funcionário
     return query
 }
 
+const funcionarioTest = (chapa) => { // Dados do Funcionário
+    const sql = `
+    select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
+    from PFUNC F
+    inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
+    inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
+    
+    where F.CHAPA = @chapa` 
+    const params = [
+        {
+            name: 'chapa',
+            type: 'varchar',
+            value: chapa
+        }
+    ]
+    return {sql: sql, params}
+}
+
 const funcComColigada = (chapa) => {
     const query = `
     select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
@@ -64,6 +82,7 @@ module.exports = {
     cadastrarCipa,
     cadastrarCandidato,
     funcionario,
+    funcionarioTest,
     funcComColigada,
     deleteCipa,
     deleteInscritos,

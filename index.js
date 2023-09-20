@@ -57,6 +57,7 @@ const mssqlQuery = async (query) => {
 }
 
 
+
 const getUsers = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from usuario`)
     users = await JSON.parse(JSON.stringify(rows))
@@ -132,7 +133,7 @@ app.post('/cipaconfig', async (req, res) => {
 app.get('/cadastro_candidato', /*checkAuthenticated,*/ async (req, res) => {
     if(req.query.chapa) {
         const chapa = req.query.chapa
-        const func = await mssqlQuery(consulta.funcionario(chapa)) //consulta o funcionário pela chapa
+        const func = await mssql.safeQuery(consulta.funcionarioTest(chapa)) //consulta o funcionário pela chapa
         const candidato = candidatos.find(func => func.matricula === chapa) // checa se o funcionário já está inscrito
         console.log(func) 
         res.render('addCandidato.ejs', {user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato})
