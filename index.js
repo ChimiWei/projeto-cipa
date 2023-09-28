@@ -42,13 +42,14 @@ const hoje = dia + '/' + mes + '/' + ano
 const gestao = ano + '/' + (ano + 1)
 
 
-
-
 var users = []
 
-var cipaativa = [];
+var cipaativa = []
 
 var candidatos = []
+
+var votante; 
+
 
 const mssqlQuery = async (query) => {
     const poolMssql = await mssql.getPool()
@@ -133,7 +134,7 @@ app.post('/cipaconfig', async (req, res) => {
 app.get('/cadastro_candidato', /*checkAuthenticated,*/ async (req, res) => {
     if(req.query.chapa) {
         const chapa = req.query.chapa
-        const func = await mssql.safeQuery(consulta.funcionarioTest(chapa)) //consulta o funcionário pela chapa
+        const func = await mssql.safeQuery(consulta.funcionario(chapa)) //consulta o funcionário pela chapa
         const candidato = candidatos.find(func => func.matricula === chapa) // checa se o funcionário já está inscrito
         console.log(func) 
         res.render('addCandidato.ejs', {user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato})
@@ -149,7 +150,7 @@ app.get('/fichaCandidato/:chapa', async (req, res) => {
         const [rows] = await promiseMysql.query(consulta.maxNVotacao())
         const maxNVotacao = rows[0].maxnvotacao
         console.log(maxNVotacao)
-        const func = await mssqlQuery(consulta.funcComColigada(chapa))
+        const func = await mssql.safeQuery(consulta.funcComColigada(chapa))
         res.render('fichaCandidato.ejs', {func: func[0], n_votacao: maxNVotacao, hoje: hoje})
     } catch (e) {
         console.log(e)
@@ -164,11 +165,11 @@ app.post('/fichaCandidato', async (req, res) => {
         const nvotacao = req.body.nvotacao 
         if (candidatos.find(func => func.matricula === chapa)) res.send('Funcionário já cadastrado!')
         if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
-        const rows = await mssqlQuery(consulta.funcionario(chapa))
-        const func = rows[0]
+        console.log(req.body)
         console.log(nvotacao)
-        await promiseMysql.query(consulta.cadastrarCandidato(func.CHAPA, cipaativa.id, nvotacao, func.NOME, func.FUNCAO, func.SECAO, ano))
-        res.redirect('/votacao')
+        const query = consulta.cadastrarCandidato(req.body.chapa, cipaativa.id, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
+        await promiseMysql.query(query.sql, query.params)
+        res.redirect('/lista')
     } catch (e) {
         console.log(e)
     }
@@ -176,10 +177,40 @@ app.post('/fichaCandidato', async (req, res) => {
 
 })
 
-app.get('/votacao', async (req, res) => {
-    await getCandidatos()
-    res.render('votacao.ejs', {candidatos: candidatos})
+app.get('/iniciar_votacao', async (req, res) => {
+    res.render('iniVotacao.ejs')
+    
 })
+
+app.post('/iniciar_votacao', async (req, res) => {
+    const func = await mssql.safeQuery(consulta.funcComCpf(req.body.chapa))
+    votante = func[0]
+    res.redirect('/votacao')
+    
+})
+
+app.get('/votacao', async (req, res) => {
+    if(votante) {
+        await getCandidatos()
+        res.render('votacao.ejs', {candidatos: candidatos, func: votante})
+    } else {
+        res.redirect('/iniciar_votacao')
+    }
+    
+})
+
+app.post('/votacao', async (req, res) =>{
+    votante.nvotacao = req.body.nvotacao
+    res.redirect('/confirmar_voto')
+})
+
+app.get('/confirmar_voto', async (req, res) => {
+    if(!votante.nvotacao) return res.redirect('/votacao')
+    res.render('confirmarVoto.ejs')
+})
+
+
+
 
 app.post('/solicitar_alteracao', async (req, res) => {
     try {

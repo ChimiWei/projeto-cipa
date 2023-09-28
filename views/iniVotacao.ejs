@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Votação'}); %>
+   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+<body>
+    <%- include('partials/header'); %>
+    <section class="container bg-white rounded p-2 mt-2"> 
+        <div class="container">
+            <div class="row">
+                <div class="col-sm text-center ">
+                    <form action="/iniciar_votacao" method="POST" >
+                        <label for="" class="fs-3"> Para iniciar a votação, insira a sua matrícula: </label>
+                        <input name="chapa" type="text" value="" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
+                        <button  type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%- include('partials/footer'); %>
+    <script src='js/votacao.js'></script>
+
+
+</body>
+</html>
