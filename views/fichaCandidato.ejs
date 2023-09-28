@@ -7,10 +7,14 @@
     <%- include('partials/header'); %>
     <% if (locals.func) { %>
     <section >
+    <div class="container text-end mt-2">
+        <button class="btn btn-success"> Imprimir </button>
+        <a href="/cadastro_candidato" class="btn btn-dark"> Voltar </a>
+    </div>
     <div class="container bg-white rounded mt-2 pt-2 pb-2">
         <div class="row">
             <div class="col-sm-2 text-center align-text-bottom">
-                <img src='/cipa.png' class="w-75"/>
+                <img src='/cipa.png' class="w-75" />
             </div>
             <div class="col-sm-8 ">
                 <div class="text-center ">
@@ -119,6 +123,9 @@
         <form method="POST" action="/fichaCandidato">
             <input type="hidden" id="chapa" name="chapa" value="<%= func.CHAPA %>">
             <input type="hidden" id="nvotacao" name="nvotacao" value="<%= n_votacao %>">
+            <input type="hidden" id="nome" name="nome" value="<%= func.NOME %>">
+            <input type="hidden" id="funcao" name="funcao" value="<%= func.FUNCAO %>">
+            <input type="hidden" id="secao" name="secao" value="<%= func.SECAO %>">
             <button class="btn btn-color"> Confirmar Cadastro </button>
         </form>
     </div>  

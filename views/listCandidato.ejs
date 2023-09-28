@@ -2,10 +2,7 @@
 <html>
 <head>
    <%- include('partials/head', {title: 'Candidatos'}); %>
-   <!-- datepicker  -->
-   <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap-datepicker.css'>
-   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-   <script src='js/bootstrap-datepicker.min.js'></script>
+
 </head>
 <body>
     <%- include('partials/header'); %>
@@ -21,25 +18,30 @@
             </div>
         </div>
         <div>
+            <div class="row row-cols-2 mt-2 ">
             <% if (locals.candidatos) { %>
                 <% candidatos.forEach(func => { %>
-                <div class="row justify-content-center mt-2">
-                    <div class="col-sm-auto">
-                        <img class="img-small " src=<%= func.foto %>  />
-                    </div>
-                        <div class="col-sm-4">
-                            <ul class="list-group">
-                            <li class="list-item-pd-0">Funcionario: <%= func.chapa %> <%= func.nome  %> </li>
-                            <li class="list-item-pd-0">Setor: <%= func.setor %> </li>
-                            <li class="list-item-pd-0">Número de Votação: </li>
-                            </ul>
+                    <div class="col">
+                        <div class="d-flex rounded bg-light candidato">
+                            <div class="col-sm-auto">
+                                <img class="img-small " src=<%= func.foto %>  />
+                            </div>
+                                <div class="col-sm-auto">
+                                    <ul class="list-group">
+                                    <li class="list-item-pd-0">Funcionario: <%= func.matricula %> <%= func.nome  %> </li>
+                                    <li class="list-item-pd-0">Setor: <%= func.secao %> </li>
+                                    <li class="list-item-pd-0">Número de Votação: <%= func.n_votacao %> </li>
+                                    </ul>
+                                </div>
+                            <div class="col-sm text-center">
+                                <span class="display-5"> 0% </span>
+                            </div>
                         </div>
-                    <div class="col-sm-1">
-                        <span class="display-5"> 0</span>
                     </div>
-                </div>
+            
                 <% }) %> 
             <% } %> 
+        </div>
         </div>
     </section>
     <%- include('partials/footer'); %>

@@ -15,14 +15,20 @@
         <div>
             <div class="row">
                 <div class="col-sm-3  rounded">
-                    <form action="/cadastro_candidato" method="GET" id="searchFunc"  style="max-width: 210px">
-                            <input name="chapa" type="number" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" required />
+                    <form action="/cadastro_candidato" method="GET" style="max-width: 210px">
+                            <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
                             <button  type="submit" class="input-style btn-color rounded submit"> Procurar... </button>
                     </form>
                 </div>
             </div>
+            <% if (!locals.func && locals.chapa) { %>
+                <div class="row mt-2 text-center">
+                    <h1 class="text-shadow"> Funcionário não encontrado </h1>
+                </div>
+
+            <% } %> 
             <% if (locals.func) { %>
-            <div class="row  mt-2">
+            <div class="row mt-2">
                 <div class="col-2">
                     <img src=<%= func.foto %> class="img-thumbnail"/>
                 </div>

@@ -227,7 +227,7 @@ h5 {
 .img-small {
     background-color: #fff;
     border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
+    border-radius: 50%;
     width: 71px;
     height: 71px;
 }
