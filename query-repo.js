@@ -6,13 +6,15 @@ const cadastrarCipa = (ano, inscricaoini, inscricaofim, votacaoini, votacaofim, 
     return query
 }
 
-const cadastrarCandidato = (chapa, cipaid, n_votacao, nome, funcao, secao, gestao) => {
+const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gestao) => {
     const sql = `
-    insert into inscritos values (default, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
+    insert into inscritos values (?, ?, ?, default, ?, default, ?, ?, default, '', default, ?);
     `
-    const params = [chapa, cipaid, n_votacao, nome, funcao, secao, gestao]
+    const params = [cipaid, chapa, n_votacao, nome, funcao, secao, gestao]
     return {sql, params}
 }
+
+
 
 const maxNVotacao = () => {
     const query = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos`

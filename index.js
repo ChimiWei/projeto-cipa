@@ -178,7 +178,7 @@ app.post('/fichaCandidato', catchAsyncErr(async (req, res) => {
     if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
     console.log(req.body)
     console.log(nvotacao)
-    const query = consulta.cadastrarCandidato(req.body.chapa, cipaativa.id, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
+    const query = consulta.cadastrarCandidato(cipaativa.id, req.body.chapa, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
     await promiseMysql.query(query.sql, query.params)
     res.redirect('/lista')
     
@@ -239,7 +239,8 @@ app.get('/perfil', /*checkAuthenticated,*/ (req, res) => {
     res.render('profile.ejs', {user: req.user})
 })
 
-app.get('/lista', /*checkAuthenticated,*/ (req, res) => {
+app.get('/lista', /*checkAuthenticated,*/ async (req, res) => {
+    await getCandidatos()
     res.render('listCandidato.ejs', {user: req.user, candidatos: candidatos})
 })
 
