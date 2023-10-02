@@ -1,69 +1,81 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <%- include('partials/head', {title: 'Votação'}); %>
-   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <%- include('partials/head', {title: 'Votação' }); %>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 </head>
+
 <body>
     <%- include('partials/header'); %>
-    <section class="container bg-white rounded p-2 mt-2"> 
-        <div>
-            <div class="d-flex justify-content-center">
-                <h4 class="text-secondary"> <%= func.NOME  %> está votando... </h2>
-            </div>
-            <div class="text-center">
-                <h3> Candidatos </h3>
-            </div>
-            <% candidatos.forEach(candidato => { %>
-            <div class="row w-50 candidato justify-content-center mt-2 mx-auto border p-1 rounded bg-light" 
-            onclick="candidatoModal('<%= candidato.matricula %>', '<%= candidato.nome %>', '<%= candidato.secao %>', '<%= candidato.n_votacao %>')">
-                <div class="col-sm-auto">
-                    <img class="img-small" src='eu.jpg'  />
+        <section class="container bg-white rounded p-2 mt-2">
+            <div>
+                <div class="d-flex justify-content-center">
+                    <h4 class="text-secondary">
+                        <%= func.NOME %> está votando... </h2>
                 </div>
-                <div class="col-sm-8 pt-1">
-                    <ul class="list-group">
-                        <li class="list-item-pd-0 ">Funcionario: <%= candidato.matricula %> - <%= candidato.nome  %> </li>
-                        <li class="list-item-pd-0">Setor: <%= candidato.secao %> </li>
-                        <li class="list-item-pd-0 ">Número de Votação: <text class="text-success fw-bold"><%= candidato.n_votacao %></text></li>
-                    </ul>
+                <div class="text-center">
+                    <h3> Candidatos </h3>
                 </div>
-            </div>
-            <% }) %> 
-            <div id="candidatoModal" class="voto-modal" >
-                <div class="voto-modal-content">
-                    <div class="text-end ">
-                        <span class="close" onclick="toggleModal()">&times;</span>
-                    </div>      
-                    <div class="container">
-                        <div class="row justify-content-center">
-                            <div class="col-sm-auto">
-                                <img class="img-small " src='eu.jpg' />
-                            </div>
-                            <div class="col-sm-8 pt-1">
-                                <ul class="list-group">
-                                    <li class="list-item-pd-0" id="Func"></li>
-                                    <li class="list-item-pd-0" id="Secao"></li>
-                                    <li class="list-item-pd-0"> Número de Votação: <text class="text-success fw-bold" id="NVotacao"></text></li>
-                                </ul>
-                            </div>
-                            <div class="text-end">
-                                <form action="/votacao" method="POST">
-                                    <button id="btnConfirmarVoto" class="btn btn-success" type="submit" value="" name="nvotacao"> Confirmar Candidato </button>
-                                </form>
-                                <button class="btn btn-danger" onclick="toggleModal()"> Voltar </button>
-                            </div>
-                            <% if(locals.messages.error) { %>
-                                <small class="text-danger"> <%= message.error %> </small>
-                            <% } %>
-                        </div>    
+                <% candidatos.forEach(candidato=> { %>
+                    <div class="row w-50 candidato justify-content-center mt-2 mx-auto border p-1 rounded bg-light"
+                        onclick="candidatoModal('<%= candidato.chapa %>', '<%= candidato.nome %>', '<%= candidato.secao %>', '<%= candidato.n_votacao %>')">
+                        <div class="col-sm-auto">
+                            <img class="img-small" src='eu.jpg' />
+                        </div>
+                        <div class="col-sm-8 pt-1">
+                            <ul class="list-group">
+                                <li class="list-item-pd-0 ">Funcionario: <%= candidato.chapa %> - <%= candidato.nome %>
+                                </li>
+                                <li class="list-item-pd-0">Setor: <%= candidato.secao %>
+                                </li>
+                                <li class="list-item-pd-0 ">Número de Votação: <text class="text-success fw-bold">
+                                        <%= candidato.n_votacao %>
+                                    </text></li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
+                    <% }) %>
+                        <div id="candidatoModal" class="voto-modal">
+                            <div class="voto-modal-content">
+                                <div class="text-end ">
+                                    <span class="close" onclick="toggleModal()">&times;</span>
+                                </div>
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-sm-auto">
+                                            <img class="img-small " src='eu.jpg' />
+                                        </div>
+                                        <div class="col-sm-8 pt-1">
+                                            <ul class="list-group">
+                                                <li class="list-item-pd-0" id="Func"></li>
+                                                <li class="list-item-pd-0" id="Secao"></li>
+                                                <li class="list-item-pd-0"> Número de Votação: <text
+                                                        class="text-success fw-bold" id="NVotacao"></text></li>
+                                            </ul>
+                                        </div>
+                                        <div class="text-end">
+                                            <form action="/votacao" method="POST">
+                                                <button id="btnConfirmarVoto" class="btn btn-success" type="submit"
+                                                    value="" name="nvotacao"> Confirmar Candidato </button>
+                                            </form>
+                                            <button class="btn btn-danger" onclick="toggleModal()"> Voltar </button>
+                                        </div>
+                                        <% if(locals.messages.error) { %>
+                                            <small class="text-danger">
+                                                <%= message.error %>
+                                            </small>
+                                            <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
             </div>
-        </div>
-    </section>
-    <%- include('partials/footer'); %>
-    <script src='js/votacao.js'></script>
+        </section>
+        <%- include('partials/footer'); %>
+            <script src='js/votacao.js'></script>
 
 
 </body>
+
 </html>

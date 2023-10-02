@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <%- include('partials/head', {title: 'Candidatos'}); %>
+    <%- include('partials/head', {title: 'Candidatos' }); %>
 
 </head>
+
 <body>
     <%- include('partials/header'); %>
-    <% if (user) { %>
-    <section class="container my-3">
-        <h1 class="display-5 my-3"> Olá <%= user.name %> </h1>
-    </section> 
-    <% } %>   
-    <section class="container bg-white rounded p-2 mt-2"> 
-        <div class="row">
-            <div class="col text-center">
-                <h3> Candidatos </h3>
-            </div>
-        </div>
-            <div class="row row-cols-md-3 justify-content-center">
-            <% if (locals.candidatos) { %>
-                <% candidatos.forEach(func => { %>
-                    <div class="col-auto mt-3">
-                        <div class="card rounded candidato">
-                            <div class="card-body text-center">
-                                <h5 class="fs-5"> <%= func.n_votacao %> - <%= func.nome  %> </h5>
-                                <img class="img-small " style="z-index: 3;" src="eu.jpg"  />
-                            <ul class="list-group" style="z-index: 3;">
-                                <li class="list-item-pd-0">Setor: <%= func.secao %> </li>
-                                <li class="list-item-pd-0">Chapa: <%= func.matricula %>  </li>
-                            </ul>
-                            <span class="display-5"> 0 </span>
-                            </div>
+        <% if (user) { %>
+            <section class="container my-3">
+                <h1 class="display-5 my-3"> Olá <%= user.name %>
+                </h1>
+            </section>
+            <% } %>
+                <section class="container bg-white rounded p-2 mt-2">
+                    <div class="row">
+                        <div class="col text-center">
+                            <h3> Candidatos </h3>
                         </div>
-                    </div>    
-                <% }) %> 
-            <% } %> 
-            </div>
-    </section>
-    <%- include('partials/footer'); %>
-    <script src='js/app.js'></script>
+                    </div>
+                    <div class="row row-cols-md-3 justify-content-center">
+                        <% if (locals.candidatos) { %>
+                            <% candidatos.forEach(func=> { %>
+                                <div class="col-auto mt-3">
+                                    <div class="card rounded candidato">
+                                        <div class="card-body text-center">
+                                            <h5 class="fs-5">
+                                                <%= func.n_votacao %> - <%= func.nome %>
+                                            </h5>
+                                            <img class="img-small " style="z-index: 3;" src="eu.jpg" />
+                                            <ul class="list-group" style="z-index: 3;">
+                                                <li class="list-item-pd-0">Setor: <%= func.secao %>
+                                                </li>
+                                                <li class="list-item-pd-0">Chapa: <%= func.chapa %>
+                                                </li>
+                                            </ul>
+                                            <span class="display-5"> <%= func.votos_r %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                                    <% } %>
+                    </div>
+                </section>
+                <%- include('partials/footer'); %>
+                    <script src='js/app.js'></script>
 
 
 </body>
+
 </html>

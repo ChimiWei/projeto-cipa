@@ -11,10 +11,24 @@ const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gesta
     insert into inscritos values (?, ?, ?, default, ?, default, ?, ?, default, '', default, ?);
     `
     const params = [cipaid, chapa, n_votacao, nome, funcao, secao, gestao]
-    return {sql, params}
+    return { sql, params }
 }
 
+const voto = (votos_r, cipaid, chapa, n_votacao) => {
+    const sql = 
+    'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
+    
+    const params = [++votos_r, cipaid, chapa, n_votacao]
+    console.log(params)
+    return [sql, params]
+}
 
+const registrarVoto = (cipaid, chapa) => {
+    const sql = 'insert into pfvoto values (?, ?, default)'
+    const params = [cipaid, chapa]
+
+    return [sql, params]
+}
 
 const maxNVotacao = () => {
     const query = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos`
@@ -41,7 +55,7 @@ const funcionario = (chapa) => { // Dados do Funcionário
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
     
-    where F.CHAPA = @chapa` 
+    where F.CHAPA = @chapa`
     const params = [
         {
             name: 'chapa',
@@ -49,7 +63,7 @@ const funcionario = (chapa) => { // Dados do Funcionário
             value: chapa
         }
     ]
-    return {sql, params}
+    return { sql, params }
 }
 
 const funcComCpf = (chapa) => { // Dados do Funcionário
@@ -58,7 +72,7 @@ const funcComCpf = (chapa) => { // Dados do Funcionário
     from PFUNC F
     inner join PPESSOA P on P.CODIGO = F.CODPESSOA
     
-    where F.CHAPA = @chapa` 
+    where F.CHAPA = @chapa`
     const params = [
         {
             name: 'chapa',
@@ -66,7 +80,7 @@ const funcComCpf = (chapa) => { // Dados do Funcionário
             value: chapa
         }
     ]
-    return {sql, params}
+    return { sql, params }
 }
 
 const funcComColigada = (chapa) => {
@@ -89,7 +103,7 @@ const funcComColigada = (chapa) => {
             value: chapa
         }
     ]
-    return {sql, params}
+    return { sql, params }
 }
 
 const deleteCipa = (cipaid) => {
@@ -108,6 +122,8 @@ const deleteInscritos = (cipaid) => {
 module.exports = {
     cadastrarCipa,
     cadastrarCandidato,
+    voto,
+    registrarVoto,
     funcionario,
     funcComCpf,
     funcComColigada,

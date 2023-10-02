@@ -30,11 +30,14 @@
                           <li class="list-item-pd-0 p-1 text-center">
                             Para confirmar seu voto, insira os 3 últimos digitos do seu cpf: 
                             <input name="confirmacao" type="password" value="" placeholder="CPF" class="input-style " minlength="3" maxlength="3" autocomplete="off" required />
+                            <% if (locals.message) { %>
+                              <p class="text-danger"> <%= message.error  %> </p>
+                            <% } %>
                           </li>
                         </ul>
                         <div class="card-body text-end">
                             <button id="btnConfirmarVoto" class="btn btn-success" type="submit" > Confirmar Voto </button>
-                            <button class="btn btn-danger" > Voltar </button>
+                            <a href="/votacao" class="btn btn-danger" > Voltar </a>
                         </div>
                           </form>
                       </div>
