@@ -17,32 +17,25 @@
                 <h3> Candidatos </h3>
             </div>
         </div>
-        <div>
-            <div class="row row-cols-2 mt-2 ">
+            <div class="row row-cols-md-3 justify-content-center">
             <% if (locals.candidatos) { %>
                 <% candidatos.forEach(func => { %>
-                    <div class="col">
-                        <div class="d-flex rounded bg-light candidato">
-                            <div class="col-sm-auto">
-                                <img class="img-small " src=<%= func.foto %>  />
-                            </div>
-                                <div class="col-sm-auto">
-                                    <ul class="list-group">
-                                    <li class="list-item-pd-0">Funcionario: <%= func.matricula %> <%= func.nome  %> </li>
-                                    <li class="list-item-pd-0">Setor: <%= func.secao %> </li>
-                                    <li class="list-item-pd-0">Número de Votação: <%= func.n_votacao %> </li>
-                                    </ul>
-                                </div>
-                            <div class="col-sm text-center">
-                                <span class="display-5"> 0% </span>
+                    <div class="col-auto mt-3">
+                        <div class="card rounded candidato">
+                            <div class="card-body text-center">
+                                <h5 class="fs-5"> <%= func.n_votacao %> - <%= func.nome  %> </h5>
+                                <img class="img-small " style="z-index: 3;" src="eu.jpg"  />
+                            <ul class="list-group" style="z-index: 3;">
+                                <li class="list-item-pd-0">Setor: <%= func.secao %> </li>
+                                <li class="list-item-pd-0">Chapa: <%= func.matricula %>  </li>
+                            </ul>
+                            <span class="display-5"> 0 </span>
                             </div>
                         </div>
-                    </div>
-            
+                    </div>    
                 <% }) %> 
             <% } %> 
-        </div>
-        </div>
+            </div>
     </section>
     <%- include('partials/footer'); %>
     <script src='js/app.js'></script>
