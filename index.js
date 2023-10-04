@@ -11,7 +11,7 @@ const methodOverride = require('method-override')
 const path = require('path')
 const mysql = require('./db_connection');
 const mssql = require('./db_connection_mssql')
-const consulta = require('./query-repo')
+const db = require('./query-repo')
 const middleware = require('./middleware')
 
 const app = express();
@@ -20,8 +20,18 @@ const app = express();
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/js', express.static(__dirname + 'public/js'))
-app.use(express.static(path.join(__dirname, 'views/img')));
-
+app.use(express.static(path.join(__dirname, 'views/img')))
+app.use(express.urlencoded({ extended: false }))
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))
+app.engine('html', require('ejs').renderFile);
 
 
 
@@ -77,8 +87,8 @@ const mssqlQuery = async (query) => {
 const getUsers = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from usuario`)
     users = await JSON.parse(JSON.stringify(rows))
-    console.log('usuários no sistema:')
-    console.log(users)
+    // console.log('usuários no sistema:')
+    // console.log(users)
 }
 
 getUsers()
@@ -87,8 +97,8 @@ getUsers()
 const getCipaAtiva = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
     cipaativa = await JSON.parse(JSON.stringify(rows))[0] // recebe a primeira linha 
-    console.log('cipa ativa:')
-    console.log(cipaativa)
+    // console.log('cipa ativa:')
+    // console.log(cipaativa)
     getCandidatos()
 
 }
@@ -101,8 +111,6 @@ const getCandidatos = async () => {
     try {
         const [rows] = await promiseMysql.query(`select n_votacao, chapa, votos_r, nome, funcao, secao from inscritos where cipaid = ${cipaativa.id}`)
         candidatos = await JSON.parse(JSON.stringify(rows))
-        console.log('candidatos:')
-        console.log(candidatos)
         return rows
     } catch (e) {
         console.log(e)
@@ -112,19 +120,7 @@ const getCandidatos = async () => {
 
 
 
-app.use(express.urlencoded({ extended: false }))
 
-app.use(flash())
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}))
-
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(methodOverride('_method'))
-app.engine('html', require('ejs').renderFile);
 
 
 
@@ -135,7 +131,7 @@ app.get('/', /*checkAuthenticated,*/(req, res) => {
 app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
     if (cipaativa) return res.send('ja existe uma cipa ativa')
     try {
-        await promiseMysql.query(consulta.cadastrarCipa(ano, req.body.inscricaoini, req.body.inscricaofim,
+        await promiseMysql.query(db.mysql.cadastrarCipa(ano, req.body.inscricaoini, req.body.inscricaofim,
             req.body.votacaoini, req.body.votacaofim, req.body.resultado))
         console.log('cipa cadastrada com sucesso')
         getCipaAtiva()
@@ -149,9 +145,8 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
 app.get('/cadastro_candidato', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     if (req.query.chapa) {
         const chapa = req.query.chapa
-        const func = await mssql.safeQuery(consulta.funcionario(chapa)) //consulta o funcionário pela chapa
+        const func = await mssql.safeQuery(db.mssql.funcionario(chapa)) //db o funcionário pela chapa
         const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
-        console.log(func)
         res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato })
     } else {
         res.render('addCandidato.ejs', { user: req.user, gestao: gestao })
@@ -161,11 +156,10 @@ app.get('/cadastro_candidato', /*checkAuthenticated,*/ catchAsyncErr(async (req,
 app.get('/fichaCandidato/:chapa', catchAsyncErr(async (req, res) => {
     const chapa = req.params.chapa
     if (candidatos.find(func => func.chapa === chapa)) res.send('Funcionário já cadastrado!')
-    const [rows] = await promiseMysql.query(consulta.maxNVotacao())
+    const [rows] = await promiseMysql.query(db.mysql.maxNVotacao())
     const maxNVotacao = rows[0].maxnvotacao ? rows[0].maxnvotacao : '001'
-    console.log(maxNVotacao)
-    const func = await mssql.safeQuery(consulta.funcComColigada(chapa))
-    res.render('fichaCandidato.ejs', { func: func[0], n_votacao: maxNVotacao, hoje: hoje })
+    const func = await mssql.safeQuery(db.mssql.funcComColigada(chapa))
+    res.render('fichaCandidato.ejs', { func: func[0], n_votacao: maxNVotacao, hoje })
 
 }))
 
@@ -178,20 +172,28 @@ app.post('/fichaCandidato', catchAsyncErr(async (req, res) => {
     if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
     console.log(req.body)
     console.log(nvotacao)
-    const query = consulta.cadastrarCandidato(cipaativa.id, req.body.chapa, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
+    const query = db.mysql.cadastrarCandidato(cipaativa.id, req.body.chapa, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
     await promiseMysql.query(query.sql, query.params)
     res.redirect('/lista')
 
 
 }))
 
-app.get('/iniciar_votacao', async (req, res) => {
-    res.render('iniVotacao.ejs')
+app.get('/iniciar_votacao', catchAsyncErr(async (req, res) => {
+    if (req.query.chapa) {
+        const func = await mssql.safeQuery(db.mssql.funcionario(req.query.chapa))
+        const [voto] = await promiseMysql.query(...db.mysql.checarVoto(cipaativa.id, req.query.chapa))
 
-})
+        res.render('iniVotacao.ejs', {func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash()})
+    } else {
+        res.render('iniVotacao.ejs', {message: req.flash()})
+    }
+
+
+}))
 
 app.post('/iniciar_votacao', catchAsyncErr(async (req, res) => {
-    const func = await mssql.safeQuery(consulta.funcComCpf(req.body.chapa))
+    const func = await mssql.safeQuery(db.mssql.funcComCpf(req.body.chapa))
     votante.func = func[0]
     res.redirect('/votacao')
 
@@ -215,20 +217,18 @@ app.post('/votacao', async (req, res) => {
 app.get('/confirmar_voto', catchAsyncErr(async (req, res) => {
     if (!votante.nvotacao) return res.redirect('/votacao')
     const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
-    console.log(votante.func.CHAPA)
-    console.log(mysql.format(consulta.voto(candidato.votos_r, cipaativa.id, candidato.chapa, candidato.n_votacao)))
     res.render('confirmarVoto.ejs', { candidato, votante: votante.func, message: req.flash() })
 }))
 
 app.post('/confirmar_voto', catchAsyncErr(async (req, res) => {
     if (req.body.confirmacao == votante.func.CONFIRMACAO) {
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
-
-        await promiseMysql.query(...consulta.voto(candidato.votos_r, cipaativa.id, candidato.chapa, candidato.n_votacao))
-        await promiseMysql.query(...consulta.registrarVoto(cipaativa.id, votante.func.CHAPA))
+        await promiseMysql.query(...db.mysql.addVoto(candidato.votos_r, cipaativa.id, candidato.chapa, candidato.n_votacao))
+        await promiseMysql.query(...db.mysql.registrarVoto(cipaativa.id, votante.func.CHAPA))
+        req.flash("nome", votante.func.NOME)
         votante.func = null
         votante.nvotacao = null
-        return res.redirect('/lista')
+        return res.redirect('/iniciar_votacao')
     } else {
         req.flash("error", "Os digitos inseridos estão incorretos")
         return res.redirect('/confirmar_voto')
@@ -241,8 +241,8 @@ app.post('/confirmar_voto', catchAsyncErr(async (req, res) => {
 app.post('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
 
     const cipaid = req.body.deletedcipaid
-    await promiseMysql.query(consulta.deleteInscritos(cipaid))
-    await promiseMysql.query(consulta.deleteCipa(cipaid))
+    await promiseMysql.query(db.mysql.deleteInscritos(cipaid))
+    await promiseMysql.query(db.mysql.deleteCipa(cipaid))
     getCipaAtiva()
     res.redirect('/')
 

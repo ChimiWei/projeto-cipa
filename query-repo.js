@@ -14,13 +14,21 @@ const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gesta
     return { sql, params }
 }
 
-const voto = (votos_r, cipaid, chapa, n_votacao) => {
+const addVoto = (votos_r, cipaid, chapa, n_votacao) => {
     const sql = 
     'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
     
     const params = [++votos_r, cipaid, chapa, n_votacao]
-    console.log(params)
     return [sql, params]
+}
+
+const checarVoto = (cipaid, chapa) => {
+    const sql = 
+    'select chapa from pfvoto where cipaid = ? and chapa = ?;'
+    
+    const params = [cipaid, chapa]
+    return [sql, params]
+
 }
 
 const registrarVoto = (cipaid, chapa) => {
@@ -35,6 +43,20 @@ const maxNVotacao = () => {
 
     return query
 }
+
+const deleteCipa = (cipaid) => {
+    const query = `DELETE FROM cipaconfig WHERE id = '${cipaid}' `
+
+    return query
+}
+
+const deleteInscritos = (cipaid) => {
+    const query = `DELETE FROM inscritos WHERE cipaid = '${cipaid}'`
+
+    return query
+}
+
+// ------------- MSSQL -------------- //
 
 /*const funcionario = (chapa) => { // Dados do Funcionário
     const query = `
@@ -106,28 +128,21 @@ const funcComColigada = (chapa) => {
     return { sql, params }
 }
 
-const deleteCipa = (cipaid) => {
-    const query = `DELETE FROM cipaconfig WHERE id = '${cipaid}' `
-
-    return query
-}
-
-const deleteInscritos = (cipaid) => {
-    const query = `DELETE FROM inscritos WHERE cipaid = '${cipaid}'`
-
-    return query
-}
-
 
 module.exports = {
-    cadastrarCipa,
-    cadastrarCandidato,
-    voto,
-    registrarVoto,
-    funcionario,
-    funcComCpf,
-    funcComColigada,
-    deleteCipa,
-    deleteInscritos,
-    maxNVotacao
+    mysql: {
+        cadastrarCipa,
+        cadastrarCandidato,
+        addVoto,
+        registrarVoto,
+        checarVoto,
+        maxNVotacao,
+        deleteCipa,
+        deleteInscritos
+    },
+    mssql: {
+        funcionario,
+        funcComCpf,
+        funcComColigada,
+    }
 }
