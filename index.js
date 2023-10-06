@@ -125,20 +125,29 @@ const getCandidatos = async () => {
 
 
 app.get('/', /*checkAuthenticated,*/(req, res) => {
-    res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, cipa: cipaativa })
+    res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, cipa: cipaativa, message: req.flash() })
 })
 
 app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
     if (cipaativa) return res.send('ja existe uma cipa ativa')
-    try {
-        await promiseMysql.query(db.mysql.cadastrarCipa(ano, req.body.inscricaoini, req.body.inscricaofim,
-            req.body.votacaoini, req.body.votacaofim, req.body.resultado))
-        console.log('cipa cadastrada com sucesso')
-        getCipaAtiva()
-        res.redirect('/')
-    } catch (e) {
-        res.send(e)
+    const fimIns = new Date(req.body.fiminscricao.split('/').reverse().join('/')) // reverse na data para o js reconhecer o mês corretamente
+    const iniVoto = new Date(req.body.inivotacao.split('/').reverse().join('/'))
+    const fimVoto = new Date(req.body.fimvotacao.split('/').reverse().join('/'))
+    const resultado = new Date(req.body.resultado.split('/').reverse().join('/'))
+    if(fimIns > iniVoto) {
+        req.flash('error', 'data final da inscrição não pode ser maior que a data inicial da votação')
+        return res.redirect('/')
+    } 
+    if(fimVoto > resultado) {
+        req.flash('error', 'data final da votação não pode ser maior que a data do resultado')
+        return res.redirect('/')
     }
+        await promiseMysql.query(db.mysql.cadastrarCipa(ano, req.body.inscricaoini, req.body.fiminscricao,
+            req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
+    console.log('cipa cadastrada com sucesso')
+    getCipaAtiva()
+    res.redirect('/')
+
 }))
 
 
@@ -184,9 +193,9 @@ app.get('/iniciar_votacao', catchAsyncErr(async (req, res) => {
         const func = await mssql.safeQuery(db.mssql.funcionario(req.query.chapa))
         const [voto] = await promiseMysql.query(...db.mysql.checarVoto(cipaativa.id, req.query.chapa))
 
-        res.render('iniVotacao.ejs', {func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash()})
+        res.render('iniVotacao.ejs', { func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash() })
     } else {
-        res.render('iniVotacao.ejs', {message: req.flash()})
+        res.render('iniVotacao.ejs', { message: req.flash() })
     }
 
 
@@ -238,9 +247,10 @@ app.post('/confirmar_voto', catchAsyncErr(async (req, res) => {
 
 
 
-app.post('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
+app.delete('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
 
     const cipaid = req.body.deletedcipaid
+    await promiseMysql.query(db.mysql.deleteVoto(cipaid))
     await promiseMysql.query(db.mysql.deleteInscritos(cipaid))
     await promiseMysql.query(db.mysql.deleteCipa(cipaid))
     getCipaAtiva()

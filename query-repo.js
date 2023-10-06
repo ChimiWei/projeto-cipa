@@ -1,7 +1,7 @@
-const cadastrarCipa = (ano, inscricaoini, inscricaofim, votacaoini, votacaofim, resultado) => {
+const cadastrarCipa = (ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
     const query = `
-    INSERT INTO cipaconfig VALUES (default, default, '${ano}', '${inscricaoini}','${inscricaofim}', 
-    '${votacaoini}', '${votacaofim}', '${resultado}', default)`
+    INSERT INTO cipaconfig VALUES (default, default, '${ano}', '${inscricaoini}','${fiminscricao}', 
+    '${inivotacao}', '${fimvotacao}', '${resultado}', default)`
 
     return query
 }
@@ -15,17 +15,17 @@ const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gesta
 }
 
 const addVoto = (votos_r, cipaid, chapa, n_votacao) => {
-    const sql = 
-    'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
-    
+    const sql =
+        'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
+
     const params = [++votos_r, cipaid, chapa, n_votacao]
     return [sql, params]
 }
 
 const checarVoto = (cipaid, chapa) => {
-    const sql = 
-    'select chapa from pfvoto where cipaid = ? and chapa = ?;'
-    
+    const sql =
+        'select chapa from pfvoto where cipaid = ? and chapa = ?;'
+
     const params = [cipaid, chapa]
     return [sql, params]
 
@@ -52,6 +52,12 @@ const deleteCipa = (cipaid) => {
 
 const deleteInscritos = (cipaid) => {
     const query = `DELETE FROM inscritos WHERE cipaid = '${cipaid}'`
+
+    return query
+}
+
+const deleteVoto = (cipaid) => {
+    const query = `DELETE FROM pfvoto WHERE cipaid = '${cipaid}'`
 
     return query
 }
@@ -138,7 +144,8 @@ module.exports = {
         checarVoto,
         maxNVotacao,
         deleteCipa,
-        deleteInscritos
+        deleteInscritos,
+        deleteVoto
     },
     mssql: {
         funcionario,
