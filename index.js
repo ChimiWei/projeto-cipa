@@ -118,13 +118,17 @@ const getCandidatos = async () => {
 
 }
 
+app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const filiais = await mssqlQuery('select codfilial, nome from gfilial where codcoligada = 1')
+    res.render('home.ejs', { user: req.user, gestao: gestao, filiais: filiais, message: req.flash() })
+}))
 
+app.post('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const filiais = await mssqlQuery('select codfilial, nome from gfilial where codcoligada = 1')
+    res.render('home.ejs', { user: req.user, gestao: gestao, filiais: filiais, message: req.flash() })
+}))
 
-
-
-
-
-app.get('/', /*checkAuthenticated,*/(req, res) => {
+app.get('/cipaconfig', /*checkAuthenticated,*/ (req, res) => {
     res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, cipa: cipaativa, message: req.flash() })
 })
 
