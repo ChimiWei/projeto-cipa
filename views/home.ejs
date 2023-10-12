@@ -13,23 +13,13 @@
             </div>
         </div>
         <div>
-            <div class="row justify-content-center">
-                <div class="col-sm-6 ">
-                    <form action="/cipaconfig" method="POST">
-                        <select class="form-select text-center" aria-label="Selecione a filial">
-                            <option disabled selected>Selecione a filial</option>
-                            <% filiais.forEach(filial => { %>
-                            <option value="<%= filial.codfilial %>"><%= filial.nome %></option>
-                            <% }) %>
-                          </select>    
-                    </form>
-                </div>
-                
-            </div>
             <div class="d-flex justify-content-center pt-2">
-                <button  type="submit" class="input-style btn-color rounded submit"> Continuar </button>
+                <a href="/cipaconfig" class="btn btn-color rounded submit"> Cadastrar Cipa </a>
             </div>
         </div>
+        <% cipas.forEach(cipa => { %>
+        <%- include('components/inscricao/viewInscricao', {cipa: cipa}); %>
+        <% }) %>
     </div>
     </section>
     <%- include('partials/footer'); %>

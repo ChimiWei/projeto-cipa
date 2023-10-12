@@ -3,6 +3,7 @@ const minDate = '01/01/' + currentYear
 const maxDate = '30/12/' + currentYear
 const iniVoto = document.getElementById('IniVoto')
 const fimVoto = document.getElementById('FimVoto')
+const errFilial = document.getElementById('errFilial')
 let changeDatepicker = false
 
 const resetVotacao = () => {
@@ -79,7 +80,16 @@ const resultadoDatepicker = (MinVotacao) => {
     changeDatepicker = false
 }
 
-
+const checkFilial = (filiais, selectedFilial) => {
+    const [codfilial, filial] = selectedFilial.split(',') 
+    if(JSON.parse(filiais).find(filial => filial.codfilial ==  codfilial)) {
+        errFilial.style.visibility = 'visible'
+        $('#cadastro').hide()
+    } else {
+        errFilial.style.visibility = 'hidden'
+        $('#cadastro').show()
+    }
+}
 
 /*
 $('#gestao').datepicker({

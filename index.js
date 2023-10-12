@@ -56,7 +56,7 @@ const gestao = ano + '/' + (ano + 1)
 
 var users = []
 
-var cipaativa = []
+var cipas = []
 
 var candidatos = []
 
@@ -96,10 +96,9 @@ getUsers()
 
 const getCipaAtiva = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
-    cipaativa = await JSON.parse(JSON.stringify(rows))[0] // recebe a primeira linha 
+    cipas = await JSON.parse(JSON.stringify(rows))
     // console.log('cipa ativa:')
-    // console.log(cipaativa)
-    getCandidatos()
+    console.log(cipas)
 
 }
 
@@ -107,11 +106,11 @@ getCipaAtiva()
 
 
 const getCandidatos = async () => {
-    if (!cipaativa) return // interrompe a função se não houver uma cipa ativa
+    if (!cipas) return // interrompe a função se não houver uma cipa ativa
     try {
-        const [rows] = await promiseMysql.query(`select n_votacao, chapa, votos_r, nome, funcao, secao from inscritos where cipaid = ${cipaativa.id}`)
-        candidatos = await JSON.parse(JSON.stringify(rows))
-        return rows
+        // const [rows] = await promiseMysql.query(`select n_votacao, chapa, nome, funcao, secao from inscritos where cipaid = ${cipas.id}`)
+        //  candidatos = await JSON.parse(JSON.stringify(rows))
+        //  return rows
     } catch (e) {
         console.log(e)
     }
@@ -119,35 +118,34 @@ const getCandidatos = async () => {
 }
 
 app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const filiais = await mssqlQuery('select codfilial, nome from gfilial where codcoligada = 1')
-    res.render('home.ejs', { user: req.user, gestao: gestao, filiais: filiais, message: req.flash() })
+    res.render('home.ejs', { user: req.user, gestao: gestao, cipas: cipas })
 }))
 
 app.post('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const filiais = await mssqlQuery('select codfilial, nome from gfilial where codcoligada = 1')
-    res.render('home.ejs', { user: req.user, gestao: gestao, filiais: filiais, message: req.flash() })
+
 }))
 
-app.get('/cipaconfig', /*checkAuthenticated,*/ (req, res) => {
-    res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, cipa: cipaativa, message: req.flash() })
-})
+app.get('/cipaconfig', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const filiais = await mssqlQuery('select codfilial, nome from gfilial where codcoligada = 1')
+    res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
+}))
 
 app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
-    if (cipaativa) return res.send('ja existe uma cipa ativa')
+    const [codfilial, filial] = req.body.filial.split(',')
     const fimIns = new Date(req.body.fiminscricao.split('/').reverse().join('/')) // reverse na data para o js reconhecer o mês corretamente
     const iniVoto = new Date(req.body.inivotacao.split('/').reverse().join('/'))
     const fimVoto = new Date(req.body.fimvotacao.split('/').reverse().join('/'))
     const resultado = new Date(req.body.resultado.split('/').reverse().join('/'))
-    if(fimIns > iniVoto) {
+    if (fimIns > iniVoto) {
         req.flash('error', 'data final da inscrição não pode ser maior que a data inicial da votação')
         return res.redirect('/')
-    } 
-    if(fimVoto > resultado) {
+    }
+    if (fimVoto > resultado) {
         req.flash('error', 'data final da votação não pode ser maior que a data do resultado')
         return res.redirect('/')
     }
-        await promiseMysql.query(db.mysql.cadastrarCipa(ano, req.body.inscricaoini, req.body.fiminscricao,
-            req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
+    await promiseMysql.query(...db.mysql.cadastrarCipa(codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
+        req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
     console.log('cipa cadastrada com sucesso')
     getCipaAtiva()
     res.redirect('/')
@@ -155,10 +153,11 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
 }))
 
 
-app.get('/cadastro_candidato', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+app.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    if(!cipas.find(filial => filial.codfilial ==  req.params.codfilial)) return res.redirect('/')
     if (req.query.chapa) {
         const chapa = req.query.chapa
-        const func = await mssql.safeQuery(db.mssql.funcionario(chapa)) //db o funcionário pela chapa
+        const func = await mssql.safeQuery(db.mssql.funcionario(req.params.codfilial, chapa)) //db o funcionário pela chapa
         const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
         res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato })
     } else {
@@ -185,7 +184,7 @@ app.post('/fichaCandidato', catchAsyncErr(async (req, res) => {
     if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
     console.log(req.body)
     console.log(nvotacao)
-    const query = db.mysql.cadastrarCandidato(cipaativa.id, req.body.chapa, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
+    const query = db.mysql.cadastrarCandidato(cipas.id, req.body.chapa, nvotacao, req.body.nome, req.body.funcao, req.body.secao, ano)
     await promiseMysql.query(query.sql, query.params)
     res.redirect('/lista')
 
@@ -195,7 +194,7 @@ app.post('/fichaCandidato', catchAsyncErr(async (req, res) => {
 app.get('/iniciar_votacao', catchAsyncErr(async (req, res) => {
     if (req.query.chapa) {
         const func = await mssql.safeQuery(db.mssql.funcionario(req.query.chapa))
-        const [voto] = await promiseMysql.query(...db.mysql.checarVoto(cipaativa.id, req.query.chapa))
+        const [voto] = await promiseMysql.query(...db.mysql.checarVoto(cipas.id, req.query.chapa))
 
         res.render('iniVotacao.ejs', { func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash() })
     } else {
@@ -236,8 +235,8 @@ app.get('/confirmar_voto', catchAsyncErr(async (req, res) => {
 app.post('/confirmar_voto', catchAsyncErr(async (req, res) => {
     if (req.body.confirmacao == votante.func.CONFIRMACAO) {
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
-        await promiseMysql.query(...db.mysql.addVoto(candidato.votos_r, cipaativa.id, candidato.chapa, candidato.n_votacao))
-        await promiseMysql.query(...db.mysql.registrarVoto(cipaativa.id, votante.func.CHAPA))
+        await promiseMysql.query(...db.mysql.addVoto(candidato.votos_r, cipas.id, candidato.chapa, candidato.n_votacao))
+        await promiseMysql.query(...db.mysql.registrarVoto(cipas.id, votante.func.CHAPA))
         req.flash("nome", votante.func.NOME)
         votante.func = null
         votante.nvotacao = null

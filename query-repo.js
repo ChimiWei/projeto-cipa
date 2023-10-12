@@ -1,9 +1,10 @@
-const cadastrarCipa = (ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
-    const query = `
-    INSERT INTO cipaconfig VALUES (default, default, '${ano}', '${inscricaoini}','${fiminscricao}', 
-    '${inivotacao}', '${fimvotacao}', '${resultado}', default)`
+const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
+    const sql = `
+    INSERT INTO cipaconfig VALUES (1, ?, default, ?, default, ?, ?, ?, ?, ?, ?, default)`
 
-    return query
+    const params = [codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado]
+
+    return [sql, params]
 }
 
 const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gestao) => {
@@ -19,7 +20,7 @@ const addVoto = (votos_r, cipaid, chapa, n_votacao) => {
         'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
 
     const params = [++votos_r, cipaid, chapa, n_votacao]
-    return [sql, params]
+    return 
 }
 
 const checarVoto = (cipaid, chapa) => {
@@ -57,7 +58,7 @@ const deleteInscritos = (cipaid) => {
 }
 
 const deleteVoto = (cipaid) => {
-    const query = `DELETE FROM pfvoto WHERE cipaid = '${cipaid}'`
+    const query = `DELETE FROM votos WHERE cipaid = '${cipaid}'`
 
     return query
 }
@@ -76,19 +77,24 @@ const deleteVoto = (cipaid) => {
     return query
 }
 */
-const funcionario = (chapa) => { // Dados do Funcionário
+const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     const sql = `
     select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
     from PFUNC F
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
     
-    where F.CHAPA = @chapa`
+    where F.CODFILIAL = @codfilial AND F.CHAPA = @chapa`
     const params = [
         {
             name: 'chapa',
             type: 'varchar',
             value: chapa
+        },
+        {
+            name: 'codfilial',
+            type: 'int',
+            value: codfilial
         }
     ]
     return { sql, params }
