@@ -15,7 +15,7 @@
         <div>
             <div class="row">
                 <div class="col-sm-3  rounded">
-                    <form action="/cadastro_candidato" method="GET" style="max-width: 210px">
+                    <form method="GET" style="max-width: 210px">
                             <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
                             <button  type="submit" class="input-style btn-color rounded submit"> Procurar... </button>
                     </form>
@@ -30,7 +30,7 @@
             <% if (locals.func) { %>
             <div class="row mt-2">
                 <div class="col-2">
-                    <img src=<%= func.foto %> class="img-thumbnail"/>
+                    <img src='<%= func.CHAPA %>' class="img-thumbnail" />
                 </div>
                 <div class="col">
                     <ul class="list-group">
@@ -44,7 +44,7 @@
                 <% if (locals.candidato) { %>
                     <h4 class="text-danger text-shadow"> Funcionário já cadastrado! </h4>
                 <% } else { %>
-                    <a href="/fichaCandidato/<%= func.CHAPA %>" class="btn btn-color"> Gerar Ficha </a> 
+                    <a href="/fichaCandidato/<%= func.CODFILIAL %>/<%= func.CHAPA %>" class="btn btn-color"> Gerar Ficha </a> 
                     <% } %> 
             </div>
             <% } %> 
@@ -52,5 +52,6 @@
     </div>
     </section>
     <%- include('partials/footer'); %>
+        
 </body>
 </html>

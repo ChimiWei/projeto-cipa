@@ -7,11 +7,11 @@ const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivo
     return [sql, params]
 }
 
-const cadastrarCandidato = (cipaid, chapa, n_votacao, nome, funcao, secao, gestao) => {
+const cadastrarCandidato = (cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao) => {
     const sql = `
-    insert into inscritos values (?, ?, ?, default, ?, default, ?, ?, default, '', default, ?);
+    insert into inscritos values (?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
     `
-    const params = [cipaid, chapa, n_votacao, nome, funcao, secao, gestao]
+    const params = [cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao]
     return { sql, params }
 }
 
@@ -20,7 +20,7 @@ const addVoto = (votos_r, cipaid, chapa, n_votacao) => {
         'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
 
     const params = [++votos_r, cipaid, chapa, n_votacao]
-    return 
+    return [sql, params]
 }
 
 const checarVoto = (cipaid, chapa) => {
@@ -32,9 +32,9 @@ const checarVoto = (cipaid, chapa) => {
 
 }
 
-const registrarVoto = (cipaid, chapa) => {
-    const sql = 'insert into pfvoto values (?, ?, default)'
-    const params = [cipaid, chapa]
+const registrarVoto = (cipaid, codfilial, chapa, nome, setor, hora_voto) => {
+    const sql = 'insert into pfvoto values (?, ?, ?, default, ?, ?, default)'
+    const params = [cipaid, codfilial, chapa, nome, setor, hora_voto]
 
     return [sql, params]
 }
@@ -79,7 +79,7 @@ const deleteVoto = (cipaid) => {
 */
 const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     const sql = `
-    select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
+    select F.CHAPA, F.NOME, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
     from PFUNC F
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
@@ -100,26 +100,31 @@ const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     return { sql, params }
 }
 
-const funcComCpf = (chapa) => { // Dados do Funcionário
+const funcComCpf = (chapa, codfilial) => { // Dados do Funcionário
     const sql = `
-    select F.CHAPA, F.NOME, right(P.CPF, 3) as CONFIRMACAO
+    select F.CHAPA, F.NOME, F.CODFILIAL, right(P.CPF, 3) as CONFIRMACAO
     from PFUNC F
     inner join PPESSOA P on P.CODIGO = F.CODPESSOA
     
-    where F.CHAPA = @chapa`
+    where F.CHAPA = @chapa and F.CODFILIAL = @codfilial`
     const params = [
         {
             name: 'chapa',
             type: 'varchar',
             value: chapa
+        },
+        {
+            name: 'codfilial',
+            type: 'int',
+            value: codfilial
         }
     ]
     return { sql, params }
 }
 
-const funcComColigada = (chapa) => {
+const funcComColigada = (codfilial, chapa) => {
     const sql = `
-    select F.CHAPA, F.NOME, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
+    select F.CHAPA, F.NOME, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
     GC.NOMEFANTASIA AS GCNOME, GC.RUA AS GCRUA, GC.NUMERO AS GCNUMERO, GC.BAIRRO AS GCBAIRRO, GC.CIDADE AS GCCIDADE,
     GC.ESTADO AS GCESTADO, GC.CGC AS GCCGC, GC.TELEFONE AS GCTELEFONE
     
@@ -128,13 +133,18 @@ const funcComColigada = (chapa) => {
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
     
-    where F.CODCOLIGADA = 1 AND F.CHAPA = @chapa`
+    where F.CODCOLIGADA = 1 AND F.CODFILIAL = @codfilial AND F.CHAPA = @chapa`
 
     const params = [
         {
             name: 'chapa',
             type: 'varchar',
             value: chapa
+        },
+        {
+            name: 'codfilial',
+            type: 'int',
+            value: codfilial
         }
     ]
     return { sql, params }

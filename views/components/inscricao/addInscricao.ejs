@@ -7,8 +7,13 @@
             <form class="formgroup" action="/cipaconfig" method="POST">
                 <div id="inscription" class="row justify-content-center">
                     <div class="text-center">
-                        <h2> Gestão <%= gestao %>
-                        </h2>
+                        <h2> Gestão <%= gestao %> </h2>
+                        <select class="form-select text-center p-2" name="filial"  aria-label="Selecione a filial">
+                            <option disabled selected>Selecione a filial</option>
+                            <% filiais.forEach(filial => { %>
+                            <option value="<%= [filial.codfilial, filial.nome] %>"><%= filial.nome %></option>
+                            <% }) %>
+                        </select> 
                     </div>
                     <div class="text-center mb-2">
                         <h3 class="title-style pt-2"> Inscrições </h3>

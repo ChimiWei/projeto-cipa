@@ -10,7 +10,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm text-center ">
-                    <form action="/iniciar_votacao" method="GET" >
+                    <form  method="GET" >
                         <label for="" class="fs-3"> Para iniciar a votação, insira a sua matrícula: </label>
                         <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
                         <button  type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
@@ -40,7 +40,7 @@
                     <% if (locals.voto) { %>
                         <h4 class="text-danger text-shadow"> Funcionário já votou! </h4>
                     <% } else { %>
-                        <form action="/iniciar_votacao" method="POST" >
+                        <form method="POST" >
                             <input hidden name="chapa" type="text" value="<%= chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
                             <button  type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
                         </form> 
@@ -53,10 +53,14 @@
                         <h4 class="text-shadow"> Voto de <text class="text-capitalize fw-bold"><%= message.nome[0].toLowerCase() %></text> realizado com sucesso </h4>
                     </div>
                 <% } %>
+                <% if(locals.message.error) { %>
+                    <div class="row mt-2 text-center">
+                        <h4 class="text-shadow"><%= message.error %></h4>
+                    </div>
+                <% } %>
         </div>
     </section>
     <%- include('partials/footer'); %>
-    <script src='js/votacao.js'></script>
 
 
 </body>
