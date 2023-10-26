@@ -12,7 +12,7 @@
             <div>
                 <div class="d-flex justify-content-center">
                     <h4 class="text-secondary">
-                        <%= func.NOME %> está votando... </h2>
+                        <%= func.nome %> está votando... </h2>
                 </div>
                 <div class="text-center">
                     <h3> Candidatos </h3>
@@ -37,8 +37,11 @@
                     </div>
                     <% }) %>
                     <div class="text-end">
-                        <button class="btn shadow btn-hover"> BRANCO </button>
-                        <button class="btn btn-color btn-hover"> NULO </button>
+                        <form method="POST">
+                            <button class="btn shadow btn-hover" type="submit" value="BRA" name="nvotacao" > BRANCO </button>
+                            <button class="btn btn-color btn-hover" type="submit" value="NUL" name="nvotacao"> NULO </button>
+                        </form>
+                        
                     </div>
                         <div id="candidatoModal" class="voto-modal">
                             <div class="voto-modal-content">
@@ -54,12 +57,12 @@
                                             <ul class="list-group">
                                                 <li class="list-item-pd-0" id="Func"></li>
                                                 <li class="list-item-pd-0" id="Secao"></li>
-                                                <li class="list-item-pd-0"> Número de Votação: <text
-                                                        class="text-success fw-bold" id="NVotacao"></text></li>
+                                                <li class="list-item-pd-0"> Número de Votação: 
+                                                <text class="text-success fw-bold" id="NVotacao"></text></li>
                                             </ul>
                                         </div>
                                         <div class="text-end">
-                                            <form action="/votacao" method="POST">
+                                            <form method="POST">
                                                 <button id="btnConfirmarVoto" class="btn btn-success" type="submit"
                                                     value="" name="nvotacao"> Confirmar Candidato </button>
                                             </form>

@@ -9,7 +9,12 @@
             <p class="fs-5"> Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %> </p>
             <p class="fs-5"> Resultado: <%= cipa.dtresultado %> </p>
         </div>
-        <div class="text-end">
+    </div>
+    <div class="row">
+        <div class="col-sm-3 text-start">
+            <a class="btn btn-color" href="/lista/<%= cipa.codfilial %>"> Candidatos </a>
+        </div>
+        <div class="col-sm text-end">
             <form action="/solicitar_alteracao?_method=DELETE" method="POST">
                 <a class="btn btn-success" href="/iniciar_votacao/<%= cipa.codfilial %>"> Iniciar Votação </a>
                 <a class="btn btn-color" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>

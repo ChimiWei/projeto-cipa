@@ -1,3 +1,15 @@
+const candidatos = (cipaid) => {
+    const sql = `
+    select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, V.total 
+    from inscritos I
+    inner join votos V on V.cipaid = I.cipaid and V.voto = I.n_votacao
+    where I.cipaid = ?`
+
+    const params = [cipaid]
+
+    return [sql, params]
+}
+
 const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
     const sql = `
     INSERT INTO cipaconfig VALUES (1, ?, default, ?, default, ?, ?, ?, ?, ?, ?, default)`
@@ -12,14 +24,21 @@ const cadastrarCandidato = (cipaid, n_votacao, codfilial, chapa, nome, funcao, s
     insert into inscritos values (?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
     `
     const params = [cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao]
-    return { sql, params }
+    return [sql, params]
 }
 
-const addVoto = (votos_r, cipaid, chapa, n_votacao) => {
-    const sql =
-        'update inscritos set votos_r = ? where cipaid = ? and chapa = ? and n_votacao = ?;'
+const cadastrarVoto = (cipaid, n_votacao) => {
+    const sql = `
+    insert into votos values (?, ?,  default);
+    `
+    const params = [cipaid, n_votacao]
+    return [sql, params]
+}
 
-    const params = [++votos_r, cipaid, chapa, n_votacao]
+const addVoto = (cipaid, n_votacao) => {
+    const sql = 'update votos set total = total + 1 where cipaid = ? and voto = ?;'
+
+    const params = [cipaid, n_votacao]
     return [sql, params]
 }
 
@@ -32,9 +51,9 @@ const checarVoto = (cipaid, chapa) => {
 
 }
 
-const registrarVoto = (cipaid, codfilial, chapa, nome, setor, hora_voto) => {
+const registrarVoto = (cipaid, codfilial, chapa, nome, setor,) => {
     const sql = 'insert into pfvoto values (?, ?, ?, default, ?, ?, default)'
-    const params = [cipaid, codfilial, chapa, nome, setor, hora_voto]
+    const params = [cipaid, codfilial, chapa, nome, setor]
 
     return [sql, params]
 }
@@ -102,10 +121,10 @@ const funcionario = (codfilial, chapa) => { // Dados do Funcionário
 
 const funcComCpf = (chapa, codfilial) => { // Dados do Funcionário
     const sql = `
-    select F.CHAPA, F.NOME, F.CODFILIAL, right(P.CPF, 3) as CONFIRMACAO
+    select F.chapa, F.nome, F.codfilial, S.DESCRICAO AS secao, right(P.CPF, 3) as confirmacao
     from PFUNC F
     inner join PPESSOA P on P.CODIGO = F.CODPESSOA
-    
+    inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     where F.CHAPA = @chapa and F.CODFILIAL = @codfilial`
     const params = [
         {
@@ -153,8 +172,10 @@ const funcComColigada = (codfilial, chapa) => {
 
 module.exports = {
     mysql: {
+        candidatos,
         cadastrarCipa,
         cadastrarCandidato,
+        cadastrarVoto,
         addVoto,
         registrarVoto,
         checarVoto,
