@@ -328,6 +328,10 @@ h5 {
     background-color: grey;
 }
 
+.btn-hover:hover {
+     background-color: #baddc5!important;
+}
+
 
 
 

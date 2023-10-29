@@ -145,6 +145,18 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
     }
     await promiseMysql.query(...db.mysql.cadastrarCipa(codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
         req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
+    
+    await getCipaAtiva()
+
+    const cipa = cipas.find(cipa => cipa.codfiflial == codfilial)
+
+    if(cipa) {
+        await promiseMysql.query(db.mysql.cadastrarVoto(cipa.id, "BRA"))
+        await promiseMysql.query(db.mysql.cadastrarVoto(cipa.id, "NUL"))
+    } else {
+        return res.send("ocorreu um erro")
+    }
+    
     console.log('cipa cadastrada com sucesso')
     getCipaAtiva()
     res.redirect('/')
@@ -261,10 +273,16 @@ app.put('/confirmar_voto/:nvotacao', catchAsyncErr(async (req, res) => {
         const func = votante.func
         const candidatos = await getCandidatos(votante.cipaid)
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
-        const test = await promiseMysql.query(...db.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
+        const result = await promiseMysql.query(...db.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
 
-        console.log('Test:')
-        console.log(test)
+        console.log('Resultado:')
+        console.log(result[0])
+
+        if(result[0].affectedRows === 0) {
+            req.flash("error", "Ocorreu um erro com seu voto.")
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            return res.redirect('back');
+        }
 
         await promiseMysql.query(...db.mysql.registrarVoto(votante.cipaid, func.codfilial, func.chapa, func.nome, func.secao))
         req.flash("nome", func.nome)
@@ -295,7 +313,7 @@ app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
     res.render('profile.ejs', { user: req.user })
 })
 
-app.get('/lista/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
     if (!cipa) return res.redirect('/')
     const candidatos = await getCandidatos(cipa.id)

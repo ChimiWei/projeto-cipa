@@ -22,7 +22,7 @@
                           <img class="img-small" src='eu.jpg'  />
                           <text class="fs-3 ms-3 text-capitalize"><%= candidato.nome.toLowerCase()  %> </text>
                         <% } else { %>
-                          <text class="fs-3 ms-3 text-capitalize"><%= voto  %> </text>
+                          <text class="fs-3 ms-3 text-capitalize"><%= voto %> </text>
                         <% } %>
                         </div>
                         <ul class="list-group list-group-flush">
@@ -41,7 +41,7 @@
                         </ul>
                         <div class="card-body text-end">
                             <button id="btnConfirmarVoto" class="btn btn-success" type="submit" > Confirmar Voto </button>
-                            <a href="javascript:window.history.back()" class="btn btn-danger" > Voltar </a>
+                            <a href="/votacao/<%= votante.func.codfilial %>" class="btn btn-danger" > Voltar </a>
                         </div>
                           </form>
                     </div>
