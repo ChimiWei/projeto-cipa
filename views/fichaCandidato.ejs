@@ -3,25 +3,39 @@
 <head>
    <%- include('partials/head', {title: 'Ficha de Registro'}); %>
 </head>
+<style>
+    
+@media print {
+    body * {
+      visibility: hidden;
+    }
+    .printable, .printable * {
+      visibility: visible!important;
+    }
+    .printable {
+      position: fixed;
+      right: 50px;
+      top: 0;
+    }
+  }
+</style>
+
 <body>
-    <%- include('partials/header'); %>
+    <%- include('partials/header'); %> 
     <% if (locals.func) { %>
     <section >
-    <div class="container text-end mt-2">
-        <button class="btn btn-success"> Imprimir </button>
-        <a href="/cadastro_candidato" class="btn btn-dark"> Voltar </a>
-    </div>
-    <div class="container bg-white rounded mt-2 pt-2 pb-2">
+   
+    <div class="container bg-white rounded mt-2 pt-2 pb-2 printable">
         <div class="row">
-            <div class="col-sm-2 text-center align-text-bottom">
+            <div class="col-sm-2 align-text-bottom">
                 <img src='/cipa.png' class="w-75" />
             </div>
-            <div class="col-sm-8 ">
-                <div class="text-center ">
+            <div class="col-sm-8">
+                <div class="text-center">
                     <h1> <%= func.GCNOME %></h1>
                     <p> <%= func.GCRUA %>,<%= func.GCNUMERO %> - <%= func.GCBAIRRO %> - <%= func.GCCIDADE %>/<%= func.GCESTADO %> </p>
                     <p> C.G.C: <%= func.GCCGC %> Fone: <%= func.GCTELEFONE %> </p>
-                    <h2>Comissão Interna de Prevenção de Acidentes</h3>
+                    <h2>Comissão Interna de Prevenção de Acidentes</h2>
                     <h4> FICHA DE INSCRIÇÃO </h4>
                 </div>
                 <ul class="list-group">
@@ -67,38 +81,38 @@
                 </tr>
                 <tr>
                     <td >
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                             Matrícula: <%= func.CHAPA %>
                          </div>
                     </td>
                     <td>
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                             Número de Votação: 
                          </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                            Nome:  <%= func.NOME %>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                             Seção: <%= func.SECAO %>
                          </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                             Função: <%= func.FUNCAO %>
                          </div>
                     </td>
                     <td>
-                        <div class="border border-dark p-1  fw-normal">
+                        <div class="border border-dark p-1 fw-normal">
                             Data: <%= hoje %>
                          </div>
                     </td>
@@ -120,6 +134,7 @@
         </div>
     </div>
     <div class="container mt-2 text-center">
+        <text id="info" class="text-danger text-shadow"> Para confirmar o cadastro, imprima a ficha </text>
         <form method="POST" action="/fichaCandidato">
             <input type="hidden" id="chapa" name="chapa" value="<%= func.CHAPA %>">
             <input type="hidden" id="nvotacao" name="nvotacao" value="<%= n_votacao %>">
@@ -127,11 +142,14 @@
             <input type="hidden" id="nome" name="nome" value="<%= func.NOME %>">
             <input type="hidden" id="funcao" name="funcao" value="<%= func.FUNCAO %>">
             <input type="hidden" id="secao" name="secao" value="<%= func.SECAO %>">
-            <button class="btn btn-color"> Confirmar Cadastro </button>
+            <button id="btnConfirm" disabled class="btn btn-color"> Confirmar Cadastro </button>
         </form>
+        <button onclick="printForm()" class="btn btn-success"> Imprimir </button>
+        <a href="javascript:history.back()" class="btn btn-dark"> Voltar </a>
     </div>  
     </section>
     <% } %>
     <%- include('partials/footer'); %>
+    <script src="/js/fichacandidato.js"></script>
 </body>
 </html>

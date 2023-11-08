@@ -306,6 +306,15 @@ h5 {
     background-color: #240115;
 }
 
+.counter-circle{
+    display: inline-flex;
+    background-color: rgb(122, 121, 121);
+    padding: 0.22em 0.60em;
+    min-width: 33px;
+    color: white;
+    border-radius: 50%;
+}
+
 /* Tela de index - inicio */
 
 /* Footer */
@@ -333,5 +342,4 @@ h5 {
 }
 
 
-
-
+  
