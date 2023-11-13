@@ -324,6 +324,12 @@ app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
     res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
 })
 
+app.get('/votos/:codfilial', catchAsyncErr(async (req, res) => {
+    const [funcionarios] = await promiseMysql.query(...db.mysql.getFuncComVoto(req.params.codfilial))
+    console.log(funcionarios[0].data_voto)
+    res.render('listVotos.ejs', {funcionarios})
+}))
+
 
 
 app.get('/login', /*checkNotAuthenticated,*/(req, res) => {

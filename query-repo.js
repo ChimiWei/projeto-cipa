@@ -21,6 +21,16 @@ const getVotos = (cipaid) => {
     return [sql, params]
 }
 
+const getFuncComVoto = (codfilial) => {
+    const sql = `
+    select chapa, nome, setor, date_format(data_voto, "%d/%m/%y") as data_voto, hora_voto from pfvoto where codfilial = ?
+    `
+
+    const params = [codfilial]
+
+    return [sql, params]
+}
+
 const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
     const sql = `
     INSERT INTO cipaconfig VALUES (1, ?, default, ?, default, ?, ?, ?, ?, ?, ?, default)`
@@ -205,6 +215,7 @@ module.exports = {
         addVoto,
         registrarVoto,
         checarVoto,
+        getFuncComVoto,
         maxNVotacao,
         deleteCipa,
         deleteInscritos,

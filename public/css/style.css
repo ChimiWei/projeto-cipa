@@ -16,9 +16,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-table, tr, td {
-    border: 1px solid #212529!important;
-}
+
 
 td {
     padding: 3px;

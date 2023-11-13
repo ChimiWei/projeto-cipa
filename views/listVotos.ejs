@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <%- include('partials/head', {title: 'Cipas'}); %>
+</head>
+<body>
+    <%- include('partials/header'); %>  
+    <section> 
+    <div class="container bg-white rounded p-2 mt-2">
+        <div class="row">
+            <div class="col text-center">
+                <h3> Cipa</h3>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <table class="table w-75">
+                <thead>
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Setor</th>
+                    <th scope="col">Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% funcionarios.forEach(func => { %>
+                  <tr>
+                    <td><%= func.nome %></td>
+                    <td><%= func.setor %></td>
+                    <td><%= func.data_voto %></td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+    </section>
+    <%- include('partials/footer'); %>
+</body>
+</html>
