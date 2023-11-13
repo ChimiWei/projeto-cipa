@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head', {title: 'Voto Finalizado'}); %>
+</head>
+
+   
+
+<body>
+ <section class="st-section">
+     <div class="container text-center bg-white p-2">
+        <div class="row"> 
+            <h2> Voto da gestão <%= gestao %> realizado com sucesso, Obrigado!</h2>
+        </div>
+        <div class="">
+            <p class="fs-3">
+                A página será redirecionada em:
+            </p>
+            <h2 id="counter" class=""></h2>
+            <div class="loader m-auto">
+                
+            </div>
+        </div>
+    </div>
+ </section>
+    
+ <script src='/js/fimVoto.js'></script>
+</body>
+</html>

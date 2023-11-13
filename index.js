@@ -381,6 +381,11 @@ app.delete('/logout', (req, res) => {
     res.redirect('/login')
 })
 
+app.get('/test', (req, res) => {
+    res.render('fimVoto.ejs', {gestao})
+})
+
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
