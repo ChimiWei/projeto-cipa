@@ -267,8 +267,14 @@ app.get('/confirmar_voto/:codfilial/:nvotacao', catchAsyncErr(async (req, res) =
 }))
 
 app.put('/confirmar_voto/:nvotacao', catchAsyncErr(async (req, res) => {
+    if(!votante.func) return res.redirect('/')
+    const func = votante.func
+    const [voto] = await promiseMysql.query(...db.mysql.checarVoto(votante.cipaid, func.chapa))
+    if(voto[0]) {
+        req.flash("error", "Funcionário já votou")
+        return res.redirect(`/iniciar_votacao/${func.codfilial}`)
+    }
     if (req.body.confirmacao == votante.func.confirmacao) {
-        const func = votante.func
         const candidatos = await getCandidatos(votante.cipaid)
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
         const result = await promiseMysql.query(...db.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
@@ -286,12 +292,16 @@ app.put('/confirmar_voto/:nvotacao', catchAsyncErr(async (req, res) => {
         req.flash("nome", func.nome)
         votante.func = null
         votante.nvotacao = null
-        return res.redirect(`/iniciar_votacao/${func.codfilial}`)
+        return res.redirect(`/voto_finalizado/${func.codfilial}`)
     } else {
         req.flash("error", "Os digitos inseridos estão incorretos")
         return res.redirect('/confirmar_voto')
     }
 }))
+
+app.get('/voto_finalizado/:codfilial', (req, res) => {
+    res.render('fimVoto.ejs', {gestao, message: req.flash()})
+})
 
 
 
@@ -310,14 +320,22 @@ app.delete('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
 
 }))
 
-app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
-    res.render('profile.ejs', { user: req.user })
-})
-
 app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
     if (!cipa) return res.redirect('/')
     const candidatos = await getCandidatos(cipa.id)
+
+    // bubble sort lets gooooooooooo
+    for(let i = 0; i < candidatos.length; i++){
+        for(let j = 0; j < candidatos.length - 1; j++){
+            if(candidatos[j].votos < candidatos[j + 1].votos){
+                const temp = candidatos[j]
+                candidatos[j] = candidatos[j + 1]
+                candidatos[j + 1] = temp
+            }
+        }
+    }
+
     const [rows] = await promiseMysql.query(...db.mysql.getVotos(cipa.id))
     const [branco, nulo] = rows
     console.log(branco)
@@ -330,7 +348,9 @@ app.get('/votos/:codfilial', catchAsyncErr(async (req, res) => {
     res.render('listVotos.ejs', {funcionarios})
 }))
 
-
+app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
+    res.render('profile.ejs', { user: req.user })
+})
 
 app.get('/login', /*checkNotAuthenticated,*/(req, res) => {
     res.render('login.ejs')
@@ -381,9 +401,6 @@ app.delete('/logout', (req, res) => {
     res.redirect('/login')
 })
 
-app.get('/test', (req, res) => {
-    res.render('fimVoto.ejs', {gestao})
-})
 
 
 function checkAuthenticated(req, res, next) {

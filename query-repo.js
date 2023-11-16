@@ -1,6 +1,6 @@
 const candidatos = (cipaid) => {
     const sql = `
-    select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, V.total 
+    select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, V.total as votos
     from inscritos I
     inner join votos V on V.cipaid = I.cipaid and V.voto = I.n_votacao
     where I.cipaid = ?`
@@ -30,6 +30,7 @@ const getFuncComVoto = (codfilial) => {
 
     return [sql, params]
 }
+
 
 const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
     const sql = `

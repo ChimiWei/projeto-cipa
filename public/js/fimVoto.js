@@ -1,5 +1,6 @@
 let counter = 10
 const counterEl = document.getElementById('counter')
+const currentUrl = window.location.href;
 counterEl.textContent = counter 
 var intervalId;
 const startInterval = () => {
@@ -16,5 +17,9 @@ startInterval()
 
 const stopInterval = () =>{
     clearInterval(intervalId)
+    window.location.replace(`http://localhost:3000/iniciar_votacao/${currentUrl.split('/').pop()}`);
 }
+
+
+console.log()
 

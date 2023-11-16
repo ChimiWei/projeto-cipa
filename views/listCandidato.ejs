@@ -20,9 +20,15 @@
                             <h3> Candidatos </h3>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md my-2">
+                            <text class="fs-5 ">  <span class="counter-circle"><%= branco.total %></span> BRANCOS </text>
+                            <text class="fs-5">  <span class="counter-circle"><%= nulo.total %></span> NULOS </text>
+                        </div>
+                    </div>
                     <div class="row row-cols-md-3 justify-content-center">
                         <% if (locals.candidatos) { %>
-                            <% candidatos.forEach(func=> { %>
+                            <% candidatos.forEach(func => { %>
                                 <div class="col-auto mt-3">
                                     <div class="card rounded candidato">
                                         <div class="card-body text-center">
@@ -35,19 +41,13 @@
                                                 <li class="list-item-pd-0"> Setor: <%= func.secao %> </li>
                                             </ul>
                                             <span class="display-5">
-                                                <%= func.total %>
+                                                <%= func.votos %>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             <% }) %>
                         <% } %>    
-                    </div>
-                    <div class="row">
-                        <div class="col-md my-2">
-                            <text class="fs-5 ">  <span class="counter-circle"><%= branco.total %></span> BRANCOS </text>
-                            <text class="fs-5">  <span class="counter-circle"><%= nulo.total %></span> NULOS </text>
-                        </div>
                     </div>
                 </section>
                 <%- include('partials/footer'); %>
