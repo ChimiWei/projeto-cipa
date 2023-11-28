@@ -16,11 +16,9 @@
             <a class="btn btn-color" href="/votos/<%= cipa.codfilial %>"> Votos </a>
         </div>
         <div class="col-sm text-end">
-            <form action="/solicitar_alteracao?_method=DELETE" method="POST">
-                <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
-                <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
-                <button name="deletedcipaid" class="btn btn-danger" type="submit" value="<%= cipa.id %>"> Solicitar Alteração </button>
-            </form>
+            <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
+            <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
+            <a class="btn btn-danger" href="/autorizar_delete/<%= cipa.codfilial %>"> Solicitar Alteração </a>
         </div>
     </div>
 </div>
