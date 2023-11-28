@@ -114,7 +114,6 @@ const getCipaAtiva = async () => {
     cipas = await JSON.parse(JSON.stringify(rows))
     // console.log('cipa ativa:')
 
-    console.log(cipas)
 
 }
 
@@ -343,11 +342,42 @@ app.get('/voto_finalizado/:codfilial', (req, res) => {
 })
 
 
+app.get('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
+    res.render('autorizarDelete.ejs', {codfilial: req.params.codfilial, message: req.flash()})
+})
 
-app.delete('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
+app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const codfilial = req.params.codfilial
+    const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
+    if (!cipa) return res.redirect('/')
+    
+    const [rows] = await promiseMysql.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+    const {token} = rows[0]
+    
+    if(req.body.token === token) {
+        const cipaid = cipa.id
+        console.log('cipa id:')
+        console.log(cipaid)
+        await promiseMysql.query(...db.mysql.deleteRegistroVoto(cipaid))
+        await promiseMysql.query(...db.mysql.deleteVoto(cipaid))
+        await promiseMysql.query(...db.mysql.deleteInscritos(cipaid))
+        await promiseMysql.query(...db.mysql.deleteToken(cipaid))
+        await promiseMysql.query(...db.mysql.deleteCipa(cipaid))
+        
+        getCipaAtiva()
 
-    const cipaid = req.body.deletedcipaid
+        return res.redirect('/')
+    } else {
+        req.flash("error", "Token Incorreto")
+        return res.redirect(`/autorizar_acesso/${codfilial}`)
+    }
+}))
+
+app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
+    if(!deleteAuth) return res.redirect('/')
+    
+    const cipaid = req.params.cipaid
 
     await promiseMysql.query(...db.mysql.deleteRegistroVoto(cipaid))
     await promiseMysql.query(...db.mysql.deleteVoto(cipaid))
@@ -355,16 +385,19 @@ app.delete('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
     await promiseMysql.query(...db.mysql.deleteCipa(cipaid))
     
     getCipaAtiva()
+
+    deleteAuth = false
+
     res.redirect('/')
 
 }))
 
-app.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+app.get('/autorizar_acesso/:codfilial/candidatos', /*checkAuthenticated,*/ async (req, res) => {
 
     res.render('autorizarAcesso.ejs', {codfilial: req.params.codfilial, message: req.flash()})
 })
 
-app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+app.post('/autorizar_acesso/:codfilial/candidatos', /*checkAuthenticated,*/ async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
@@ -380,7 +413,6 @@ app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res
         return res.redirect(`/autorizar_acesso/${codfilial}`)
     }
 })
-
 
 app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
     if(!candidatosAuth) return res.redirect('/')

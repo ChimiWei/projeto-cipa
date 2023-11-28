@@ -135,6 +135,14 @@ const deleteRegistroVoto = (cipaid) => {
     return [sql, params]
 }
 
+const deleteToken = (cipaid) => {
+    const sql = `DELETE FROM cipatoken WHERE cipaid = ?`
+
+    const params = [cipaid]
+
+    return [sql, params]
+}
+
 // ------------- MSSQL -------------- //
 
 /*const funcionario = (chapa) => { // Dados do Funcionário
@@ -258,7 +266,8 @@ module.exports = {
         deleteCipa,
         deleteInscritos,
         deleteVoto,
-        deleteRegistroVoto
+        deleteRegistroVoto,
+        deleteToken
     },
     mssql: {
         funcionario,
