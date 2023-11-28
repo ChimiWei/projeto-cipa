@@ -73,6 +73,16 @@ const checarVoto = (cipaid, chapa) => {
 
 }
 
+const getTotalVotos = (cipaid, chapa) => {
+    const sql =`
+    select count(chapa) as total from pfvoto where cipaid = ?
+        `
+
+    const params = [cipaid]
+    return [sql, params]
+
+}
+
 const registrarVoto = (cipaid, codfilial, chapa, nome, setor,) => {
     const sql = 'insert into pfvoto values (?, ?, ?, default, ?, ?, default)'
     const params = [cipaid, codfilial, chapa, nome, setor]
@@ -84,6 +94,13 @@ const maxNVotacao = () => {
     const query = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos`
 
     return query
+}
+
+const getCipaToken = (cipaid) => {
+    const sql = `select token from cipatoken where cipaid = ?`
+    const params = [cipaid]
+
+    return [sql, params]
 }
 
 const deleteCipa = (cipaid) => {
@@ -205,6 +222,24 @@ const funcComColigada = (codfilial, chapa) => {
     return { sql, params }
 }
 
+const funcTotalFilial = (codfilial) => {
+    const sql = `
+    select count(F.chapa) as total
+    from PFUNC F
+    where F.CODFILIAL = @codfilial AND F.CODSITUACAO <> 'D'
+    `
+
+    const params = [
+        {
+            name: 'codfilial',
+            type: 'int',
+            value: codfilial
+        }
+    ]
+
+    return { sql, params }
+
+}
 
 module.exports = {
     mysql: {
@@ -216,8 +251,10 @@ module.exports = {
         addVoto,
         registrarVoto,
         checarVoto,
+        getTotalVotos,
         getFuncComVoto,
         maxNVotacao,
+        getCipaToken,
         deleteCipa,
         deleteInscritos,
         deleteVoto,
@@ -227,5 +264,6 @@ module.exports = {
         funcionario,
         funcComCpf,
         funcComColigada,
+        funcTotalFilial,
     }
 }
