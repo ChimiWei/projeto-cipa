@@ -1,4 +1,4 @@
-<div class="container rounded shadow bg-grey text-white w-75 my-2 p-3 ">
+<div class="container rounded shadow bg-grey text-white w-75 my-2 p-3">
     <div class="row">
       <div class="text-center">  <h2> <%= cipa.filial %> </h2> </div>
         <div class="col-sm text-end"> 
@@ -12,13 +12,13 @@
     </div>
     <div class="row">
         <div class="col-sm-3 text-start">
-            <a class="btn btn-color" href="/candidatos/<%= cipa.codfilial %>"> Candidatos </a>
+            <a class="btn btn-color" href="/autorizar_acesso/<%= cipa.codfilial %>"> Candidatos </a>
             <a class="btn btn-color" href="/votos/<%= cipa.codfilial %>"> Votos </a>
         </div>
         <div class="col-sm text-end">
             <form action="/solicitar_alteracao?_method=DELETE" method="POST">
-                <a class="btn btn-success" href="/iniciar_votacao/<%= cipa.codfilial %>"> Iniciar Votação </a>
-                <a class="btn btn-color" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
+                <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
+                <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
                 <button name="deletedcipaid" class="btn btn-danger" type="submit" value="<%= cipa.id %>"> Solicitar Alteração </button>
             </form>
         </div>
