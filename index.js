@@ -65,6 +65,8 @@ var votante = {
     func: null
 }
 
+var candidatosAuth = false
+
 const catchAsyncErr = (middleware) => {
     return async function (req, res, next) {
         try {
@@ -96,8 +98,22 @@ getUsers()
 
 const getCipaAtiva = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
+    
+    rows.forEach((cipa) => {
+        if(cipa.inscricaoAtiva === undefined) {
+            const iniInsc = new Date(cipa.dtiniinsc.split('/').reverse())
+            const fimInsc = new Date(cipa.dtfiminsc.split('/').reverse())
+            const iniVoto = new Date(cipa.dtinivoto.split('/').reverse())
+            const fimVoto= new Date(cipa.dtfimvoto.split('/').reverse())
+            
+            cipa.inscricaoAtiva = isTodayInRange(iniInsc, fimInsc)
+            cipa.votacaoAtiva = isTodayInRange(iniVoto, fimVoto)
+        }
+    })
+
     cipas = await JSON.parse(JSON.stringify(rows))
     // console.log('cipa ativa:')
+
     console.log(cipas)
 
 }
@@ -116,7 +132,29 @@ const getCandidatos = async (cipaid) => {
 
 }
 
+const checkCipaVotes = async (codfilial, cipaid) => {
+    const result = await mssql.safeQuery(db.mssql.funcTotalFilial(codfilial))
+    const [rows] = await promiseMysql.query(...db.mysql.getTotalVotos(cipaid))
+    console.log(rows)
+
+    const [filial] = result
+    const [votos] = rows
+
+    let percentage = Math.floor((votos.total * 100)/filial.total)
+
+    console.log(percentage + '%')
+
+}
+
+function isTodayInRange(firstD, lastD) {
+    const currentDate = new Date()
+
+    return (firstD >= currentDate && currentDate <= lastD)
+}
+
 app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    
+
     res.render('home.ejs', { user: req.user, gestao: gestao, cipas: cipas })
 }))
 
@@ -164,7 +202,7 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
 
 app.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
+    if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/')
     if (req.query.chapa) {
         const chapa = req.query.chapa
         const func = await mssql.safeQuery(db.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
@@ -178,7 +216,7 @@ app.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(
 
 app.get('/fichaCandidato/:codfilial/:chapa', catchAsyncErr(async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
+    if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/')
     const candidatos = await getCandidatos(cipa.id)
     const chapa = req.params.chapa
     if (candidatos.find(func => func.chapa === chapa)) res.send('Funcionário já cadastrado!')
@@ -208,7 +246,8 @@ app.post('/fichaCandidato', catchAsyncErr(async (req, res) => {
 app.get('/iniciar_votacao/:codfilial', catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-    if (!cipa) return res.redirect('/')
+    if (!cipa || !cipa.votacaoAtiva) return res.redirect('/')
+    await checkCipaVotes(codfilial, cipa.id)
     if (req.query.chapa) {
         const func = await mssql.safeQuery(db.mssql.funcionario(codfilial, req.query.chapa))
         const [voto] = await promiseMysql.query(...db.mysql.checarVoto(cipa.id, req.query.chapa))
@@ -320,11 +359,36 @@ app.delete('/solicitar_alteracao', catchAsyncErr(async (req, res) => {
 
 }))
 
+app.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+
+    res.render('autorizarAcesso.ejs', {codfilial: req.params.codfilial, message: req.flash()})
+})
+
+app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+    const codfilial = req.params.codfilial
+    const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
+    if (!cipa) return res.redirect('/')
+    
+    const [rows] = await promiseMysql.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+    const {token} = rows[0]
+    
+    if(req.body.token === token) {
+        candidatosAuth = true
+        return res.redirect(`/candidatos/${codfilial}`)
+    } else {
+        req.flash("error", "Token Incorreto")
+        return res.redirect(`/autorizar_acesso/${codfilial}`)
+    }
+})
+
+
 app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+    if(!candidatosAuth) return res.redirect('/')
+    candidatosAuth = false
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
     if (!cipa) return res.redirect('/')
     const candidatos = await getCandidatos(cipa.id)
-
+    
     // bubble sort lets gooooooooooo
     for(let i = 0; i < candidatos.length; i++){
         for(let j = 0; j < candidatos.length - 1; j++){
