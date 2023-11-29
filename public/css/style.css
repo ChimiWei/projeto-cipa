@@ -6,9 +6,31 @@
 }
 
 body {
-    background-color: #48c5389f!important;
+    position: relative;
+    z-index: 1;
+    background-color: #38a4c59f!important;
     padding-bottom: 100px;
 }
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    min-height: 100% !important;
+    height: 100%;
+    opacity: .4; 
+    z-index: -1;
+    background: url('/cipabg.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
