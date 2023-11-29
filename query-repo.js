@@ -57,6 +57,14 @@ const cadastrarVoto = (cipaid, n_votacao) => {
     return [sql, params]
 }
 
+const addToken = (cipaid, codfilial, token) => {
+    const sql = `
+    insert into cipatoken values (?, ?, ?);
+    `
+    const params = [cipaid, codfilial, token]
+    return [sql, params]
+}
+
 const addVoto = (cipaid, n_votacao) => {
     const sql = 'update votos set total = total + 1 where cipaid = ? and voto = ?;'
 
@@ -256,6 +264,7 @@ module.exports = {
         cadastrarCipa,
         cadastrarCandidato,
         cadastrarVoto,
+        addToken,
         addVoto,
         registrarVoto,
         checarVoto,

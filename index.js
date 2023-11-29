@@ -151,9 +151,17 @@ function isTodayInRange(firstD, lastD) {
     return (firstD >= currentDate && currentDate <= lastD)
 }
 
-app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    
+function generateToken() {
+    let randomToken = Math.random().toString(36).slice(2, 8)
+    console.log(randomToken)
+    if(randomToken.length >= 6 && randomToken.search(/\d{1,3}/) != -1) return randomToken
 
+    return generateToken()
+}
+
+
+
+app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     res.render('home.ejs', { user: req.user, gestao: gestao, cipas: cipas })
 }))
 
@@ -188,6 +196,7 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
 
     if(cipa) {
+        await promiseMysql.query(...db.mysql.addToken(cipa.id, codfilial, generateToken()))
         await promiseMysql.query(...db.mysql.cadastrarVoto(cipa.id, "BRA"))
         await promiseMysql.query(...db.mysql.cadastrarVoto(cipa.id, "NUL"))
     } else {
@@ -392,12 +401,12 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 
 }))
 
-app.get('/autorizar_acesso/:codfilial/candidatos', /*checkAuthenticated,*/ async (req, res) => {
+app.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
     res.render('autorizarAcesso.ejs', {codfilial: req.params.codfilial, message: req.flash()})
 })
 
-app.post('/autorizar_acesso/:codfilial/candidatos', /*checkAuthenticated,*/ async (req, res) => {
+app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
