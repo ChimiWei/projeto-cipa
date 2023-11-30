@@ -5,7 +5,12 @@
     line-height: 1.2;
 }
 
+html {
+    height: 100%;
+}
+
 body {
+    min-height: 100%;
     position: relative;
     z-index: 1;
     background-color: #38a4c59f!important;
