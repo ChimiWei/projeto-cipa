@@ -162,6 +162,8 @@ function generateToken() {
 
 
 app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    await getCipaAtiva()
+
     res.render('home.ejs', { user: req.user, gestao: gestao, cipas: cipas })
 }))
 
@@ -207,6 +209,26 @@ app.post('/cipaconfig', catchAsyncErr(async (req, res) => {
     res.redirect('/')
 }))
 
+app.get('/edit_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
+    if (!cipa) return res.redirect('/')
+    res.render('editCipa.ejs', { user: req.user, gestao: gestao, cipa, message: req.flash() })
+}))
+
+app.put('/edit_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
+    if (!cipa) return res.redirect('/')
+    
+    const [result] = await promiseMysql.query(...db.mysql.editCipa(req.body.fimvotacao, cipa.id))
+    console.log(result)
+
+    if(result.affectedRows === 0){
+        return res.redirect(`/edit_cipa/<%= cipa.codfilial %>`)
+    } 
+
+    return res.redirect('/')
+    
+}))
 
 app.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
@@ -443,13 +465,12 @@ app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
     const [rows] = await promiseMysql.query(...db.mysql.getVotos(cipa.id))
     const [branco, nulo] = rows
-    console.log(branco)
+
     res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
 })
 
 app.get('/votos/:codfilial', catchAsyncErr(async (req, res) => {
     const [funcionarios] = await promiseMysql.query(...db.mysql.getFuncComVoto(req.params.codfilial))
-    console.log(funcionarios[0].data_voto)
     res.render('listVotos.ejs', {funcionarios})
 }))
 

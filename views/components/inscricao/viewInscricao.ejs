@@ -2,11 +2,15 @@
     <div class="row">
       <div class="text-center">  <h2> <%= cipa.filial %> </h2> </div>
         <div class="col-sm text-end"> 
-            <p class="fs-5"> Gestão: <%= cipa.gestao + '/' + (cipa.gestao + 1) %> </p>
-            <p class="fs-5"> Inscrições: <%= cipa.dtiniinsc %> à <%= cipa.dtfiminsc %></p>
+            <p class="fs-5 "> Gestão: <%= cipa.gestao + '/' + (cipa.gestao + 1) %> </p>
+            <p class="fs-5"> Inscrições: <%= cipa.dtiniinsc %> à <%= cipa.dtfiminsc %> </p>
         </div>
         <div class="col-sm"> 
-            <p class="fs-5"> Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %> </p>
+            <p class="fs-5 ">
+                Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %> 
+                <a class="btn-small btn-color position-absolute" href="/edit_cipa/<%= cipa.codfilial %>"> Extender </a> 
+            </p>
+            
             <p class="fs-5"> Resultado: <%= cipa.dtresultado %> </p>
         </div>
     </div>

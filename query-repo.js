@@ -41,6 +41,15 @@ const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivo
     return [sql, params]
 }
 
+function editCipa(dtinivoto, cipaid) {
+    const sql = `
+    UPDATE cipaconfig set dtfimvoto = ? where id = ?`
+
+    const params = [dtinivoto, cipaid]
+
+    return [sql, params]
+}
+
 const cadastrarCandidato = (cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao) => {
     const sql = `
     insert into inscritos values (?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
@@ -263,6 +272,7 @@ module.exports = {
         getVotos,
         cadastrarCipa,
         cadastrarCandidato,
+        editCipa,
         cadastrarVoto,
         addToken,
         addVoto,
