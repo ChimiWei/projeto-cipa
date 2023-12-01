@@ -85,6 +85,40 @@ const mssqlQuery = async (query) => {
 }
 
 
+const checkCipaVotes = async (codfilial, cipaid) => {
+    const result = await mssql.safeQuery(db.mssql.funcTotalFilial(codfilial))
+    const [rows] = await promiseMysql.query(...db.mysql.getTotalVotos(cipaid))
+    console.log(rows)
+
+    const [filial] = result
+    const [votos] = rows
+
+    let percentage = Math.floor((votos.total * 100)/filial.total)
+
+    console.log(percentage + '%')
+
+}
+
+function isTodayInRange(firstD, lastD) {
+    const currentDate = new Date()
+  //  console.log(`${formatDate(currentDate)} está entre ${formatDate(firstD)} e ${formatDate(lastD)}`)
+    return (firstD <= currentDate && currentDate <= lastD)
+}
+
+function formatDate(date){
+    let formatedDate = ((date.getDate() )) + "/" + ((date.getMonth() + 1)) + "/" + (date.getFullYear())
+
+    return formatedDate
+}
+
+function generateToken() {
+    let randomToken = Math.random().toString(36).slice(2, 8)
+    console.log(randomToken)
+    if(randomToken.length >= 6 && randomToken.search(/\d{1,3}/) != -1) return randomToken
+
+    return generateToken()
+}
+
 
 const getUsers = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from usuario`)
@@ -107,7 +141,9 @@ const getCipaAtiva = async () => {
             const fimVoto= new Date(cipa.dtfimvoto.split('/').reverse())
             
             cipa.inscricaoAtiva = isTodayInRange(iniInsc, fimInsc)
+    
             cipa.votacaoAtiva = isTodayInRange(iniVoto, fimVoto)
+            
         }
     })
 
@@ -129,34 +165,6 @@ const getCandidatos = async (cipaid) => {
         console.log(e)
     }
 
-}
-
-const checkCipaVotes = async (codfilial, cipaid) => {
-    const result = await mssql.safeQuery(db.mssql.funcTotalFilial(codfilial))
-    const [rows] = await promiseMysql.query(...db.mysql.getTotalVotos(cipaid))
-    console.log(rows)
-
-    const [filial] = result
-    const [votos] = rows
-
-    let percentage = Math.floor((votos.total * 100)/filial.total)
-
-    console.log(percentage + '%')
-
-}
-
-function isTodayInRange(firstD, lastD) {
-    const currentDate = new Date()
-
-    return (firstD >= currentDate && currentDate <= lastD)
-}
-
-function generateToken() {
-    let randomToken = Math.random().toString(36).slice(2, 8)
-    console.log(randomToken)
-    if(randomToken.length >= 6 && randomToken.search(/\d{1,3}/) != -1) return randomToken
-
-    return generateToken()
 }
 
 
