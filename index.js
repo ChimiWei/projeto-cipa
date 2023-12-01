@@ -383,10 +383,35 @@ app.get('/voto_finalizado/:codfilial', (req, res) => {
 
 app.get('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
-    res.render('autorizarDelete.ejs', {codfilial: req.params.codfilial, message: req.flash()})
+    res.render('autorizarEncerramento.ejs', {codfilial: req.params.codfilial, message: req.flash()})
 })
 
-app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+app.put('/encerrar_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
+    const codfilial = req.params.codfilial
+    const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
+    if (!cipa) return res.redirect('/')
+    
+    const [rows] = await promiseMysql.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+    const {token} = rows[0]
+    
+    if(req.body.token === token) {
+        const cipaid = cipa.id
+        console.log('cipa id:')
+        console.log(cipaid)
+        await promiseMysql.query(...db.mysql.suspendCipa(cipaid))
+
+        
+        getCipaAtiva()
+
+        return res.redirect('/')
+    } else {
+        req.flash("error", "Token Incorreto")
+        return res.redirect(`/autorizar_acesso/${codfilial}`)
+    }
+}))
+
+/*
+app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated, <////>catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
@@ -409,7 +434,7 @@ app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ catchAsyncErr
         return res.redirect('/')
     } else {
         req.flash("error", "Token Incorreto")
-        return res.redirect(`/autorizar_acesso/${codfilial}`)
+        return res.redirect(`/autorizar_delete/${codfilial}`)
     }
 }))
 
@@ -430,7 +455,7 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
     res.redirect('/')
 
 }))
-
+*/
 app.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
     res.render('autorizarAcesso.ejs', {codfilial: req.params.codfilial, message: req.flash()})
