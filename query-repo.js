@@ -21,40 +21,49 @@ const getVotos = (cipaid) => {
     return [sql, params]
 }
 
-const getFuncComVoto = (codfilial) => {
+const getFuncComVoto = (cipaid) => {
     const sql = `
-    select chapa, nome, setor, date_format(data_voto, "%d/%m/%y") as data_voto, hora_voto from pfvoto where codfilial = ?
+    select chapa, nome, setor, date_format(data_voto, "%d/%m/%y") as data_voto, hora_voto from pfvoto where cipaid = ?
     `
 
-    const params = [codfilial]
+    const params = [cipaid]
 
     return [sql, params]
 }
 
 
-const cadastrarCipa = (codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
+const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
     const sql = `
-    INSERT INTO cipaconfig VALUES (1, ?, default, ?, default, ?, ?, ?, ?, ?, ?, default)`
+    INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default)`
 
-    const params = [codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado]
+    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado]
 
     return [sql, params]
 }
 
 function editCipa(dtinivoto, cipaid) {
     const sql = `
-    UPDATE cipaconfig set dtfimvoto = ? where id = ?`
+    UPDATE cipaconfig SET dtfimvoto = ? WHERE id = ?`
 
     const params = [dtinivoto, cipaid]
 
     return [sql, params]
 }
 
-const cadastrarCandidato = (cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao) => {
+function suspendCipa(cipaid){
     const sql = `
-    insert into inscritos values (?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
+    UPDATE cipaconfig SET ativa = 0 WHERE id = ?`
+
+    const params = [cipaid]
+
+    return [sql, params]
+}
+
+const cadastrarCandidato = (cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, gestao) => {
+    const sql = `
+    insert into inscritos values (?, ?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
     `
-    const params = [cipaid, n_votacao, codfilial, chapa, nome, funcao, secao, gestao]
+    const params = [cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, gestao]
     return [sql, params]
 }
 
@@ -66,11 +75,11 @@ const cadastrarVoto = (cipaid, n_votacao) => {
     return [sql, params]
 }
 
-const addToken = (cipaid, codfilial, token) => {
+const addToken = (cipaid, codcoligada, codfilial, token) => {
     const sql = `
-    insert into cipatoken values (?, ?, ?);
+    insert into cipatoken values (?, ?, ?, ?);
     `
-    const params = [cipaid, codfilial, token]
+    const params = [cipaid, codcoligada, codfilial, token]
     return [sql, params]
 }
 
@@ -100,17 +109,18 @@ const getTotalVotos = (cipaid, chapa) => {
 
 }
 
-const registrarVoto = (cipaid, codfilial, chapa, nome, setor,) => {
-    const sql = 'insert into pfvoto values (?, ?, ?, default, ?, ?, default)'
-    const params = [cipaid, codfilial, chapa, nome, setor]
+const registrarVoto = (cipaid, codcoligada, codfilial, chapa, nome, setor,) => {
+    const sql = 'insert into pfvoto values (?, ?, ?, ?, default, ?, ?, default)'
+    const params = [cipaid, codcoligada, codfilial, chapa, nome, setor]
 
     return [sql, params]
 }
 
-const maxNVotacao = () => {
-    const query = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos`
+const maxNVotacao = (cipaid) => {
+    const sql = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos where cipaid = ?`
+    const params = [cipaid]
 
-    return query
+    return [sql, params]
 }
 
 const getCipaToken = (cipaid) => {
@@ -199,7 +209,7 @@ const funcionario = (codfilial, chapa) => { // Dados do Funcionário
 
 const funcComCpf = (chapa, codfilial) => { // Dados do Funcionário
     const sql = `
-    select F.chapa, F.nome, F.codfilial, S.DESCRICAO AS secao, right(P.CPF, 3) as confirmacao
+    select F.chapa, F.nome, F.codcoligada, F.codfilial, S.DESCRICAO AS secao, right(P.CPF, 3) as confirmacao
     from PFUNC F
     inner join PPESSOA P on P.CODIGO = F.CODPESSOA
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
@@ -221,7 +231,7 @@ const funcComCpf = (chapa, codfilial) => { // Dados do Funcionário
 
 const funcComColigada = (codfilial, chapa) => {
     const sql = `
-    select F.CHAPA, F.NOME, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
+    select F.CHAPA, F.NOME, F.CODCOLIGADA, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
     GC.NOMEFANTASIA AS GCNOME, GC.RUA AS GCRUA, GC.NUMERO AS GCNUMERO, GC.BAIRRO AS GCBAIRRO, GC.CIDADE AS GCCIDADE,
     GC.ESTADO AS GCESTADO, GC.CGC AS GCCGC, GC.TELEFONE AS GCTELEFONE
     
@@ -271,8 +281,9 @@ module.exports = {
         candidatos,
         getVotos,
         cadastrarCipa,
-        cadastrarCandidato,
         editCipa,
+        suspendCipa,
+        cadastrarCandidato,
         cadastrarVoto,
         addToken,
         addVoto,
