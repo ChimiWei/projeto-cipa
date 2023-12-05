@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <%- include('partials/head', {title: 'Confirmar Voto'}); %>
+  <%- include('partials/head', {title: 'Confirmar Voto' }); %>
 </head>
 
-   
+
 
 <body>
- <section class="st-section">
-     <div class="container ">
-        <div class="row justify-content-center "> 
+  <section class="st-section">
+    <div class="container ">
+      <div class="row justify-content-center ">
         <div class="text-center mb-3">
-           <h2 class="title brand text-dark text-shadow"> Voto de <text class="text-capitalize"><%= votante.func.nome.toLowerCase() %></text> </h2> 
+          <h2 class="title brand text-dark text-shadow"> Voto de <text class="text-capitalize">
+              <%= votante.func.nome.toLowerCase() %>
+            </text> </h2>
         </div>
-        <div class="row justify-content-center"> 
-            <div class="col-md-7 shadow rounded bg-white">
-                <div class="p-md-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                        <% if(candidato) { %>
-                          <img class="img-small" src='eu.jpg'  />
-                          <text class="fs-3 ms-3 text-capitalize"><%= candidato.nome.toLowerCase()  %> </text>
-                        <% } else { %>
-                          <text class="fs-3 ms-3 text-capitalize"><%= voto %> </text>
-                        <% } %>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                          <% if(candidato) { %>
-                          <li class="list-group-item">Setor: <%= candidato.secao %> </li>
-                          <li class="list-group-item">Número de Votação: <text class="text-success fw-bold"><%= candidato.n_votacao %></text></li>
-                          <% } %>
-                          <form action="/confirmar_voto/<%= votante.nvotacao %>?_method=PUT" method="POST">
-                          <li class="list-item-pd-0 p-1 text-center">
-                            Para confirmar seu voto, insira os 3 últimos digitos do seu cpf: 
-                            <input name="confirmacao" type="password" value="" placeholder="CPF" class="input-style " minlength="3" maxlength="3" autocomplete="off" required />
-                            <% if (locals.message) { %>
-                              <p class="text-danger"> <%= message.error  %> </p>
-                            <% } %>
-                          </li>
-                        </ul>
-                        <div class="card-body text-end">
-                            <button id="btnConfirmarVoto" class="btn btn-success" type="submit" > Confirmar Voto </button>
-                            <a href="/votacao/<%= votante.func.codfilial %>" class="btn btn-danger" > Voltar </a>
-                        </div>
-                          </form>
-                    </div>
+        <div class="row justify-content-center">
+          <div class="col-md-7 shadow rounded bg-white">
+            <div class="p-md-3">
+              <div class="card">
+                <div class="card-body text-center">
+                  <% if(candidato) { %>
+                    <img class="img-small" src='/profile-icon.png' />
+                    <text class="fs-3 ms-3 text-capitalize">
+                      <%= candidato.nome.toLowerCase() %>
+                    </text>
+                    <% } else { %>
+                      <text class="fs-3 ms-3 text-capitalize">
+                        <%= voto %>
+                      </text>
+                      <% } %>
                 </div>
+                <ul class="list-group list-group-flush">
+                  <% if(candidato) { %>
+                    <li class="list-group-item">Setor: <%= candidato.secao %>
+                    </li>
+                    <li class="list-group-item">Número de Votação: <text class="text-success fw-bold">
+                        <%= candidato.n_votacao %>
+                      </text></li>
+                    <% } %>
+                      <form action="/confirmar_voto/<%= votante.nvotacao %>?_method=PUT" method="POST">
+                        <li class="list-item-pd-0 p-1 text-center">
+                          Para confirmar seu voto, insira os 3 últimos digitos do seu cpf:
+                          <input name="confirmacao" type="password" value="" placeholder="CPF" class="input-style "
+                            minlength="3" maxlength="3" autocomplete="off" required />
+                          <% if (locals.message) { %>
+                            <p class="text-danger">
+                              <%= message.error %>
+                            </p>
+                            <% } %>
+                        </li>
+                </ul>
+                <div class="card-body text-end">
+                  <button id="btnConfirmarVoto" class="btn btn-success" type="submit"> Confirmar Voto </button>
+                  <a href="/votacao/<%= votante.func.codfilial %>" class="btn btn-danger"> Voltar </a>
+                </div>
+                </form>
+              </div>
             </div>
-            
-        </div>
-        </div>
-     </div>
-    </div>
- </section>
-    
+          </div>
 
- <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+
+  <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
