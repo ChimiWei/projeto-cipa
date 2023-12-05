@@ -12,4 +12,3 @@ function createDatepicker(startDate, endDate) {
 
 
 
-console.log('test')

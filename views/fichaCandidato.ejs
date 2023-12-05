@@ -135,9 +135,10 @@
     </div>
     <div class="container mt-2 text-center">
         <text id="info" class="text-danger text-shadow"> Para confirmar o cadastro, imprima a ficha </text>
-        <form method="POST" action="/fichaCandidato">
+        <form method="POST" action="/fichaCandidato?_method=PUT">
             <input type="hidden" id="chapa" name="chapa" value="<%= func.CHAPA %>">
             <input type="hidden" id="nvotacao" name="nvotacao" value="<%= n_votacao %>">
+            <input type="hidden" id="codcoligada" name="codcoligada" value="<%= func.CODCOLIGADA %>">
             <input type="hidden" id="codfilial" name="codfilial" value="<%= func.CODFILIAL %>">
             <input type="hidden" id="nome" name="nome" value="<%= func.NOME %>">
             <input type="hidden" id="funcao" name="funcao" value="<%= func.FUNCAO %>">

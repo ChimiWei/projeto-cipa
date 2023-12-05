@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <%- include('partials/head', {title: 'Cadastrar Candidato'}); %>
+   <%- include('partials/head', {title: 'Home'}); %>
 </head>
 <body>
     <%- include('partials/header'); %>  
@@ -12,14 +12,14 @@
                 <h3> Cipa <%= gestao %> </h3>
             </div>
         </div>
-        <div>
-            <div class="d-flex justify-content-center pt-2">
-                <a href="/cipaconfig" class="btn btn-color rounded submit"> Cadastrar Cipa </a>
-            </div>
-        </div>
         <% cipas.forEach(cipa => { %>
             <%- include('components/inscricao/viewInscricao', {cipa: cipa}); %>
         <% }) %>
+        <div>
+            <div class="d-flex justify-content-center pt-2">
+                <a href="/cipaconfig" class="btn btn-color rounded submit"> Nova Cipa </a>
+            </div>
+        </div>
     </div>
     </section>
     <%- include('partials/footer'); %>

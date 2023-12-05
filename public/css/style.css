@@ -113,6 +113,10 @@ h5 {
     border-color: #5C6F68  !important;
 }
 
+.text-shadow {
+    text-shadow: 0px 0px black;
+}
+
 
 .checkbox-container {
     position: absolute;
