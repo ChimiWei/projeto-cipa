@@ -373,7 +373,7 @@ app.put('/confirmar_voto/:nvotacao', catchAsyncErr(async (req, res) => {
         return res.redirect(`/voto_finalizado/${func.codfilial}`)
     } else {
         req.flash("error", "Os digitos inseridos estão incorretos")
-        return res.redirect('/confirmar_voto')
+        return res.redirect(`/confirmar_voto/${func.codfilial}/${votante.nvotacao}`)
     }
 }))
 
