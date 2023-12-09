@@ -27,7 +27,7 @@ body::before {
     height: 100%;
     opacity: .4; 
     z-index: -1;
-    background: url('/cipabg.png');
+    background: url('/img/cipabg.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
