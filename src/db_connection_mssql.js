@@ -8,7 +8,6 @@ const config = {
         trustedConnection: true,
         trustServerCertificate: true,
         enableArithAbort: true,
-        
       },
 }
 

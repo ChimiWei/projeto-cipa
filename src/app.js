@@ -12,15 +12,17 @@ const path = require('path')
 const mysql = require('./db_connection');
 const mssql = require('./db_connection_mssql')
 const db = require('./query-repo')
-const middleware = require('./middleware')
+const middleware = require('./errorHandler')
 
 const app = express();
 
 
 app.use(express.static('public'))
-app.use('/css', express.static(__dirname + 'public/css'))
-app.use('/js', express.static(__dirname + 'public/js'))
-app.use(express.static(path.join(__dirname, 'views/img')))
+app.use('/css', express.static(__dirname + '/public/css'))
+app.use('/js', express.static(__dirname + '/public/js'))
+app.use('/img', express.static(__dirname + '/public/img'))
+// app.use(express.static(path.join(__dirname, '/public/img')))
+app.set('views', path.join(__dirname, 'public/views'));
 
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
@@ -58,7 +60,6 @@ const gestao = ano + '/' + (ano + 1)
 var users = []
 
 var cipas = []
-
 
 var votante = {
     nvotacao: null,
