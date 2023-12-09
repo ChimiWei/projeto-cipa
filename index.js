@@ -584,6 +584,6 @@ function checkNotAuthenticated(req, res, next) {
 
 app.use(middleware.errorHandler)
 
-app.listen(3000, () => {
+app.listen((process.env.PORT || 3200), () => {
     console.log('Servidor está funcionando')
 });
