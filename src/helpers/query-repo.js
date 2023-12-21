@@ -275,8 +275,7 @@ const funcTotalFilial = (codfilial) => {
     return { sql, params }
 
 }
-
-module.exports = {
+const db = {
     mysql: {
         candidatos,
         getVotos,
@@ -306,3 +305,4 @@ module.exports = {
         funcTotalFilial,
     }
 }
+module.exports = db

@@ -9,20 +9,23 @@ const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 const path = require('path')
-const mysql = require('./db_connection');
-const mssql = require('./db_connection_mssql')
-const db = require('./query-repo')
-const middleware = require('./errorHandler')
+const mysql = require('../config/db_connection_mysql');
+const mssql = require('../config/db_connection_mssql')
+const db = require('./helpers/query-repo')
+const errorHandler = require('./middleware/errorHandler')
+
+const homeRoute = require('./routes/homeRoute')
 
 const app = express();
 
 
 app.use(express.static('public'))
-app.use('/css', express.static(__dirname + '/public/css'))
-app.use('/js', express.static(__dirname + '/public/js'))
-app.use('/img', express.static(__dirname + '/public/img'))
+app.use('/css', express.static('../public/css'))
+app.use('/js', express.static('../public/js'))
+app.use('/img', express.static('../public/img'))
 // app.use(express.static(path.join(__dirname, '/public/img')))
-app.set('views', path.join(__dirname, 'public/views'));
+app.set('views', 'public/views');
+//console.log(__dirname)
 
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
@@ -38,7 +41,7 @@ app.engine('html', require('ejs').renderFile);
 
 
 
-const initializePassport = require('./passport-config')
+const initializePassport = require('../config/passport-config')
 initializePassport(passport,
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
@@ -68,10 +71,10 @@ var votante = {
 
 var candidatosAuth = false
 
-const catchAsyncErr = (middleware) => {
+const catchAsyncErr = (route) => {
     return async function (req, res, next) {
         try {
-            await middleware(req, res, next)
+            await route(req, res, next)
         } catch (e) {
             console.log(e)
             next(e)
@@ -169,16 +172,7 @@ const getCandidatos = async (cipaid) => {
 }
 
 
-
-app.get('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    await getCipaAtiva()
-
-    res.render('home.ejs', { user: req.user, gestao: gestao, cipas: cipas })
-}))
-
-app.post('/', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-
-}))
+app.use('/', homeRoute)
 
 app.get('/cipaconfig', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
@@ -583,7 +577,7 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 
-app.use(middleware.errorHandler)
+app.use(errorHandler)
 
 app.listen((process.env.PORT || 3200), () => {
     console.log('Servidor está funcionando')
