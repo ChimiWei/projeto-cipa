@@ -11,12 +11,14 @@ const config = {
       },
 }
 
-async function getPool() {
+async function mssqlQuery(query) {
     try {
     console.log('mssql - tentando conexão')
     const pool = await sql.connect(config)
     console.log('mssql - conectado com sucesso')
-    return pool
+    const result = (await pool.query(query)).recordset
+    return result
+    
     } catch (e) {
         console.log(e)
     }
@@ -57,6 +59,6 @@ async function safeQuery(query) {
 }) */
 
 module.exports = {
-    getPool,
+    mssqlQuery,
     safeQuery
 }

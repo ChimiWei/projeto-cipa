@@ -1,8 +1,6 @@
 const isTodayInRange = require('../helpers/isTodayInRange')
 const promiseMysql = require('../helpers/promiseMysql')
 
-var cipas = []
-
 const getCipaAtiva = async () => {
     const [rows, fields] = await promiseMysql.query(`select * from cipaconfig where ativa=1`)
     
@@ -20,11 +18,11 @@ const getCipaAtiva = async () => {
         }
     })
 
-    cipas = await JSON.parse(JSON.stringify(rows))
+    const cipas = rows
     return cipas
 }
 
+
 module.exports = {
-    cipas,
-    getCipaAtiva
+    getCipaAtiva,
 }

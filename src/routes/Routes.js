@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
-const cipaconfigController = require('../controllers/cipaconfigController')
+const { homeController, cipaconfigController } = require('../controllers/index')
 
+
+router.get('/', asyncErrorHandler(homeController.renderHome))
 
 router.get('/cipaconfig', /*checkAuthenticated,*/ asyncErrorHandler(cipaconfigController.renderCipaConfig))
 

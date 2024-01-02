@@ -1,11 +1,14 @@
-const { cipas, getCipaAtiva } = require('../models/cipaModel')
+const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
 const promiseMysql = require('../helpers/promiseMysql')
+const { mssqlQuery } = require('../../config/db_connection_mssql')
+
 const db = require('../helpers/query-repo')
 
 const cipaconfigController = {
 
     renderCipaConfig: async (req, res) => {
+        const cipas = await getCipaAtiva()
         const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
         res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
     },
@@ -28,7 +31,7 @@ const cipaconfigController = {
         await promiseMysql.query(...db.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
             req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
         
-        await getCipaAtiva()
+        const cipas = await getCipaAtiva()
     
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     
