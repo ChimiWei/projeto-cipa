@@ -116,8 +116,8 @@ const registrarVoto = (cipaid, codcoligada, codfilial, chapa, nome, setor,) => {
     return [sql, params]
 }
 
-const maxNVotacao = (cipaid) => {
-    const sql = `select right('1000' + max(n_votacao)+1, 3) as maxnvotacao from inscritos where cipaid = ?`
+const novoNumeroDeVotacao = (cipaid) => {
+    const sql = `select right('1000' + max(n_votacao)+1, 3) as novonvotacao from inscritos where cipaid = ?`
     const params = [cipaid]
 
     return [sql, params]
@@ -290,7 +290,7 @@ const db = {
         checarVoto,
         getTotalVotos,
         getFuncComVoto,
-        maxNVotacao,
+        novoNumeroDeVotacao,
         getCipaToken,
         deleteCipa,
         deleteInscritos,
