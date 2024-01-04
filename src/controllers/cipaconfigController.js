@@ -1,9 +1,10 @@
 const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
+const db = require('../helpers/query-repo')
 const promiseMysql = require('../helpers/promiseMysql')
+const generateToken = require('../helpers/generateToken')
 const { mssqlQuery } = require('../../config/db_connection_mssql')
 
-const db = require('../helpers/query-repo')
 
 const cipaconfigController = {
 
@@ -28,6 +29,7 @@ const cipaconfigController = {
             req.flash('error', 'data final da votação não pode ser maior que a data do resultado')
             return res.redirect('/')
         }
+        const token = generateToken()
         await promiseMysql.query(...db.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
             req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
         
@@ -36,7 +38,7 @@ const cipaconfigController = {
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     
         if(cipa) {
-            await promiseMysql.query(...db.mysql.addToken(cipa.id, codcoligada, codfilial, generateToken()))
+            await promiseMysql.query(...db.mysql.addToken(cipa.id, codcoligada, codfilial, token))
             await promiseMysql.query(...db.mysql.cadastrarVoto(cipa.id, "BRA"))
             await promiseMysql.query(...db.mysql.cadastrarVoto(cipa.id, "NUL"))
         } else {
@@ -45,6 +47,29 @@ const cipaconfigController = {
         
         console.log('cipa cadastrada com sucesso')
         res.redirect('/')
+    },
+
+    renderCipaConfigEdit: async (req, res) => {
+        const cipas = await getCipaAtiva()
+        const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
+        if (!cipa) return res.redirect('/')
+        res.render('editCipa.ejs', { user: req.user, gestao: gestao, cipa, message: req.flash() })
+    },
+
+    putCipaConfigEdit: async (req, res) => {
+        const cipas = await getCipaAtiva()
+        const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
+        if (!cipa) return res.redirect('/')
+        
+        const [result] = await promiseMysql.query(...db.mysql.editCipa(req.body.fimvotacao, cipa.id))
+        console.log(result)
+    
+        if(result.affectedRows === 0){
+            return res.redirect(`/edit_cipa/<%= cipa.codfilial %>`)
+        } 
+    
+        return res.redirect('/')
+        
     }
 }
 

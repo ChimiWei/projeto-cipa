@@ -172,31 +172,7 @@ const getCandidatos = async (cipaid) => {
 
 }
 
-
 app.use('/', Routes)
-
-
-
-app.get('/edit_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
-    res.render('editCipa.ejs', { user: req.user, gestao: gestao, cipa, message: req.flash() })
-}))
-
-app.put('/edit_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
-    
-    const [result] = await promiseMysql.query(...db.mysql.editCipa(req.body.fimvotacao, cipa.id))
-    console.log(result)
-
-    if(result.affectedRows === 0){
-        return res.redirect(`/edit_cipa/<%= cipa.codfilial %>`)
-    } 
-
-    return res.redirect('/')
-    
-}))
 
 app.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
