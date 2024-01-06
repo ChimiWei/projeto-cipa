@@ -1,8 +1,8 @@
 const { getCipaAtiva } = require('../models/cipaModel')
 const db = require('../helpers/query-repo')
-const promiseMysql = require('../helpers/promiseMysql')
-const { gestao, hoje } = require('../models/dateModel')
-const { safeQuery } = require('../../config/db_connection_mssql')
+const mysqlPromise = require('../helpers/mysqlQuery')
+const { gestao, hoje, ano } = require('../models/dateModel')
+const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const getCandidatos = require('../helpers/getCandidatos')
 
 const candidatoController = {
@@ -12,9 +12,9 @@ const candidatoController = {
         if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/')
         if (req.query.chapa) {
             const chapa = req.query.chapa
-            const func = await safeQuery(db.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
+            const func = await mssqlStmtQuery(db.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
             const candidatos = await getCandidatos(cipa.id)
-            console.log(func)
+            console.log(candidatos)
             const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
             res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato })
         } else {
@@ -28,9 +28,9 @@ const candidatoController = {
         const candidatos = await getCandidatos(cipa.id)
         const chapa = req.params.chapa
         if (candidatos.find(func => func.chapa === chapa)) res.send('Funcionário já cadastrado!')
-        const [rows] = await promiseMysql.query(...db.mysql.novoNumeroDeVotacao(cipa.id))
+        const [rows] = await mysqlPromise.query(...db.mysql.novoNumeroDeVotacao(cipa.id))
         const novoNVotacao = rows[0].novonvotacao ? rows[0].novonvotacao : '001'
-        const func = await safeQuery(db.mssql.funcComColigada(req.params.codfilial, chapa))
+        const func = await mssqlStmtQuery(db.mssql.funcComColigada(req.params.codfilial, chapa))
         res.render('fichaCandidato.ejs', { func: func[0], n_votacao: novoNVotacao, hoje })
     },
     putFichaCandidato: async (req, res) => {
@@ -45,8 +45,8 @@ const candidatoController = {
         if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
         console.log(req.body)
         console.log(nvotacao)
-        await promiseMysql.query(...db.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, ano))
-        await promiseMysql.query(...db.mysql.cadastrarVoto(cipa.id, nvotacao))
+        await mysqlPromise.query(...db.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, ano))
+        await mysqlPromise.query(...db.mysql.cadastrarVoto(cipa.id, nvotacao))
         res.redirect('/candidatos/' + codfilial)
     }
 
