@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
-const { homeController, cipaconfigController, candidatoController } = require('../controllers/index')
+const { homeController, cipaconfigController, candidatoController, votacaoController } = require('../controllers/index')
 
 
 router.get('/', asyncErrorHandler(homeController.renderHome))
@@ -19,5 +19,19 @@ router.get('/cadastro_candidato/:codfilial', /*checkAuthenticated,*/ asyncErrorH
 router.get('/fichaCandidato/:codfilial/:chapa', /*checkAuthenticated,*/ asyncErrorHandler(candidatoController.renderFichaCandidato))
 
 router.put('/fichaCandidato', /*checkAuthenticated,*/ asyncErrorHandler(candidatoController.putFichaCandidato))
+
+router.get('/iniciar_votacao/:codfilial', asyncErrorHandler(votacaoController.renderIniciarVotacao))
+
+router.post('/iniciar_votacao/:codfilial', asyncErrorHandler(votacaoController.postIniciarVotacao))
+
+router.get('/votacao/:codfilial', asyncErrorHandler(votacaoController.renderVotacao))
+
+router.post('/votacao/:codfilial', votacaoController.postVotacao)
+
+router.get('/confirmar_voto/:codfilial/:nvotacao', asyncErrorHandler(votacaoController.renderConfirmarVoto))
+
+router.put('/confirmar_voto/:nvotacao', asyncErrorHandler(votacaoController.putConfirmarVoto))
+
+router.get('/voto_finalizado/:codfilial', votacaoController.renderVotoFinalizado)
 
 module.exports = router
