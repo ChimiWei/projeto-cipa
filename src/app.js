@@ -175,41 +175,6 @@ const getCandidatos = async (cipaid) => {
 app.use('/', Routes)
 
 
-
-app.get('/voto_finalizado/:codfilial', (req, res) => {
-    res.render('fimVoto.ejs', { gestao, message: req.flash() })
-})
-
-
-app.get('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
-
-    res.render('autorizarEncerramento.ejs', { codfilial: req.params.codfilial, message: req.flash() })
-})
-
-app.put('/encerrar_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const codfilial = req.params.codfilial
-    const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-    if (!cipa) return res.redirect('/')
-
-    const [rows] = await mysqlPromise.query(...db.mysql.getCipaToken(cipa.id, codfilial))
-    const { token } = rows[0]
-
-    if (req.body.token === token) {
-        const cipaid = cipa.id
-        console.log('cipa id:')
-        console.log(cipaid)
-        await mysqlPromise.query(...db.mysql.suspendCipa(cipaid))
-
-
-        getCipaAtiva()
-
-        return res.redirect('/')
-    } else {
-        req.flash("error", "Token Incorreto")
-        return res.redirect(`/autorizar_delete/${codfilial}`)
-    }
-}))
-
 /*
 app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated, <////>catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
@@ -256,12 +221,17 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 
 }))
 */
-app.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
 
-    res.render('autorizarAcesso.ejs', { codfilial: req.params.codfilial, message: req.flash() })
+
+
+
+
+app.get('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+
+    res.render('autorizarEncerramento.ejs', { codfilial: req.params.codfilial, message: req.flash() })
 })
 
-app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
+app.put('/encerrar_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
@@ -270,44 +240,21 @@ app.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ async (req, res
     const { token } = rows[0]
 
     if (req.body.token === token) {
-        candidatosAuth = true
-        return res.redirect(`/candidatos/${codfilial}`)
+        const cipaid = cipa.id
+        console.log('cipa id:')
+        console.log(cipaid)
+        await mysqlPromise.query(...db.mysql.suspendCipa(cipaid))
+
+
+        getCipaAtiva()
+
+        return res.redirect('/')
     } else {
         req.flash("error", "Token Incorreto")
-        return res.redirect(`/autorizar_acesso/${codfilial}`)
+        return res.redirect(`/autorizar_delete/${codfilial}`)
     }
-})
-
-app.get('/candidatos/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
-    if (!candidatosAuth) return res.redirect('/')
-    candidatosAuth = false
-    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
-    const candidatos = await getCandidatos(cipa.id)
-
-    // bubble sort lets gooooooooooo
-    for (let i = 0; i < candidatos.length; i++) {
-        for (let j = 0; j < candidatos.length - 1; j++) {
-            if (candidatos[j].votos < candidatos[j + 1].votos) {
-                const temp = candidatos[j]
-                candidatos[j] = candidatos[j + 1]
-                candidatos[j + 1] = temp
-            }
-        }
-    }
-
-    const [rows] = await mysqlPromise.query(...db.mysql.getVotos(cipa.id))
-    const [branco, nulo] = rows
-
-    res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
-})
-
-app.get('/votos/:codfilial', catchAsyncErr(async (req, res) => {
-    const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-    if (!cipa) return res.redirect('/')
-    const [funcionarios] = await mysqlPromise.query(...db.mysql.getFuncComVoto(cipa.id))
-    res.render('listVotos.ejs', { funcionarios })
 }))
+
 
 app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
     res.render('profile.ejs', { user: req.user })

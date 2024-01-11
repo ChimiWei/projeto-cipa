@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
-const { homeController, cipaconfigController, candidatoController, votacaoController } = require('../controllers/index')
+const { homeController, cipaconfigController, candidatoController, votacaoController, listagemController } = require('../controllers/index')
 
 
 router.get('/', asyncErrorHandler(homeController.renderHome))
@@ -33,5 +33,13 @@ router.get('/confirmar_voto/:codfilial/:nvotacao', asyncErrorHandler(votacaoCont
 router.put('/confirmar_voto/:nvotacao', asyncErrorHandler(votacaoController.putConfirmarVoto))
 
 router.get('/voto_finalizado/:codfilial', votacaoController.renderVotoFinalizado)
+
+router.get('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/ listagemController.renderAutorizarAcesso)
+
+router.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/asyncErrorHandler(listagemController.postAutorizarAcesso) )
+
+router.get('/candidatos/:codfilial', /*checkAuthenticated,*/ asyncErrorHandler(listagemController.renderListCandidato))
+
+router.get('/votos/:codfilial', asyncErrorHandler(listagemController.renderVotos))
 
 module.exports = router
