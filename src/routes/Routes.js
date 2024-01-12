@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
-const { homeController, cipaconfigController, candidatoController, votacaoController, listagemController } = require('../controllers/index')
+const { homeController, cipaconfigController, candidatoController, votacaoController, listagemController, suspendercipaController} = require('../controllers/index')
 
 
 router.get('/', asyncErrorHandler(homeController.renderHome))
@@ -41,5 +41,9 @@ router.post('/autorizar_acesso/:codfilial', /*checkAuthenticated,*/asyncErrorHan
 router.get('/candidatos/:codfilial', /*checkAuthenticated,*/ asyncErrorHandler(listagemController.renderListCandidato))
 
 router.get('/votos/:codfilial', asyncErrorHandler(listagemController.renderVotos))
+
+router.get('/suspender_cipa/:codfilial', suspendercipaController.renderSuspenderCipa)
+
+router.put('/suspender_cipa/:codfilial', asyncErrorHandler(suspendercipaController.putSuspenderCipa))
 
 module.exports = router

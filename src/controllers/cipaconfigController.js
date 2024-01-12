@@ -1,10 +1,9 @@
 const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
-const db = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
-const generateToken = require('../helpers/generateToken')
+const db = require('../helpers/query-repo')
 const { mssqlQuery } = require('../../config/db_connection_mssql')
-
+const generateToken = require('../helpers/generateToken')
 
 const cipaconfigController = {
 

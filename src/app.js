@@ -102,7 +102,7 @@ const checkCipaVotes = async (codfilial, cipaid) => {
 
     console.log(percentage + '%')
 
-} 
+}
 
 function isTodayInRange(firstD, lastD) {
     const currentDate = new Date()
@@ -176,7 +176,7 @@ app.use('/', Routes)
 
 
 /*
-app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated, <////>catchAsyncErr(async (req, res) => {
+app.delete('/suspender_cipa/:codfilial', /*checkAuthenticated, <////>catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
@@ -199,7 +199,7 @@ app.delete('/autorizar_delete/:codfilial', /*checkAuthenticated, <////>catchAsyn
         return res.redirect('/')
     } else {
         req.flash("error", "Token Incorreto")
-        return res.redirect(`/autorizar_delete/${codfilial}`)
+        return res.redirect(`/suspender_cipa/${codfilial}`)
     }
 }))
 
@@ -223,37 +223,9 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 */
 
 
+app.get('/suspender_cipa/:codfilial', /*checkAuthenticated,*/)
 
-
-
-app.get('/autorizar_delete/:codfilial', /*checkAuthenticated,*/ async (req, res) => {
-
-    res.render('autorizarEncerramento.ejs', { codfilial: req.params.codfilial, message: req.flash() })
-})
-
-app.put('/encerrar_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr(async (req, res) => {
-    const codfilial = req.params.codfilial
-    const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-    if (!cipa) return res.redirect('/')
-
-    const [rows] = await mysqlPromise.query(...db.mysql.getCipaToken(cipa.id, codfilial))
-    const { token } = rows[0]
-
-    if (req.body.token === token) {
-        const cipaid = cipa.id
-        console.log('cipa id:')
-        console.log(cipaid)
-        await mysqlPromise.query(...db.mysql.suspendCipa(cipaid))
-
-
-        getCipaAtiva()
-
-        return res.redirect('/')
-    } else {
-        req.flash("error", "Token Incorreto")
-        return res.redirect(`/autorizar_delete/${codfilial}`)
-    }
-}))
+app.put('/suspender_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr())
 
 
 app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
