@@ -1,7 +1,8 @@
 
 function isTodayInRange(firstD, lastD) {
-    const currentDate = new Date()
-  //  console.log(`${formatDate(currentDate)} está entre ${formatDate(firstD)} e ${formatDate(lastD)}`)
+    const today = new Date()
+    const currentDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))
+    
     return (firstD <= currentDate && currentDate <= lastD)
 }
 

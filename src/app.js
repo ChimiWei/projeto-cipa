@@ -223,11 +223,6 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 */
 
 
-app.get('/suspender_cipa/:codfilial', /*checkAuthenticated,*/)
-
-app.put('/suspender_cipa/:codfilial', /*checkAuthenticated,*/ catchAsyncErr())
-
-
 app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
     res.render('profile.ejs', { user: req.user })
 })
