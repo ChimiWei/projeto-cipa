@@ -1,3 +1,21 @@
+const usuarioPorEmail = (email) => {
+    const sql = `
+    select * from usuario where email = ?
+    `
+    const params = [email]
+
+    return [sql, params]
+}
+
+const usuarioPorId = (id) => {
+    const sql = `
+    select * from usuario where id = ?
+    `
+    const params = [id]
+
+    return [sql, params]
+}
+
 const candidatos = (cipaid) => {
     const sql = `
     select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, V.total as votos
@@ -50,7 +68,7 @@ function editCipa(dtinivoto, cipaid) {
     return [sql, params]
 }
 
-function suspendCipa(cipaid){
+function suspendCipa(cipaid) {
     const sql = `
     UPDATE cipaconfig SET ativa = 0 WHERE id = ?`
 
@@ -100,7 +118,7 @@ const checarVoto = (cipaid, chapa) => {
 }
 
 const getTotalVotos = (cipaid, chapa) => {
-    const sql =`
+    const sql = `
     select count(chapa) as total from pfvoto where cipaid = ?
         `
 
@@ -275,8 +293,10 @@ const funcTotalFilial = (codfilial) => {
     return { sql, params }
 
 }
-const db = {
+const repository = {
     mysql: {
+        usuarioPorEmail,
+        usuarioPorId,
         candidatos,
         getVotos,
         cadastrarCipa,
@@ -305,4 +325,4 @@ const db = {
         funcTotalFilial,
     }
 }
-module.exports = db
+module.exports = repository

@@ -11,7 +11,7 @@ const methodOverride = require('method-override')
 const path = require('path')
 const mysql = require('../config/db_connection_mysql');
 const mssql = require('../config/db_connection_mssql')
-const db = require('./helpers/query-repo')
+const repository = require('./helpers/query-repo')
 const errorHandler = require('./middleware/errorHandler')
 
 const Routes = require('./routes/Routes')
@@ -43,10 +43,8 @@ app.engine('html', require('ejs').renderFile);
 
 
 const initializePassport = require('../config/passport-config')
-initializePassport(passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-)
+
+initializePassport(passport)
 
 
 const mysqlPromise = mysql.promise()
@@ -91,8 +89,8 @@ const mssqlQuery = async (query) => {
 
 
 const checkCipaVotes = async (codfilial, cipaid) => {
-    const result = await mssql.mssqlStmtQuery(db.mssql.funcTotalFilial(codfilial))
-    const [rows] = await mysqlPromise.query(...db.mysql.getTotalVotos(cipaid))
+    const result = await mssql.mssqlStmtQuery(repository.mssql.funcTotalFilial(codfilial))
+    const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipaid))
     console.log(rows)
 
     const [filial] = result
@@ -125,16 +123,6 @@ function generateToken() {
 }
 
 
-const getUsers = async () => {
-    const [rows, fields] = await mysqlPromise.query(`select * from usuario`)
-    users = await JSON.parse(JSON.stringify(rows))
-    // console.log('usuários no sistema:')
-    // console.log(users)
-}
-
-getUsers()
-
-
 const getCipaAtiva = async () => {
     const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where ativa=1`)
 
@@ -164,7 +152,7 @@ getCipaAtiva()
 const getCandidatos = async (cipaid) => {
     if (!cipas) return // interrompe a função se não houver uma cipa ativa
     try {
-        const [rows] = await mysqlPromise.query(...db.mysql.candidatos(cipaid))
+        const [rows] = await mysqlPromise.query(...repository.mysql.candidatos(cipaid))
         return rows
     } catch (e) {
         console.log(e)
@@ -181,18 +169,18 @@ app.delete('/suspender_cipa/:codfilial', /*checkAuthenticated, <////>catchAsyncE
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
     if (!cipa) return res.redirect('/')
     
-    const [rows] = await mysqlPromise.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+    const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id, codfilial))
     const {token} = rows[0]
     
     if(req.body.token === token) {
         const cipaid = cipa.id
         console.log('cipa id:')
         console.log(cipaid)
-        await mysqlPromise.query(...db.mysql.deleteRegistroVoto(cipaid))
-        await mysqlPromise.query(...db.mysql.deleteVoto(cipaid))
-        await mysqlPromise.query(...db.mysql.deleteInscritos(cipaid))
-        await mysqlPromise.query(...db.mysql.deleteToken(cipaid))
-        await mysqlPromise.query(...db.mysql.deleteCipa(cipaid))
+        await mysqlPromise.query(...repository.mysql.deleteRegistroVoto(cipaid))
+        await mysqlPromise.query(...repository.mysql.deleteVoto(cipaid))
+        await mysqlPromise.query(...repository.mysql.deleteInscritos(cipaid))
+        await mysqlPromise.query(...repository.mysql.deleteToken(cipaid))
+        await mysqlPromise.query(...repository.mysql.deleteCipa(cipaid))
         
         getCipaAtiva()
 
@@ -208,10 +196,10 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
     
     const cipaid = req.params.cipaid
 
-    await mysqlPromise.query(...db.mysql.deleteRegistroVoto(cipaid))
-    await mysqlPromise.query(...db.mysql.deleteVoto(cipaid))
-    await mysqlPromise.query(...db.mysql.deleteInscritos(cipaid))
-    await mysqlPromise.query(...db.mysql.deleteCipa(cipaid))
+    await mysqlPromise.query(...repository.mysql.deleteRegistroVoto(cipaid))
+    await mysqlPromise.query(...repository.mysql.deleteVoto(cipaid))
+    await mysqlPromise.query(...repository.mysql.deleteInscritos(cipaid))
+    await mysqlPromise.query(...repository.mysql.deleteCipa(cipaid))
     
     getCipaAtiva()
 
@@ -249,7 +237,7 @@ app.get('/register', checkNotAuthenticated, (req, res) => {
 app.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', default)`
+        let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', default, default, default)`
         mysql.query(sql, (err) => {
             if (err) throw err;
 
@@ -293,6 +281,7 @@ function checkNotAuthenticated(req, res, next) {
     }
     next()
 }
+
 
 
 app.use(errorHandler)
