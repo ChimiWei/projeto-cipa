@@ -1,6 +1,6 @@
 const { getCipaAtiva } = require('../models/cipaModel')
 const votante = require('../models/votanteModel')
-const db = require('../helpers/query-repo')
+const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const { gestao, hoje, ano } = require('../models/dateModel')
 const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
@@ -13,10 +13,10 @@ const votacaoController = {
         const codfilial = req.params.codfilial
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
         if (!cipa || !cipa.votacaoAtiva) return res.redirect('/')
-        await checkCipaVotes(codfilial, cipa.id)
+        const cipaEncerrada = await checkCipaVotes(codfilial, cipa.id)
         if (req.query.chapa) {
-            const func = await mssqlStmtQuery(db.mssql.funcionario(codfilial, req.query.chapa))
-            const [voto] = await mysqlPromise.query(...db.mysql.checarVoto(cipa.id, req.query.chapa))
+            const func = await mssqlStmtQuery(repository.mssql.funcionario(codfilial, req.query.chapa))
+            const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(cipa.id, req.query.chapa))
 
             res.render('iniVotacao.ejs', { func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash() })
         } else {
@@ -27,7 +27,7 @@ const votacaoController = {
 
     postIniciarVotacao: async (req, res) => {
         const cipas = await getCipaAtiva()
-        const func = await mssqlStmtQuery(db.mssql.funcComCpf(req.body.chapa, req.params.codfilial))
+        const func = await mssqlStmtQuery(repository.mssql.funcComCpf(req.body.chapa, req.params.codfilial))
         if (func.length != 0) {
             console.log(func)
             votante.func = func[0]
@@ -76,7 +76,7 @@ const votacaoController = {
     putConfirmarVoto: async (req, res) => {
         if (!votante.func) return res.redirect('/')
         const func = votante.func
-        const [voto] = await mysqlPromise.query(...db.mysql.checarVoto(votante.cipaid, func.chapa))
+        const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(votante.cipaid, func.chapa))
         if (voto[0]) {
             req.flash("error", "Funcionário já votou")
             return res.redirect(`/iniciar_votacao/${func.codfilial}`)
@@ -84,7 +84,7 @@ const votacaoController = {
         if (req.body.confirmacao == votante.func.confirmacao) {
             const candidatos = await getCandidatos(votante.cipaid)
             const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
-            const result = await mysqlPromise.query(...db.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
+            const result = await mysqlPromise.query(...repository.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
 
             console.log('Resultado:')
             console.log(result[0])
@@ -95,7 +95,7 @@ const votacaoController = {
                 return res.redirect('back');
             }
 
-            await mysqlPromise.query(...db.mysql.registrarVoto(votante.cipaid, func.codcoligada, func.codfilial, func.chapa, func.nome, func.secao))
+            await mysqlPromise.query(...repository.mysql.registrarVoto(votante.cipaid, func.codcoligada, func.codfilial, func.chapa, func.nome, func.secao))
             req.flash("nome", func.nome)
             votante.func = null
             votante.nvotacao = null

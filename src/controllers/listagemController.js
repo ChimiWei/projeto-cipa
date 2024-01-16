@@ -1,5 +1,5 @@
 const { getCipaAtiva } = require('../models/cipaModel')
-const db = require('../helpers/query-repo')
+const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const { setCandidatosPageAuth, getCandidatosPageAuth } = require("../models/authModel")
 const getCandidatos = require('../helpers/getCandidatos')
@@ -15,10 +15,10 @@ const listagemController = {
         const codfilial = req.params.codfilial
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
         if (!cipa) return res.redirect('/')
-    
-        const [rows] = await mysqlPromise.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+
+        const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id, codfilial))
         const { token } = rows[0]
-    
+
         if (req.body.token === token) {
             setCandidatosPageAuth(true)
             return res.redirect(`/candidatos/${codfilial}`)
@@ -36,7 +36,7 @@ const listagemController = {
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
         const candidatos = await getCandidatos(cipa.id)
-    
+
         // bubble sort lets gooooooooooo
         for (let i = 0; i < candidatos.length; i++) {
             for (let j = 0; j < candidatos.length - 1; j++) {
@@ -47,17 +47,17 @@ const listagemController = {
                 }
             }
         }
-    
-        const [rows] = await mysqlPromise.query(...db.mysql.getVotos(cipa.id))
+
+        const [rows] = await mysqlPromise.query(...repository.mysql.getVotos(cipa.id))
         const [branco, nulo] = rows
-    
+
         res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
     },
     renderVotos: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
-        const [funcionarios] = await mysqlPromise.query(...db.mysql.getFuncComVoto(cipa.id))
+        const [funcionarios] = await mysqlPromise.query(...repository.mysql.getFuncComVoto(cipa.id))
         res.render('listVotos.ejs', { funcionarios })
     }
 }

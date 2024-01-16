@@ -1,7 +1,7 @@
 const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
 const mysqlPromise = require('../helpers/mysqlQuery')
-const db = require('../helpers/query-repo')
+const repository = require('../helpers/query-repo')
 
 const { mssqlQuery } = require('../helpers/mssqlQuery')
 const generateToken = require('../helpers/generateToken')
@@ -30,7 +30,7 @@ const cipaconfigController = {
             return res.redirect('/')
         }
         const token = generateToken()
-        await mysqlPromise.query(...db.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
+        await mysqlPromise.query(...repository.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
             req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
 
         const cipas = await getCipaAtiva()
@@ -38,9 +38,9 @@ const cipaconfigController = {
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
 
         if (cipa) {
-            await mysqlPromise.query(...db.mysql.addToken(cipa.id, codcoligada, codfilial, token))
-            await mysqlPromise.query(...db.mysql.cadastrarVoto(cipa.id, "BRA"))
-            await mysqlPromise.query(...db.mysql.cadastrarVoto(cipa.id, "NUL"))
+            await mysqlPromise.query(...repository.mysql.addToken(cipa.id, codcoligada, codfilial, token))
+            await mysqlPromise.query(...repository.mysql.cadastrarVoto(cipa.id, "BRA"))
+            await mysqlPromise.query(...repository.mysql.cadastrarVoto(cipa.id, "NUL"))
         } else {
             return res.send("ocorreu um erro")
         }
@@ -61,7 +61,7 @@ const cipaconfigController = {
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
 
-        const [result] = await mysqlPromise.query(...db.mysql.editCipa(req.body.fimvotacao, cipa.id))
+        const [result] = await mysqlPromise.query(...repository.mysql.editCipa(req.body.fimvotacao, cipa.id))
         console.log(result)
 
         if (result.affectedRows === 0) {

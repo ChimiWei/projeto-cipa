@@ -1,5 +1,5 @@
 const { getCipaAtiva } = require("../models/cipaModel")
-const db = require('../helpers/query-repo')
+const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 
 
@@ -14,14 +14,14 @@ const suspendercipaController = {
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
         if (!cipa) return res.redirect('/')
 
-        const [rows] = await mysqlPromise.query(...db.mysql.getCipaToken(cipa.id, codfilial))
+        const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id, codfilial))
         const { token } = rows[0]
 
         if (req.body.token === token) {
             const cipaid = cipa.id
             console.log('cipa id:')
             console.log(cipaid)
-            await mysqlPromise.query(...db.mysql.suspendCipa(cipaid))
+            await mysqlPromise.query(...repository.mysql.suspendCipa(cipaid))
 
 
             await getCipaAtiva()

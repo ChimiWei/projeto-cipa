@@ -1,10 +1,10 @@
 const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const mysqlPromise = require('../helpers/mysqlQuery')
-const db = require('../helpers/query-repo')
+const repository = require('../helpers/query-repo')
 
 const checkCipaVotes = async (codfilial, cipaid) => {
-    const result = await mssqlStmtQuery(db.mssql.funcTotalFilial(codfilial))
-    const [rows] = await mysqlPromise.query(...db.mysql.getTotalVotos(cipaid))
+    const result = await mssqlStmtQuery(repository.mssql.funcTotalFilial(codfilial))
+    const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipaid))
     console.log(rows)
 
     const [filial] = result
@@ -13,6 +13,12 @@ const checkCipaVotes = async (codfilial, cipaid) => {
     let percentage = Math.floor((votos.total * 100) / filial.total)
 
     console.log(percentage + '%')
+
+    if (percentage > 50) {
+        return true
+    } else {
+        return false
+    }
 
 }
 
