@@ -11,6 +11,7 @@ const cipaconfigController = {
     renderCipaConfig: async (req, res) => {
         const cipas = await getCipaAtiva()
         const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
+        console.log(req.user)
         res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
     },
 
