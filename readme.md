@@ -10,8 +10,8 @@
 
 - [x] Consulta e cadastro de candidatos
 - [x] Consulta, checagem e listagem de inscritos
-- [ ] Fluxo de Votação
-- [ ] Impressão da ficha de cadastro
+- [x] Fluxo de Votação
+- [x] Impressão da ficha de cadastro
 - [ ] Cadastro e Login de usuários/admins do sistema
 
 ### Pré-requisitos
