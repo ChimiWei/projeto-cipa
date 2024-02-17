@@ -2,8 +2,17 @@ const express = require('express')
 const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
 const checkAuthenticated = require('../middleware/checkAuthenticated')
-const { homeController, cipaconfigController, candidatoController, votacaoController, listagemController, suspendercipaController} = require('../controllers/index')
+const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
+const { homeController, cipaconfigController, candidatoController, votacaoController, 
+listagemController, suspendercipaController, userController} = require('../controllers/index')
 
+router.get('/login', checkNotAuthenticated, userController.renderLogin)
+
+router.post('/login', checkNotAuthenticated, userController.postLogin)
+
+router.get('/register', checkNotAuthenticated, userController.renderRegister)
+
+router.post('/register', checkNotAuthenticated, asyncErrorHandler(userController.postRegister))
 
 router.get('/', checkAuthenticated, asyncErrorHandler(homeController.renderHome))
 
@@ -46,5 +55,7 @@ router.get('/votos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemCo
 router.get('/suspender_cipa/:codfilial', checkAuthenticated, suspendercipaController.renderSuspenderCipa)
 
 router.put('/suspender_cipa/:codfilial', checkAuthenticated, asyncErrorHandler(suspendercipaController.putSuspenderCipa))
+
+router.delete('/logout', checkAuthenticated, userController.deleteLogout)
 
 module.exports = router
