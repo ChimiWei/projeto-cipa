@@ -5,7 +5,7 @@ async function getUserByEmail(email) {
     const [rows, fields] = await mysqlPromise.query(...repository.mysql.usuarioPorEmail(email))
     
     return rows[0]
-}
+} 
 
 async function getUserById(id) {
     const [rows, fields] = await mysqlPromise.query(...repository.mysql.usuarioPorId(id))

@@ -1,11 +1,11 @@
 const passport = require('passport')
 const bcrypt = require('bcrypt')
-
+const mysqlPromise = require('../helpers/mysqlQuery')
 
 const userController = {
     renderLogin: (req, res) => {
         res.render('login.ejs')
-    
+
     },
     postLogin: passport.authenticate('local', {
         successRedirect: '/',
@@ -21,10 +21,9 @@ const userController = {
         try {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
             let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', default, default, default)`
-            mysql.query(sql, (err) => {
-                if (err) throw err;
-    
-            })
+            mysqlPromise.query(sql)
+
+            res.redirect('/login')
             /* const user = {
                 id: Date.now().toString(),
                 name: req.body.name,
@@ -33,12 +32,13 @@ const userController = {
             
             users.push(user)
             */
-    
-        } catch {
+
+        } catch (e) {
+            console.log(e)
             res.redirect('/register')
         }
-    
-        res.redirect('/login')
+
+
     },
     deleteLogout: (req, res) => {
         req.logOut()

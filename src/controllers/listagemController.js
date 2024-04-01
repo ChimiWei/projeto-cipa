@@ -29,7 +29,6 @@ const listagemController = {
     },
     renderListCandidato: async (req, res) => {
         var candidatosPageAuth = getCandidatosPageAuth()
-        console.log(candidatosPageAuth)
         if (!candidatosPageAuth) return res.redirect('/')
         setCandidatosPageAuth(false)
         const cipas = await getCipaAtiva()
