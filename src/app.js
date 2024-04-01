@@ -102,10 +102,10 @@ const checkCipaVotes = async (codfilial, cipaid) => {
 
 }
 
-function isTodayInRange(firstD, lastD) {
+function isTodayInRange(firstDate, lastDate) {
     const currentDate = new Date()
-    //  console.log(`${formatDate(currentDate)} está entre ${formatDate(firstD)} e ${formatDate(lastD)}`)
-    return (firstD <= currentDate && currentDate <= lastD)
+    //  console.log(`${formatDate(currentDate)} está entre ${formatDate(firstDate)} e ${formatDate(lastDate)}`)
+    return (firstDate <= currentDate && currentDate <= lastDate)
 }
 
 function formatDate(date) {
