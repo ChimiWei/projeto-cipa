@@ -5,23 +5,26 @@
         </div>
         <div class="col-sm rounded shadow bg-white p-3">
             <form class="formgroup" action="/cipaconfig" method="POST">
-                <div id="inscription" class="row justify-content-center">
+                <div id="cadastroCipa" class="row justify-content-center">
                     <div class="text-center">
-                        <h2> Gestão <%= gestao %> </h2>
-                        <select class="form-select text-center p-2" name="filial"  aria-label="Selecione a filial">
+                        <h2> Gestão <%= gestao %>
+                        </h2>
+                        <select class="form-select text-center p-2" name="filial" aria-label="Selecione a filial">
                             <option disabled selected>Selecione a filial</option>
-                            <% filiais.forEach(filial => { %>
-                            <option value="<%= [filial.codfilial, filial.nome] %>"><%= filial.nome %></option>
-                            <% }) %>
-                        </select> 
+                            <% filiais.forEach(filial=> { %>
+                                <option value="<%= [filial.codfilial, filial.nome] %>">
+                                    <%= filial.nome %>
+                                </option>
+                                <% }) %>
+                        </select>
                     </div>
                     <div class="text-center mb-2">
                         <h3 class="title-style pt-2"> Inscrições </h3>
                         <div class="row pt-4">
                             <div class="col px-2">
                                 <div id="datainscricao" class="input-daterange justify-content-center input-group">
-                                    <input class="input-sm form-control" type="text" id="IniInsc"
-                                        onkeydown="return false;" name="inscricaoini" autocomplete="off" required>
+                                    <input class="input-sm form-control" type="text" id="" onkeydown="return false;"
+                                        name="inscricaoini" autocomplete="off" required>
                                     <span class="p-2">até</span>
                                     <input class="input-sm form-control" type="text" id="FimInsc"
                                         onkeydown="return false;" name="fiminscricao" autocomplete="off"
@@ -49,16 +52,18 @@
                 <div class="row">
                     <div class="col-sm text-center py-3" id="resultado">
                         <span> Resultado final:</span>
-                        <input id="resultado-final" name="resultado" type="text" class="input-style"
+                        <input id="resultadoFinal" name="resultado" type="text" class="input-style"
                             onkeydown="return false;" autocomplete="off" required>
                     </div>
                 </div>
                 <div class="row pt-2">
                     <div class="col text-center">
                         <% if (locals.message) { %>
-                            <p class="text-danger"> <%= message.error  %> </p>
-                          <% } %>
-                        <button type="submit" class="btn btn-color"> Salvar Dados </button>
+                            <p class="text-danger">
+                                <%= message.error %>
+                            </p>
+                            <% } %>
+                                <button type="submit" class="btn btn-color"> Salvar Dados </button>
                     </div>
                 </div>
             </form>
