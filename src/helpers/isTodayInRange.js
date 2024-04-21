@@ -20,10 +20,6 @@ function isTodayInRange(firstDate, lastDate) {
         year: 'numeric',
     })
 
-    console.log(`datas: ${first} até ${last}`)
-    console.log(today)
-
-    console.log(first <= today)
     return (first <= today && today <= last)
 }
 
