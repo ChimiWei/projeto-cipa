@@ -1,9 +1,16 @@
 const currentYear = new Date().getFullYear()
 const minDate = '01/01/' + currentYear
 const maxDate = '30/12/' + currentYear
+const iniInsc = document.getElementById('IniInsc')
+const fimInsc = document.getElementById('FimInsc')
 const iniVoto = document.getElementById('IniVoto')
 const fimVoto = document.getElementById('FimVoto')
+const resultadoFinal = document.getElementById('resultadoFinal')
+const selectFilial = document.getElementById('selectFilial')
 const errFilial = document.getElementById('errFilial')
+const cipaModal = document.getElementById('modalCipa')
+const cipaForm = document.getElementById('cipaForm')
+
 let changeDatepicker = false
 
 const resetVotacao = () => {
@@ -15,10 +22,10 @@ const resetVotacao = () => {
 }
 
 const resetResultado = () => {
-    $('#resultado-final').datepicker('destroy')
-    $('#resultado-final').val('')
+    $('#resultadoFinal').datepicker('destroy')
+    $('#resultadoFinal').val('')
     $('#resultado').hide()
-    
+
     changeDatepicker = true
 }
 
@@ -29,7 +36,7 @@ $('#datainscricao').datepicker({
     startDate: minDate,
     endDate: maxDate,
     maxViewMode: 1
-}).on('changeDate', function(e) {
+}).on('changeDate', function (e) {
     // `e` here contains the extra attributes
     console.log(e.target.value)
     votoDatepicker(e.target.value)
@@ -38,37 +45,37 @@ $('#datainscricao').datepicker({
 $('#votacao').hide()
 
 const votoDatepicker = (MinVotacao) => {
-    if(MinVotacao && changeDatepicker) {
+    if (MinVotacao && changeDatepicker) {
         const arrDate = MinVotacao.split('/')
         const date = new Date(arrDate[1] + '/' + arrDate[0] + '/' + arrDate[2])
         date.setDate(date.getDate() + 1)
         console.log(date)
         $('#votacao').show()
         $('#datavotacao').datepicker({
-        format: 'dd/mm/yyyy',
-        autoclose: true,
-        daysOfWeekDisabled: "0,6",
-        startDate: date,
-        endDate: maxDate,
-        maxViewMode: 1
-    }).on('changeDate', function(e) {
-        // `e` here contains the extra attributes
-        console.log(e.target.value)
-        resultadoDatepicker(e.target.value)
-    });
-    changeDatepicker = false
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            daysOfWeekDisabled: "0,6",
+            startDate: date,
+            endDate: maxDate,
+            maxViewMode: 1
+        }).on('changeDate', function (e) {
+            // `e` here contains the extra attributes
+            console.log(e.target.value)
+            resultadoDatepicker(e.target.value)
+        });
+        changeDatepicker = false
     }
 }
 
 $('#resultado').hide()
 const resultadoDatepicker = (MinVotacao) => {
-    if(MinVotacao && changeDatepicker) {
+    if (MinVotacao && changeDatepicker) {
         const arrDate = MinVotacao.split('/')
         const date = new Date(arrDate[1] + '/' + arrDate[0] + '/' + arrDate[2])
         date.setDate(date.getDate() + 1)
         console.log(date)
         $('#resultado').show()
-        $('#resultado-final').datepicker({
+        $('#resultadoFinal').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
             daysOfWeekDisabled: "0,6",
@@ -81,13 +88,13 @@ const resultadoDatepicker = (MinVotacao) => {
 }
 
 const checkFilial = (filiais, selectedFilial) => {
-    const [codfilial, filial] = selectedFilial.split(',') 
-    if(JSON.parse(filiais).find(filial => filial.codfilial ==  codfilial)) {
+    const [codfilial, filial] = selectedFilial.split(',')
+    if (JSON.parse(filiais).find(filial => filial.codfilial == codfilial)) {
         errFilial.style.visibility = 'visible'
-        $('#cadastro').hide()
+        $('#formCipa').hide()
     } else {
         errFilial.style.visibility = 'hidden'
-        $('#cadastro').show()
+        $('#formCipa').show()
     }
 }
 
@@ -105,5 +112,30 @@ $('#gestao').datepicker({
 })
 */
 
+function handleSubmit(e) {
+    e.preventDefault()
+    cipaModal.classList.toggle('show')
+    let selectFilialEl = document.getElementById('confirmFilial')
+    let [codfilial, filial] = selectFilial.value.split(',')
+    selectFilialEl.textContent = filial
+    let iniInscEl = document.getElementById('confirmIniInsc')
+    iniInscEl.textContent = iniInsc.value
+    let fimInscEl = document.getElementById('confirmFimInsc')
+    fimInscEl.textContent = fimInsc.value
+    let iniVotoEl = document.getElementById('confirmIniVoto')
+    iniVotoEl.textContent = iniVoto.value
+    let fimVotoEl = document.getElementById('confirmFimVoto')
+    fimVotoEl.textContent = fimVoto.value
+    let resultadoFinalEl = document.getElementById('confirmResultadoFinal')
+    resultadoFinalEl.textContent = resultadoFinal.value
+
+}
+
+function cipaFormSubmit() {
+    cipaForm.submit()
+}
 
 
+function closeModal() {
+    cipaModal.classList.toggle('show')
+}

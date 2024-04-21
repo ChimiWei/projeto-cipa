@@ -24,55 +24,56 @@
                         <img src='/img/cipa.png' class="w-50" />
                     </div>
                     <div class="col-sm rounded shadow bg-white p-3">
-                        <form class="formgroup" action="/cipaconfig" method="POST">
-                            <div id="inscription" class="row justify-content-center">
+                        <form id="cipaForm" class="formgroup" action="/cipaconfig" method="POST">
+                            <div id="cadastroCipa" class="row justify-content-center">
                                 <div class="text-center">
-                                    <h2> Gestão <%= gestao %> </h2>
-                                    <select class="form-select text-center p-2" name="filial"
-                                    aria-label="Selecione a filial" onchange="checkFilial('<%= JSON.stringify(cipas) %>', this.value)">
+                                    <h2> Gestão <%= gestao %>
+                                    </h2>
+                                    <select id="selectFilial" class="form-select text-center p-2" name="filial"
+                                        aria-label="Selecione a filial"
+                                        onchange="checkFilial('<%= JSON.stringify(cipas) %>', this.value)">
                                         <option disabled selected>Selecione a filial</option>
-                                        <% filiais.forEach(filial => { %>    
+                                        <% filiais.forEach(filial=> { %>
                                             <option value="<%= [filial.codfilial, filial.nome] %>">
-                                            <%= filial.nome %>
+                                                <%= filial.nome %>
                                             </option>
-                                        <% }) %>
+                                            <% }) %>
                                     </select>
                                 </div>
                                 <div id="errFilial" class="text-center" style="visibility: hidden;">
-                                    <h4 class="text-danger">  Já possui uma cipa ativa. </h4>
+                                    <h4 class="text-danger"> Já possui uma cipa ativa. </h4>
                                 </div>
-                                <div id="cadastro">
-                                    <div  class="text-center mb-2">
+                                <div id="formCipa">
+                                    <div class="text-center mb-2">
                                         <h3 class="title-style pt-2"> Inscrições </h3>
                                         <div class="row pt-4">
                                             <div class="col px-2">
-                                                <div id="datainscricao" class="input-daterange justify-content-center input-group">
+                                                <div id="datainscricao"
+                                                    class="input-daterange justify-content-center input-group">
                                                     <input class="input-sm form-control" type="text" id="IniInsc"
-                                                    onkeydown="return false;" name="inscricaoini"
-                                                    autocomplete="off" required>
+                                                        onkeydown="return false;" name="inscricaoini" autocomplete="off"
+                                                        required>
                                                     <span class="p-2">até</span>
                                                     <input class="input-sm form-control" type="text" id="FimInsc"
-                                                                onkeydown="return false;" name="fiminscricao"
-                                                                autocomplete="off" onclick="resetVotacao()" required>
-                                                        </div>
-                                                    </div>
+                                                        onkeydown="return false;" name="fiminscricao" autocomplete="off"
+                                                        onclick="resetVotacao()" required>
                                                 </div>
                                             </div>
-                                            <div id="votacao" class="text-center mb-2">
-                                                <h3 class="title-style pt-2"> Votação </h3>
-                                                <div class="row pt-4">
-                                                    <div class="col px-2">
-                                                        <div id="datavotacao"
-                                                            class="input-daterange justify-content-center input-group">
-                                                            <input class="input-sm form-control" type="text" id="IniVoto"
-                                                                onkeydown="return false;" name="inivotacao"
-                                                                autocomplete="off" required>
-                                                            <span class="p-2">até</span>
-                                                            <input class="input-sm form-control" type="text" id="FimVoto"
-                                                                onkeydown="return false;" name="fimvotacao"
-                                                                autocomplete="off" onclick="resetResultado()" required>
-                                                        </div>
-                                                    </div>
+                                        </div>
+                                    </div>
+                                    <div id="votacao" class="text-center mb-2">
+                                        <h3 class="title-style pt-2"> Votação </h3>
+                                        <div class="row pt-4">
+                                            <div class="col px-2">
+                                                <div id="datavotacao"
+                                                    class="input-daterange justify-content-center input-group">
+                                                    <input class="input-sm form-control" type="text" id="IniVoto"
+                                                        onkeydown="return false;" name="inivotacao" autocomplete="off"
+                                                        required>
+                                                    <span class="p-2">até</span>
+                                                    <input class="input-sm form-control" type="text" id="FimVoto"
+                                                        onkeydown="return false;" name="fimvotacao" autocomplete="off"
+                                                        onclick="resetResultado()" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +81,7 @@
                                     <div class="row">
                                         <div class="col-sm text-center py-3" id="resultado">
                                             <span> Resultado final:</span>
-                                            <input id="resultado-final" name="resultado" type="text" class="input-style"
+                                            <input id="resultadoFinal" name="resultado" type="text" class="input-style"
                                                 onkeydown="return false;" autocomplete="off" required>
                                         </div>
                                     </div>
@@ -91,14 +92,42 @@
                                                     <%= message.error %>
                                                 </p>
                                                 <% } %>
-                                                    <button type="submit" class="btn btn-color"> Salvar Dados </button>
+                                                    <button id="confirmCipa" type="submit" class="btn btn-color"
+                                                        onclick="handleSubmit(event)"> Confirmar </button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="modalCipa" class="voto-modal">
+                    <div class="voto-modal-content">
+                        <div class="text-end ">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                        </div>
+                        <div class="container text-center">
+                            <h3> Revisar Dados </h3>
+                            <text id="confirmFilial" class="fw-bold"></text>
+                            <div class="row mt-3">
+                                <span> Data de Inscrição: <text id="confirmIniInsc" class="fw-bold"></text> até <text
+                                        id="confirmFimInsc" class="fw-bold"></text></text></span>
+                            </div>
+                            <div class="row mt-3">
+                                <span> Data de Votação: <text id="confirmIniVoto" class="fw-bold"></text> até <text
+                                        id="confirmFimVoto" class="fw-bold"></text></text></span>
+                            </div>
+                            <div class="row mt-3">
+                                <span> Data Resultado: <text id="confirmResultadoFinal" class="fw-bold"></text></span>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="cipaFormSubmit()"> Confirmar </button>
+                                <button class="btn btn-danger" onclick="closeModal()"> Voltar </button>
                             </div>
                         </div>
-
                     </div>
+                </div>
+            </div>
 
         </section>
         <%- include('partials/footer'); %>
