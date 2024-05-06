@@ -5,6 +5,7 @@ const votacaoController = require('./votacaoController')
 const listagemController = require('./listagemController')
 const suspendercipaController = require('./suspendercipaController')
 const userController = require('./userController')
+const showTokenController = require('./showTokenController')
 
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
     votacaoController,
     listagemController,
     suspendercipaController,
-    userController 
+    userController,
+    showTokenController
 
 }
