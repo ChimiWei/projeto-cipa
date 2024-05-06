@@ -31,7 +31,7 @@ async function mssqlStmtQuery(query) {
         })
         await stmt.prepare(query.sql)
         const result = (await stmt.execute(stmtParams)).recordset
-        console.log(result)
+        
         pool.close()
         return result
     } finally {
