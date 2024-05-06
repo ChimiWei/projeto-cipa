@@ -3,8 +3,9 @@ const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
 const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
-const { homeController, cipaconfigController, candidatoController, votacaoController, 
-listagemController, suspendercipaController, userController} = require('../controllers/index')
+const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
+const { homeController, cipaconfigController, candidatoController, votacaoController,
+    listagemController, suspendercipaController, userController, showTokenController } = require('../controllers/index')
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
@@ -18,7 +19,9 @@ router.get('/', checkAuthenticated, asyncErrorHandler(homeController.renderHome)
 
 router.get('/cipaconfig', checkAuthenticated, asyncErrorHandler(cipaconfigController.renderCipaConfig))
 
-router.post('/cipaconfig', asyncErrorHandler(cipaconfigController.postCipaConfig))
+router.post('/cipaconfig', checkAuthenticated, asyncErrorHandler(cipaconfigController.postCipaConfig))
+
+router.get('/cipatoken', checkAuthenticated, AuthenticateTokenJWT, asyncErrorHandler(showTokenController.getShowToken))
 
 router.get('/edit_cipa/:codfilial', checkAuthenticated, asyncErrorHandler(cipaconfigController.renderCipaConfigEdit))
 
@@ -46,7 +49,7 @@ router.get('/voto_finalizado/:codfilial', checkAuthenticated, votacaoController.
 
 router.get('/autorizar_acesso/:codfilial', checkAuthenticated, listagemController.renderAutorizarAcesso)
 
-router.post('/autorizar_acesso/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.postAutorizarAcesso) )
+router.post('/autorizar_acesso/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.postAutorizarAcesso))
 
 router.get('/candidatos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderListCandidato))
 

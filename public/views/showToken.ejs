@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('partials/head', {title: 'Token'}); %>
+</head>
+
+   
+
+<body class="bg-darkpurple">
+ <section class="st-section ">
+    <div class="container rounded bg-white shadow py-4">
+        <div class="row">
+            <div class="text-center mb-3">
+                <h3> CIPA cadastrada com sucesso! </h3>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center  mb-3">
+                <p class="fs-5 mb-3"> O token de acesso dessa CIPA é: </p>
+                <h1> <%= locals.token %> </h1>   
+            </div>
+        </div>
+        <div class="row ">
+            <div class="text-center">
+                <p class="fs-5"> Com ele você pode acessar a área de candidatos, editar e suspender a CIPA. Recomendamos anotar-lo em um local seguro onde só pessoas autorizadas tem acesso.</p>  
+                <a class="btn btn-success" href="/"> OK </a>
+            </div>
+        </div>
+
+    </div>
