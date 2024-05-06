@@ -52,13 +52,6 @@ const mysqlPromise = mysql.promise()
 const req = require('express/lib/request');
 
 
-const ano = new Date().getFullYear()
-const dia = new Date().getDate()
-const mes = new Date().getMonth() + 1
-const hoje = dia + '/' + mes + '/' + ano
-const gestao = ano + '/' + (ano + 1)
-
-
 var users = []
 
 var cipas = []
@@ -68,39 +61,6 @@ var votante = {
     func: null
 }
 
-var candidatosAuth = false
-
-const catchAsyncErr = (route) => {
-    return async function (req, res, next) {
-        try {
-            await route(req, res, next)
-        } catch (e) {
-            console.log(e)
-            next(e)
-        }
-    }
-}
-
-const mssqlQuery = async (query) => {
-    const poolMssql = await mssql.getPool()
-    const result = (await poolMssql.query(query)).recordset // retorna apenas o resultado da query
-    return result
-}
-
-
-const checkCipaVotes = async (codfilial, cipaid) => {
-    const result = await mssql.mssqlStmtQuery(repository.mssql.funcTotalFilial(codfilial))
-    const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipaid))
-    console.log(rows)
-
-    const [filial] = result
-    const [votos] = rows
-
-    let percentage = Math.floor((votos.total * 100) / filial.total)
-
-    console.log(percentage + '%')
-
-}
 
 function isTodayInRange(firstDate, lastDate) {
     const currentDate = new Date()
@@ -108,19 +68,6 @@ function isTodayInRange(firstDate, lastDate) {
     return (firstDate <= currentDate && currentDate <= lastDate)
 }
 
-function formatDate(date) {
-    let formatedDate = ((date.getDate())) + "/" + ((date.getMonth() + 1)) + "/" + (date.getFullYear())
-
-    return formatedDate
-}
-
-function generateToken() {
-    let randomToken = Math.random().toString(36).slice(2, 8)
-    console.log(randomToken)
-    if (randomToken.length >= 6 && randomToken.search(/\d{1,3}/) != -1) return randomToken
-
-    return generateToken()
-}
 
 
 const getCipaAtiva = async () => {
