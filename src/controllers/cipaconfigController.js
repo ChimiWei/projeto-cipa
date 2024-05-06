@@ -2,16 +2,17 @@ const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const repository = require('../helpers/query-repo')
-
 const { mssqlQuery } = require('../helpers/mssqlQuery')
 const generateToken = require('../helpers/generateToken')
+const generateJWT = require('../helpers/generateJWT')
+const cookie = require('cookie')
 
 const cipaconfigController = {
 
     renderCipaConfig: async (req, res) => {
         const cipas = await getCipaAtiva()
         const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
-        console.log(req.user)
+        
         res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
     },
 
@@ -47,7 +48,16 @@ const cipaconfigController = {
         }
 
         console.log('cipa cadastrada com sucesso')
-        res.redirect('/')
+
+        const tokenJWT = generateJWT({ token: token })
+        const serialized = cookie.serialize('token', tokenJWT, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 60
+            })
+        
+        res.setHeader('Set-Cookie', serialized)
+        res.redirect('/cipatoken')
     },
 
     renderCipaConfigEdit: async (req, res) => {
