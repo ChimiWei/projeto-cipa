@@ -1,10 +1,12 @@
 
 function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
+   /* if (req.isAuthenticated()) {
         return next()
     }
 
-    res.redirect('/login')
+    res.redirect('/login') */
+
+    return next()
 }
 
 
