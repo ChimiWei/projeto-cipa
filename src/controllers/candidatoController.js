@@ -5,6 +5,8 @@ const { gestao, hoje, ano } = require('../models/dateModel')
 const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const getCandidatos = require('../helpers/getCandidatos')
 
+const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')
+
 const candidatoController = {
     renderCadastroCandidato: async (req, res) => {
         const cipas = await getCipaAtiva()
@@ -15,6 +17,7 @@ const candidatoController = {
             const func = await mssqlStmtQuery(repository.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
             const candidatos = await getCandidatos(cipa.id)
             console.log(candidatos)
+            func.forEach( func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
             const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
             res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato })
         } else {
@@ -45,7 +48,10 @@ const candidatoController = {
         if (candidatos.find(func => func.n_votacao === nvotacao)) res.send('Número de votação já está em uso.')
         console.log(req.body)
         console.log(nvotacao)
-        await mysqlPromise.query(...repository.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, ano))
+    
+        
+        await mysqlPromise.query(...repository.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, '', ano))
+        
         await mysqlPromise.query(...repository.mysql.cadastrarVoto(cipa.id, nvotacao))
         res.redirect('/candidatos/' + codfilial)
     }

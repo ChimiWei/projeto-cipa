@@ -6,6 +6,8 @@ const { gestao, hoje, ano } = require('../models/dateModel')
 const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const getCandidatos = require('../helpers/getCandidatos')
 const checkCipaVotes = require('../helpers/checkCipaVotes')
+const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')
+
 
 const votacaoController = {
     renderIniciarVotacao: async (req, res) => {
@@ -16,6 +18,7 @@ const votacaoController = {
         const cipaEncerrada = await checkCipaVotes(codfilial, cipa.id)
         if (req.query.chapa) {
             const func = await mssqlStmtQuery(repository.mssql.funcionario(codfilial, req.query.chapa))
+            func.forEach( func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
             const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(cipa.id, req.query.chapa))
 
             res.render('iniVotacao.ejs', { func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash() })

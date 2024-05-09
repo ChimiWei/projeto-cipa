@@ -22,7 +22,7 @@
               <div class="card">
                 <div class="card-body text-center">
                   <% if(candidato) { %>
-                    <img class="img-small" src='/profile-icon.png' />
+                    <img class="img-small" src='<%= candidato.imagem %>' />
                     <text class="fs-3 ms-3 text-capitalize">
                       <%= candidato.nome.toLowerCase() %>
                     </text>

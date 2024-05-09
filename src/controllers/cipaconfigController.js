@@ -32,6 +32,7 @@ const cipaconfigController = {
             return res.redirect('/')
         }
         const token = generateToken()
+        
         await mysqlPromise.query(...repository.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
             req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
 

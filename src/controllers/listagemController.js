@@ -35,7 +35,7 @@ const listagemController = {
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
         const candidatos = await getCandidatos(cipa.id)
-
+        candidatos.forEach( candidato => candidato.IMAGEM = ConvertBufferAndReturnImageURL(candidato.IMAGEM))
         // bubble sort lets gooooooooooo
         for (let i = 0; i < candidatos.length; i++) {
             for (let j = 0; j < candidatos.length - 1; j++) {
