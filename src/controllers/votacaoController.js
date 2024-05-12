@@ -7,6 +7,7 @@ const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const getCandidatos = require('../helpers/getCandidatos')
 const checkCipaVotes = require('../helpers/checkCipaVotes')
 const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')
+const queryImageAndReturnURL = require('../helpers/queryImageAndReturnURL')
 
 
 const votacaoController = {
@@ -51,6 +52,11 @@ const votacaoController = {
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (votante.func && cipa) {
             const candidatos = await getCandidatos(cipa.id)
+
+            for(let i = 0; i < candidatos.length; i++) {
+                candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
+            }
+
             res.render('votacao.ejs', { candidatos: candidatos, func: votante.func })
         } else {
             res.redirect('/')
@@ -71,8 +77,9 @@ const votacaoController = {
         const candidatos = await getCandidatos(votante.cipaid)
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
         console.log(votante)
-
         if (!candidato) return res.redirect('/')
+        
+        candidato.imagem = await queryImageAndReturnURL(candidato.idimagem)
         res.render('confirmarVoto.ejs', { candidato, votante, message: req.flash() })
     },
 

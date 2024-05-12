@@ -18,7 +18,7 @@ const usuarioPorId = (id) => {
 
 const candidatos = (cipaid) => {
     const sql = `
-    select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, V.total as votos
+    select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, I.idimagem, V.total as votos
     from inscritos I
     inner join votos V on V.cipaid = I.cipaid and V.voto = I.n_votacao
     where I.cipaid = ?`
@@ -77,11 +77,11 @@ function suspendCipa(cipaid) {
     return [sql, params]
 }
 
-const cadastrarCandidato = (cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, gestao) => {
+const cadastrarCandidato = (cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, idimagem, gestao) => {
     const sql = `
-    insert into inscritos values (?, ?, ?, ?, ?, ?, default, ?, ?, default, '', default, ?);
+    insert into inscritos values (?, ?, ?, ?, ?, ?, default, ?, ?, default, ?, default, ?);
     `
-    const params = [cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, gestao]
+    const params = [cipaid, n_votacao, codcoligada, codfilial, chapa, nome, funcao, secao, idimagem, gestao]
     return [sql, params]
 }
 
@@ -90,6 +90,14 @@ const cadastrarVoto = (cipaid, n_votacao) => {
     insert into votos values (?, ?,  default);
     `
     const params = [cipaid, n_votacao]
+    return [sql, params]
+}
+
+const cadastrarImagem = (image) => {
+    const sql = `
+    insert into imagem values (default, ?);
+    `
+    const params = [image]
     return [sql, params]
 }
 
@@ -204,11 +212,11 @@ const deleteToken = (cipaid) => {
 */
 const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     const sql = `
-    select F.CHAPA, F.NOME, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO
+    select F.CHAPA, F.NOME, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, I.IMAGEM
     from PFUNC F
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
-    
+    inner join GIMAGEM I on I.ID = F.ID
     where F.CODFILIAL = @codfilial AND F.CHAPA = @chapa`
     const params = [
         {
@@ -247,11 +255,13 @@ const funcComCpf = (chapa, codfilial) => { // Dados do Funcionário
     return { sql, params }
 }
 
+
+
 const funcComColigada = (codfilial, chapa) => {
     const sql = `
     select F.CHAPA, F.NOME, F.CODCOLIGADA, F.CODFILIAL, S.DESCRICAO AS SECAO, PF.NOME AS FUNCAO, 
     GC.NOMEFANTASIA AS GCNOME, GC.RUA AS GCRUA, GC.NUMERO AS GCNUMERO, GC.BAIRRO AS GCBAIRRO, GC.CIDADE AS GCCIDADE,
-    GC.ESTADO AS GCESTADO, GC.CGC AS GCCGC, GC.TELEFONE AS GCTELEFONE
+    GC.ESTADO AS GCESTADO, GC.CGC AS GCCGC, GC.TELEFONE AS GCTELEFONE, F.ID AS IDIMAGEM
     
     from PFUNC F
     inner join GCOLIGADA GC on GC.CODCOLIGADA = F.CODCOLIGADA
@@ -275,6 +285,8 @@ const funcComColigada = (codfilial, chapa) => {
     return { sql, params }
 }
 
+
+
 const funcTotalFilial = (codfilial) => {
     const sql = `
     select count(F.chapa) as total
@@ -293,6 +305,27 @@ const funcTotalFilial = (codfilial) => {
     return { sql, params }
 
 }
+
+const imagem = (imageid) => {
+    const sql = `
+    select id, imagem
+    from gimagem
+    where id = @imageid
+    `
+
+    const params = [
+        {
+            name: 'imageid',
+            type: 'int',
+            value: imageid
+        }
+    ]
+
+    return { sql, params }
+
+}
+
+
 const repository = {
     mysql: {
         usuarioPorEmail,
@@ -304,6 +337,7 @@ const repository = {
         suspendCipa,
         cadastrarCandidato,
         cadastrarVoto,
+        cadastrarImagem,
         addToken,
         addVoto,
         registrarVoto,
@@ -323,6 +357,7 @@ const repository = {
         funcComCpf,
         funcComColigada,
         funcTotalFilial,
+        imagem
     }
 }
 module.exports = repository

@@ -19,7 +19,7 @@
                 </div>
                 <% candidatos.forEach(candidato=> { %>
                     <div class="row w-50 candidato justify-content-center mt-2 mx-auto border p-1 rounded bg-light"
-                        onclick="candidatoModal('<%= candidato.chapa %>', '<%= candidato.nome %>', '<%= candidato.secao %>', '<%= candidato.n_votacao %>')">
+                        onclick="candidatoModal('<%= candidato.chapa %>', '<%= candidato.nome %>', '<%= candidato.secao %>', '<%= candidato.n_votacao %>', '<%= candidato.imagem %>')">
                         <div class="col-sm-auto">
                             <img class="img-small" src='<%= candidato.imagem %>' />
                         </div>
@@ -53,7 +53,7 @@
                                 <div class="container">
                                     <div class="row justify-content-center">
                                         <div class="col-sm-auto">
-                                            <img class="img-small" src='/img/profile-icon.png' />
+                                            <img id="Imagem" class="img-small" />
                                         </div>
                                         <div class="col-sm-8 pt-1">
                                             <ul class="list-group">

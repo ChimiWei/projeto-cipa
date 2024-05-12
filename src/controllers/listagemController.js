@@ -3,6 +3,8 @@ const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const { setCandidatosPageAuth, getCandidatosPageAuth } = require("../models/authModel")
 const getCandidatos = require('../helpers/getCandidatos')
+const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')
+const queryImageAndReturnURL = require('../helpers/queryImageAndReturnURL')
 
 
 const listagemController = {
@@ -34,8 +36,13 @@ const listagemController = {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
+
         const candidatos = await getCandidatos(cipa.id)
-        candidatos.forEach( candidato => candidato.IMAGEM = ConvertBufferAndReturnImageURL(candidato.IMAGEM))
+
+        for(let i = 0; i < candidatos.length; i++) {
+            candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
+        }
+        
         // bubble sort lets gooooooooooo
         for (let i = 0; i < candidatos.length; i++) {
             for (let j = 0; j < candidatos.length - 1; j++) {
