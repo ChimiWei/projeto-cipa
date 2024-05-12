@@ -25,11 +25,11 @@ const cipaconfigController = {
         const resultado = new Date(req.body.resultado.split('/').reverse().join('/'))
         if (fimIns > iniVoto) {
             req.flash('error', 'data final da inscrição não pode ser maior que a data inicial da votação')
-            return res.redirect('/')
+            return res.redirect('/cipaconfig')
         }
         if (fimVoto > resultado) {
             req.flash('error', 'data final da votação não pode ser maior que a data do resultado')
-            return res.redirect('/')
+            return res.redirect('/cipaconfig')
         }
         const token = generateToken()
         
@@ -48,7 +48,6 @@ const cipaconfigController = {
             return res.send("ocorreu um erro")
         }
 
-        console.log('cipa cadastrada com sucesso')
 
         const tokenJWT = generateJWT({ token: token })
         const serialized = cookie.serialize('token', tokenJWT, {

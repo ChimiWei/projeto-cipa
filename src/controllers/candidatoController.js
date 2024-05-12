@@ -12,6 +12,7 @@ const candidatoController = {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/')
+
         if (req.query.chapa) {
             const chapa = req.query.chapa
             const func = await mssqlStmtQuery(repository.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
@@ -19,9 +20,9 @@ const candidatoController = {
             console.log(candidatos)
             func.forEach( func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
             const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
-            res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato })
+            res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato, message: req.flash()  })
         } else {
-            res.render('addCandidato.ejs', { user: req.user, gestao: gestao })
+            res.render('addCandidato.ejs', { user: req.user, gestao: gestao, message: req.flash() })
         }
     },
     renderFichaCandidato: async (req, res) => {
@@ -50,10 +51,13 @@ const candidatoController = {
         console.log(nvotacao)
     
         
-        await mysqlPromise.query(...repository.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, '', ano))
+        await mysqlPromise.query(...repository.mysql.cadastrarCandidato(cipa.id, nvotacao, req.body.codcoligada, 
+            codfilial, chapa, req.body.nome, req.body.funcao, req.body.secao, req.body.idimagem, ano))
         
         await mysqlPromise.query(...repository.mysql.cadastrarVoto(cipa.id, nvotacao))
-        res.redirect('/candidatos/' + codfilial)
+
+        req.flash('notification', 'Candidato cadastrado com sucesso')
+        res.redirect('/cadastro_candidato/' + codfilial)
     }
 
 }
