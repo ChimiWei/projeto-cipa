@@ -6,8 +6,6 @@ function isTodayInRange(firstDate, lastDate) {
         year: 'numeric',
     })
 
-    console.log(`TESTE: ${today} está entre ${firstDate} e ${lastDate}`)
-
     const first = new Date(Date.UTC(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), firstDate.getUTCDate())).toLocaleDateString('en-US', {
         day: '2-digit',
         month: '2-digit',
@@ -20,9 +18,6 @@ function isTodayInRange(firstDate, lastDate) {
         year: 'numeric',
     })
 
-    console.log(`${today} está entre ${first} e ${last}`)
-
-    console.log(today >= last)
 
     return (first <= today && today <= last)
 }
