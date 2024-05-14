@@ -47,66 +47,6 @@ const initializePassport = require('../config/passport-config')
 initializePassport(passport)
 
 
-const mysqlPromise = mysql.promise()
-
-const req = require('express/lib/request');
-
-
-var users = []
-
-var cipas = []
-
-var votante = {
-    nvotacao: null,
-    func: null
-}
-
-
-function isTodayInRange(firstDate, lastDate) {
-    const currentDate = new Date()
-    //  console.log(`${formatDate(currentDate)} está entre ${formatDate(firstDate)} e ${formatDate(lastDate)}`)
-    return (firstDate <= currentDate && currentDate <= lastDate)
-}
-
-
-
-const getCipaAtiva = async () => {
-    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where ativa=1`)
-
-    rows.forEach((cipa) => {
-        if (cipa.inscricaoAtiva === undefined) {
-            const iniInsc = new Date(cipa.dtiniinsc.split('/').reverse())
-            const fimInsc = new Date(cipa.dtfiminsc.split('/').reverse())
-            const iniVoto = new Date(cipa.dtinivoto.split('/').reverse())
-            const fimVoto = new Date(cipa.dtfimvoto.split('/').reverse())
-
-            cipa.inscricaoAtiva = isTodayInRange(iniInsc, fimInsc)
-
-            cipa.votacaoAtiva = isTodayInRange(iniVoto, fimVoto)
-
-        }
-    })
-
-    cipas = await JSON.parse(JSON.stringify(rows))
-    // console.log('cipa ativa:')
-
-
-}
-
-getCipaAtiva()
-
-
-const getCandidatos = async (cipaid) => {
-    if (!cipas) return // interrompe a função se não houver uma cipa ativa
-    try {
-        const [rows] = await mysqlPromise.query(...repository.mysql.candidatos(cipaid))
-        return rows
-    } catch (e) {
-        console.log(e)
-    }
-
-}
-
 app.use('/', Routes)
 
 
@@ -161,29 +101,6 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
     res.render('profile.ejs', { user: req.user })
 })
-
-app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
-
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
-    }
-
-    res.redirect('/login')
-}
-
-
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
-}
-
 
 
 app.use(errorHandler)
