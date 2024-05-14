@@ -216,7 +216,8 @@ const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     from PFUNC F
     inner join PSECAO S on S.CODCOLIGADA = F.CODCOLIGADA AND S.CODIGO = F.CODSECAO
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
-    inner join GIMAGEM I on I.ID = F.ID
+    inner join PPESSOA P on P.CODIGO = F.CODPESSOA
+    inner join GIMAGEM I on I.ID = P.IDIMAGEM
     where F.CODFILIAL = @codfilial AND F.CHAPA = @chapa`
     const params = [
         {
