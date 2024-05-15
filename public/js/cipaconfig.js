@@ -13,6 +13,8 @@ const cipaForm = document.getElementById('cipaForm')
 
 let changeDatepicker = false
 
+$('#confirmCipa').hide()
+
 const resetVotacao = () => {
     $('#datavotacao').datepicker('destroy')
     $('#votacao').hide()
@@ -82,7 +84,11 @@ const resultadoDatepicker = (MinVotacao) => {
             startDate: date,
             endDate: maxDate,
             maxViewMode: 1
-        })
+        }).on('changeDate', function (e) {
+            // `e` here contains the extra attributes
+            $('#MessageGuide').hide()
+            $('#confirmCipa').show()
+        });
     }
     changeDatepicker = false
 }
