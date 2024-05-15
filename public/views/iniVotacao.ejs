@@ -12,7 +12,7 @@
                 <div class="col-sm text-center ">
                     <form  method="GET" >
                         <label for="" class="fs-3"> Para iniciar a votação, insira a sua matrícula: </label>
-                        <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
+                        <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="7" required />
                         <button  type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
                     </form>
                 </div>
@@ -41,7 +41,7 @@
                         <h4 class="text-danger text-shadow"> Funcionário já votou! </h4>
                     <% } else { %>
                         <form method="POST" >
-                            <input hidden name="chapa" type="text" value="<%= chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="5" required />
+                            <input hidden name="chapa" type="text" value="<%= chapa %>" placeholder="Matrícula" class="input-style my-3" minlength="5" maxlength="7" required />
                             <button  type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
                         </form> 
                         <% } %> 
