@@ -26,7 +26,13 @@
                   <tr>
                     <td><%= func.nome %></td>
                     <td><%= func.setor %></td>
-                    <td><%= func.data_voto %></td>
+                    <td><%= func.hora_voto.toLocaleDateString("pt-br", {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                  }) %></td>
                   </tr>
                   <% }) %>
                 </tbody>
