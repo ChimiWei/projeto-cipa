@@ -5,7 +5,7 @@ const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
 const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
 const { homeController, cipaconfigController, candidatoController, votacaoController,
-    listagemController, suspendercipaController, userController, showTokenController } = require('../controllers/index')
+    listagemController, editcipaController, userController, showTokenController } = require('../controllers/index')
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
@@ -51,13 +51,15 @@ router.get('/autorizar_acesso/:codfilial', checkAuthenticated, listagemControlle
 
 router.post('/autorizar_acesso/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.postAutorizarAcesso))
 
-router.get('/candidatos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderListCandidato))
+router.get('/candidatos_auth/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderListCandidato))
+
+router.get('/candidatos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderlistCandidatoSemCount))
 
 router.get('/votos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderVotos))
 
-router.get('/suspender_cipa/:codfilial', checkAuthenticated, suspendercipaController.renderSuspenderCipa)
+router.get('/autorizar_edit/:codfilial', checkAuthenticated, editcipaController.getEditarCipa)
 
-router.put('/suspender_cipa/:codfilial', checkAuthenticated, asyncErrorHandler(suspendercipaController.putSuspenderCipa))
+router.put('/autorizar_edit/:codfilial', checkAuthenticated, asyncErrorHandler(editcipaController.putEditarCipa))
 
 router.delete('/logout', checkAuthenticated, userController.deleteLogout)
 

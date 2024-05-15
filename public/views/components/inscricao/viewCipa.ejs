@@ -16,14 +16,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3 text-start">
-            <a class="btn btn-color" href="/autorizar_acesso/<%= cipa.codfilial %>"> Candidatos </a>
-            <a class="btn btn-color" href="/votos/<%= cipa.codfilial %>"> Votos </a>
+        <div class="col-sm-4 text-start">
+            <a class="btn btn-color" href="/candidatos/<%= cipa.codfilial %>"> Candidatos </a>
+            <a class="btn btn-color" href="/votos/<%= cipa.codfilial %>"> Funcionários </a>
         </div>
         <div class="col-sm text-end">
             <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
             <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
-            <a class="btn btn-danger" href="/suspender_cipa/<%= cipa.codfilial %>"> Suspender </a>
+            <a class="btn btn-danger" href="/autorizar_edit/<%= cipa.codfilial %>"> Finalizar CIPA </a>
         </div>
     </div>
 </div>
