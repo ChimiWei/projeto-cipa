@@ -23,7 +23,7 @@ const listagemController = {
 
         if (req.body.token === token) {
             setCandidatosPageAuth(true)
-            return res.redirect(`/candidatos/${codfilial}`)
+            return res.redirect(`/candidatos_auth/${codfilial}`)
         } else {
             req.flash("error", "Token Incorreto")
             return res.redirect(`/autorizar_acesso/${codfilial}`)
@@ -58,6 +58,19 @@ const listagemController = {
         const [branco, nulo] = rows
 
         res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
+    },
+    renderlistCandidatoSemCount: async (req, res) => {
+        const cipas = await getCipaAtiva()
+        const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
+        if (!cipa) return res.redirect('/')
+
+        const candidatos = await getCandidatos(cipa.id)
+
+        for(let i = 0; i < candidatos.length; i++) {
+            candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
+        }
+
+        res.render('listCandidatoSemCount.ejs', { candidatos: candidatos, cipa: cipa })
     },
     renderVotos: async (req, res) => {
         const cipas = await getCipaAtiva()

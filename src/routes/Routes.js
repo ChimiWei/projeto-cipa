@@ -5,7 +5,7 @@ const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
 const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
 const { homeController, cipaconfigController, candidatoController, votacaoController,
-    listagemController, editcipaController, userController, showTokenController } = require('../controllers/index')
+    listagemController, finalizarcipaController, userController, showTokenController } = require('../controllers/index')
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
@@ -57,9 +57,9 @@ router.get('/candidatos/:codfilial', checkAuthenticated, asyncErrorHandler(lista
 
 router.get('/votos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderVotos))
 
-router.get('/autorizar_edit/:codfilial', checkAuthenticated, editcipaController.getEditarCipa)
+router.get('/autorizar_edit/:codfilial', checkAuthenticated, finalizarcipaController.getFinalizarCipa)
 
-router.put('/autorizar_edit/:codfilial', checkAuthenticated, asyncErrorHandler(editcipaController.putEditarCipa))
+router.put('/autorizar_edit/:codfilial', checkAuthenticated, asyncErrorHandler(finalizarcipaController.putFinalizarCipa))
 
 router.delete('/logout', checkAuthenticated, userController.deleteLogout)
 

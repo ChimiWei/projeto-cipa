@@ -3,7 +3,7 @@ const cipaconfigController = require('./cipaconfigController')
 const candidatoController = require('./candidatoController')
 const votacaoController = require('./votacaoController')
 const listagemController = require('./listagemController')
-const suspendercipaController = require('./suspendercipaController')
+const finalizarcipaController = require('./finalizarcipaController')
 const userController = require('./userController')
 const showTokenController = require('./showTokenController')
 
@@ -14,7 +14,7 @@ module.exports = {
     candidatoController,
     votacaoController,
     listagemController,
-    suspendercipaController,
+    finalizarcipaController,
     userController,
     showTokenController
 

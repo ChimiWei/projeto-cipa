@@ -3,12 +3,12 @@ const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 
 
-const suspendercipaController = {
-    renderSuspenderCipa: (req, res) => {
+const finalizarcipaController = {
+    getFinalizarCipa: (req, res) => {
 
         res.render('autorizarEncerramento.ejs', { codfilial: req.params.codfilial, message: req.flash() })
     },
-    putSuspenderCipa: async (req, res) => {
+    putFinalizarCipa: async (req, res) => {
         const codfilial = req.params.codfilial
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
@@ -34,4 +34,4 @@ const suspendercipaController = {
     },
 }
 
-module.exports = suspendercipaController
+module.exports = finalizarcipaController

@@ -23,7 +23,7 @@
         <div class="col-sm text-end">
             <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
             <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
-            <a class="btn btn-danger" href="/autorizar_edit/<%= cipa.codfilial %>"> Finalizar CIPA </a>
+            <a class="btn btn-danger" href="/autorizar_finalizar/<%= cipa.codfilial %>"> Finalizar CIPA </a>
         </div>
     </div>
 </div>
