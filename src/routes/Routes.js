@@ -57,9 +57,9 @@ router.get('/candidatos/:codfilial', checkAuthenticated, asyncErrorHandler(lista
 
 router.get('/votos/:codfilial', checkAuthenticated, asyncErrorHandler(listagemController.renderVotos))
 
-router.get('/autorizar_edit/:codfilial', checkAuthenticated, finalizarcipaController.getFinalizarCipa)
+router.get('/autorizar_finalizar/:codfilial', checkAuthenticated, finalizarcipaController.getFinalizarCipa)
 
-router.put('/autorizar_edit/:codfilial', checkAuthenticated, asyncErrorHandler(finalizarcipaController.putFinalizarCipa))
+router.put('/autorizar_finalizar/:codfilial', checkAuthenticated, asyncErrorHandler(finalizarcipaController.putFinalizarCipa))
 
 router.delete('/logout', checkAuthenticated, userController.deleteLogout)
 
