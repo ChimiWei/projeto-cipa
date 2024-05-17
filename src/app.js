@@ -95,13 +95,13 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
     res.redirect('/')
 
 }))
-*/
 
 
-app.get('/perfil', /*checkAuthenticated,*/(req, res) => {
+
+app.get('/perfil', (req, res) => {
     res.render('profile.ejs', { user: req.user })
 })
-
+*/
 
 app.use(errorHandler)
 
