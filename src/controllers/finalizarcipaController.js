@@ -14,7 +14,7 @@ const finalizarcipaController = {
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
         if (!cipa) return res.redirect('/')
 
-        const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id, codfilial))
+        const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id))
         const { token } = rows[0]
 
         if (req.body.token === token) {
