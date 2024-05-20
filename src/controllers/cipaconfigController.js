@@ -71,13 +71,24 @@ const cipaconfigController = {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/')
+        
+        const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id))
+        const { token } = rows[0]
+        
+        if(token != req.body.token) {
+            req.flash('error', 'Token Incorreto')
+            res.redirect('back')
 
-        const [result] = await mysqlPromise.query(...repository.mysql.editCipa(req.body.fimvotacao, cipa.id))
+        }
+        const [result] = await mysqlPromise.query(...repository.mysql.editCipa(req.query.fimvotacao, cipa.id))
         console.log(result)
 
         if (result.affectedRows === 0) {
-            return res.redirect(`/edit_cipa/<%= cipa.codfilial %>`)
+            req.flash('error', 'Não foi possível atualizar a data')
+            return res.redirect(`/edit_cipa/${cipa.codfilial}`)
         }
+
+        req.flash('notification', 'Data alterada com sucesso')
 
         return res.redirect('/')
 

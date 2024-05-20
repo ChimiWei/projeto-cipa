@@ -1,5 +1,16 @@
+const editForm = document.getElementById('editForm')
+const modalCipa = document.getElementById('modalCipa')
+const tokenForm = document.getElementById('tokenForm')
 
-function createDatepicker(startDate, endDate) {
+function startup(endDate, error){
+    createDatepicker(endDate)
+
+    if(error) toogleModal()
+
+    
+}
+
+function createDatepicker(endDate) {
     
     $('#datavotacao').datepicker({
         format: 'dd/mm/yyyy',
@@ -8,6 +19,34 @@ function createDatepicker(startDate, endDate) {
         daysOfWeekDisabled: "0,6",
         maxViewMode: 1
     })
+}
+
+function handleEditSubmit(e) {
+    e.preventDefault()
+
+    let isValid = editForm.checkValidity()
+    if(!isValid) return editForm.reportValidity()
+       
+    let editInputEl = document.getElementById('fimVoto')
+
+    tokenForm.action = `${location.pathname}?_method=PUT&fimvotacao=${editInputEl.value}`
+    toogleModal()
+
+
+}
+
+function handleDeleteSubmit(e) {
+    e.preventDefault()
+
+    tokenForm.action = `${location.pathname}?_method=DELETE`
+    toogleModal()
+
+
+}
+
+
+function toogleModal() {
+    modalCipa.classList.toggle('show')
 }
 
 

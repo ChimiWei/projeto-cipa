@@ -9,7 +9,7 @@
         <script src='/js/bootstrap-datepicker.min.js'></script>
 </head>
 
-<body onload="createDatepicker('<%= cipa.dtinivoto %>', '<%= cipa.dtfimvoto %>')">
+<body onload="startup('<%= cipa.dtfimvoto %>', '<%= locals.message.error %>')">
     <%- include('partials/header'); %>
         <section class="my-3">
             <h1> </h1>
@@ -24,11 +24,10 @@
                         <img src='/img/cipa.png' class="w-50" />
                     </div>
                     <div class="col-sm rounded shadow bg-white p-3">
-                        <form class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT" method="POST">
+                        <form id="editForm" class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT" method="POST">
                             <div id="cadastroCipa" class="row justify-content-center">
                                 <div class="text-center">
-                                    <h2> Gestão <%= gestao %>
-                                    </h2>
+                                    <h2> Gestão <%= gestao %> </h2>
                                     <h2>
                                         <%= cipa.filial %>
                                     </h2>
@@ -40,7 +39,7 @@
                                             <div class="col px-2">
                                                 <div id="datavotacao"
                                                     class="input-daterange justify-content-center input-group">
-                                                    <input class="input-sm form-control" type="text" id="FimVoto"
+                                                    <input class="input-sm form-control" type="text" id="fimVoto"
                                                         onkeydown="return false;" name="fimvotacao" autocomplete="off"
                                                         value="<%= cipa.dtfimvoto %>" required>
                                                 </div>
@@ -51,18 +50,14 @@
                             </div>
                             <div class="row pt-2">
                                 <div class="col text-center">
-                                    <% if (locals.message) { %>
-                                        <p class="text-danger">
-                                            <%= message.error %>
-                                        </p>
-                                        <% } %>
-                                            <button type="submit" class="btn btn-color"> Salvar Dados </button>
+                                    <button type="submit" class="btn btn-success" onclick="handleEditSubmit(event)" > Prorrogar </button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
+            <%- include('components/modalToken', {message: locals.message} ) %>
 
         </section>
         <%- include('partials/footer'); %>
