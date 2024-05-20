@@ -8,8 +8,14 @@
 
 <body>
     <%- include('partials/header'); %>
-
-                <section class="container bg-white rounded p-2 mt-2">
+            
+            <section class="">
+                <div class="container bg-white rounded p-2 mt-2">
+                    <div class="position-relative">
+                        <div class="position-absolute end-0 pt-2 px-2">
+                            <a href="/autorizar_acesso/<%= cipa.codfilial %>" class="btn btn-color"> Contagem de Votos </a>
+                        </div>
+                    </div>  
                     <div class="row">
                         <div class="col text-center">
                             <h3> Candidatos </h3>
@@ -35,12 +41,8 @@
                                 <% }) %>
                             <% } %>
                     </div>
-                    <div class="row">
-                        <div class="col-sm text-end pt-3">
-                            <a href="/autorizar_acesso/<%= cipa.codfilial %>" class="btn btn-color"> Contagem de Votos </a>
-                        </div>
-                    </div>  
-                </section>
+                </div>
+            </section>
             <%- include('partials/footer'); %>
 </body>
 

@@ -43,7 +43,7 @@
                                 <div id="errFilial" class="text-center" style="visibility: hidden;">
                                     <h4 class="text-danger"> Já possui uma cipa ativa. </h4>
                                 </div>
-                                <div id="formCipa">
+                                <div id="formBody">
                                     <div class="text-center mb-2">
                                         <h3 class="title-style pt-2"> Inscrições </h3>
                                         <div class="row pt-4">
@@ -92,7 +92,7 @@
                                                     <%= message.error %>
                                                 </p>
                                                 <% } %>
-                                                <p id="MessageGuide"> Selecione as datas para continuar </p>
+                                                    <p id="MessageGuide"> Selecione as datas para continuar </p>
                                                     <button id="confirmCipa" type="submit" class="btn btn-color"
                                                         onclick="handleSubmit(event)"> Confirmar </button>
                                         </div>
@@ -103,12 +103,12 @@
                     </div>
                 </div>
                 <div id="modalCipa" class="voto-modal">
-                    <div class="voto-modal-content">
-                        <div class="text-end ">
-                            <span class="close" onclick="closeModal()">&times;</span>
+                    <div class="custom-modal-content">
+                        <div class="position-relative">
+                            <span class="position-absolute end-0 close" onclick="closeModal()">&times;</span>
                         </div>
                         <div class="container text-center">
-                            <h3> Revisar Dados </h3>
+                            <h3> Confirme as datas </h3>
                             <text id="confirmFilial" class="fw-bold"></text>
                             <div class="row mt-3">
                                 <span> Data de Inscrição: <text id="confirmIniInsc" class="fw-bold"></text> até <text

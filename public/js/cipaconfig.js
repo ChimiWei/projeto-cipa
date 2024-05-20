@@ -97,10 +97,10 @@ const checkFilial = (filiais, selectedFilial) => {
     const [codfilial, filial] = selectedFilial.split(',')
     if (JSON.parse(filiais).find(filial => filial.codfilial == codfilial)) {
         errFilial.style.visibility = 'visible'
-        $('#formCipa').hide()
+        $('#formBody').hide()
     } else {
         errFilial.style.visibility = 'hidden'
-        $('#formCipa').show()
+        $('#formBody').show()
     }
 }
 
@@ -119,6 +119,9 @@ $('#gestao').datepicker({
 */
 
 function handleSubmit(e) {
+    let isValid = cipaForm.checkValidity()
+    if (!isValid) return cipaForm.reportValidity()
+
     e.preventDefault()
     cipaModal.classList.toggle('show')
     let selectFilialEl = document.getElementById('confirmFilial')
