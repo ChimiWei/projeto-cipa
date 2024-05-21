@@ -8,7 +8,7 @@
         <div class="col-sm"> 
             <p class="fs-5 ">
                 Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %> 
-                <% if(cipa.inscricaoAtiva || cipa.votacaoAtiva) { %>
+                <% if(!cipa.inscricaoAtiva && !cipa.votacaoAtiva) { %>
                     <a class="btn-small btn-color position-absolute mx-2"  href="/edit_cipa/<%= cipa.codfilial %>"> Prorrogar </a> 
                 <% } %>
             </p>
