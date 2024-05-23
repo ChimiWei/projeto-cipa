@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <%- include('partials/head', {title: 'Autorização'}); %>
+    <%- include('partials/head', {title: 'Autorização' }); %>
 </head>
 
-<body>
- <section class="st-section">
-     <div class="container text-center p-2">
-        <div class="row">
-            <div>
-                <form method="POST">
-                    <span class="bg-dark text-white rounded px-2"> Insira a senha de acesso:</span>
-                    <input class="bg-dark text-white" name="token" type="password" minlength="6" maxlength="6" required>
-                    <button class="btn-small btn-success" type="submit">Acessar</button>
-                </form>
-            </div>
+<body class="bg-image">
+    <section class="st-section">
+        <div class="container text-center p-2">
+            <div class="row">
+                <div>
+                    <form method="POST">
+                        <span class="bg-dark text-white rounded px-2"> Insira a senha de acesso:</span>
+                        <input class="bg-dark text-white" name="token" type="password" minlength="6" maxlength="6"
+                            required>
+                        <button class="btn-small btn-success" type="submit">Acessar</button>
+                    </form>
+                </div>
                 <% if (message.error) { %>
                     <small class="text-danger">
                         <%= message.error %>
                     </small>
-                <% } %> 
+                    <% } %>
+            </div>
         </div>
-    </div>
- </section>
-    
- <script src='/js/rs.js'></script>
+    </section>
+
+    <script src='/js/rs.js'></script>
 </body>
+
 </html>

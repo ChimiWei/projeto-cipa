@@ -1,42 +1,44 @@
-<%- include('partials/head', {title: 'Perfil'}); %>
+<%- include('partials/head', {title: 'Perfil' }); %>
 
-<body>
+  <body class="bg-image">
     <%- include('partials/header'); %>
-    <section>
+      <section>
         <div class="container mt-2">
-            <div class="row border bg-light">
-                <div class="col-md-4">
-                  <div class="mb-4">
-                    <div class="card-body text-center">
-                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                        class="rounded-circle img-fluid bg-white" style="width: 150px;">
-                      <h5 class="my-3">John Smith</h5>
-                      <p class="text-muted mb-1">Provider Soluções</p>
-                      <p class="text-muted mb-4">Candidato</p>
-                      <div class="d-flex justify-content-center mb-2">
-                        <form action="/register" method="POST" id="registerForm"  class="singin-form">
-                        <button type="button" class="btn btn-outline-secondary">Salvar</button>
-                        <button type="button" class="btn btn-outline-danger ms-1">Cancelar</button>
-                      </div>
-                    </div>
+          <div class="row border bg-light">
+            <div class="col-md-4">
+              <div class="mb-4">
+                <div class="card-body text-center">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                    class="rounded-circle img-fluid bg-white" style="width: 150px;">
+                  <h5 class="my-3">John Smith</h5>
+                  <p class="text-muted mb-1">Provider Soluções</p>
+                  <p class="text-muted mb-4">Candidato</p>
+                  <div class="d-flex justify-content-center mb-2">
+                    <form action="/register" method="POST" id="registerForm" class="singin-form">
+                      <button type="button" class="btn btn-outline-secondary">Salvar</button>
+                      <button type="button" class="btn btn-outline-danger ms-1">Cancelar</button>
                   </div>
                 </div>
-                <div class="col-md-8 bg-light pt-4">
-                    <div class="form-group ">
-                        <input name="name" type="text" placeholder="Usuário" class="form-control mb-4" required>
-                    </div>
-                    <div class="form-group ">
-                        <input name="email" name="email" type="email" placeholder="Email" class="form-control mb-4" required>
-                    </div>
-                    <div class="form-group">
-                        <input name="password" id="password" type="password" class="form-control mb-4" placeholder="Senha"  required>
-                    </div>
-                    </div>
-                </form>
-                </div>
+              </div>
             </div>
+            <div class="col-md-8 bg-light pt-4">
+              <div class="form-group ">
+                <input name="name" type="text" placeholder="Usuário" class="form-control mb-4" required>
+              </div>
+              <div class="form-group ">
+                <input name="email" name="email" type="email" placeholder="Email" class="form-control mb-4" required>
+              </div>
+              <div class="form-group">
+                <input name="password" id="password" type="password" class="form-control mb-4" placeholder="Senha"
+                  required>
+              </div>
+            </div>
+            </form>
+          </div>
         </div>
-    </section>
-    <%- include('partials/footer'); %>
-</body>
-</html>
+        </div>
+      </section>
+      <%- include('partials/footer'); %>
+  </body>
+
+  </html>

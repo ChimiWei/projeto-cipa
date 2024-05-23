@@ -6,44 +6,46 @@
 
 </head>
 
-<body>
+<body class="bg-image">
     <%- include('partials/header'); %>
-            
-            <section class="">
-                <div class="container bg-white rounded p-2 mt-2">
-                    <div class="position-relative">
-                        <div class="position-absolute end-0 pt-2 px-2">
-                            <a href="/autorizar_acesso/<%= cipa.codfilial %>" class="btn btn-color"> Contagem de Votos </a>
-                        </div>
-                    </div>  
-                    <div class="row">
-                        <div class="col text-center">
-                            <h3> Candidatos </h3>
-                        </div>
-                    </div>
-                    <div class="row row-cols-md-3 justify-content-center">
-                        <% if (locals.candidatos) { %>
-                            <% candidatos.forEach(func=> { %>
-                                <div class="col-auto mt-3">
-                                    <div class="card rounded bg-grey candidato">
-                                        <div class="card-body text-center">
-                                            <h5 class="fs-5">
-                                                <%= func.n_votacao %> - <%= func.nome %>
-                                            </h5>
-                                            <img class="img-small " style="z-index: 3;" src="<%= func.imagem %>" />
-                                            <ul class="list-group" style="z-index: 3;">
-                                                <li class="list-item-pd-0"> Chapa: <%= func.chapa %> </li>
-                                                <li class="list-item-pd-0"> Setor: <%= func.secao %> </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% }) %>
-                            <% } %>
+
+        <section class="">
+            <div class="container bg-white rounded p-2 mt-2">
+                <div class="position-relative">
+                    <div class="position-absolute end-0 pt-2 px-2">
+                        <a href="/autorizar_acesso/<%= cipa.codfilial %>" class="btn btn-color"> Contagem de Votos </a>
                     </div>
                 </div>
-            </section>
-            <%- include('partials/footer'); %>
+                <div class="row">
+                    <div class="col text-center">
+                        <h3> Candidatos </h3>
+                    </div>
+                </div>
+                <div class="row row-cols-md-3 justify-content-center">
+                    <% if (locals.candidatos) { %>
+                        <% candidatos.forEach(func=> { %>
+                            <div class="col-auto mt-3">
+                                <div class="card rounded bg-grey candidato">
+                                    <div class="card-body text-center">
+                                        <h5 class="fs-5">
+                                            <%= func.n_votacao %> - <%= func.nome %>
+                                        </h5>
+                                        <img class="img-small " style="z-index: 3;" src="<%= func.imagem %>" />
+                                        <ul class="list-group" style="z-index: 3;">
+                                            <li class="list-item-pd-0"> Chapa: <%= func.chapa %>
+                                            </li>
+                                            <li class="list-item-pd-0"> Setor: <%= func.secao %>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+                                <% } %>
+                </div>
+            </div>
+        </section>
+        <%- include('partials/footer'); %>
 </body>
 
 </html>
