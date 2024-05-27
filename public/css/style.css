@@ -9,6 +9,21 @@ html {
     height: 100%;
 }
 
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+.section-full-screen {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 .bg-image {
     min-height: 100%;
     position: relative;
@@ -325,7 +340,6 @@ h5 {
 
 .brand {
     padding-bottom: 0.3125rem;
-    margin-right: 1rem;
     text-align: center;
     font-size: 2.25rem;
     text-decoration: none;
@@ -459,4 +473,33 @@ h5 {
         opacity: 0;
         display: none;
     }
+}
+
+.nav-pills > li.active > a {
+    color: white;
+    background-color: #4c0292ad;
+}
+
+.nav-pills > li > a:hover {
+    background-color: #9292921f;
+}
+
+.nav-pills > li:hover {
+    background-color: #9292921f;
+}
+
+.light-green {
+    color: rgb(38, 199, 38);
+}
+
+.dark-green {
+    color: rgba(20, 80, 20, 0.89);
+}
+
+.btn-no-style {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    cursor: pointer;
+    width: 100%;
 }

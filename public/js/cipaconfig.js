@@ -14,6 +14,7 @@ const cipaForm = document.getElementById('cipaForm')
 let changeDatepicker = false
 
 $('#confirmCipa').hide()
+$('#formBody').hide()
 
 const resetVotacao = () => {
     $('#datavotacao').datepicker('destroy')

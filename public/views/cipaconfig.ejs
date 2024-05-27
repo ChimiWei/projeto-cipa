@@ -33,7 +33,7 @@
                                         aria-label="Selecione a filial"
                                         onchange="checkFilial('<%= JSON.stringify(cipas) %>', this.value)">
                                         <option disabled selected>Selecione a filial</option>
-                                        <% filiais.forEach(filial=> { %>
+                                        <% filiais.forEach(filial => { %>
                                             <option value="<%= [filial.codfilial, filial.nome] %>">
                                                 <%= filial.nome %>
                                             </option>
@@ -44,7 +44,7 @@
                                     <h4 class="text-danger"> Já possui uma cipa ativa. </h4>
                                 </div>
                                 <div id="formBody">
-                                    <div class="text-center mb-2">
+                                    <div id="inscricao" class="text-center mb-2">
                                         <h3 class="title-style pt-2"> Inscrições </h3>
                                         <div class="row pt-4">
                                             <div class="col px-2">
@@ -132,7 +132,7 @@
 
         </section>
         <%- include('partials/footer'); %>
-            <script src='js/cipaconfig.js'></script>
+        <script src='js/cipaconfig.js'></script>
 
 
 </body>

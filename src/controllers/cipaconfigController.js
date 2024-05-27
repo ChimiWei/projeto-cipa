@@ -34,7 +34,7 @@ const cipaconfigController = {
         const token = generateToken()
         
         await mysqlPromise.query(...repository.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
-            req.body.inivotacao, req.body.fimvotacao, req.body.resultado))
+            req.body.inivotacao, req.body.fimvotacao, req.body.resultado, (req.user ? req.user.id : null)))
 
         const cipas = await getCipaAtiva()
 
