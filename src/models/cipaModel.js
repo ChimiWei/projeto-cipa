@@ -22,7 +22,17 @@ const getCipaAtiva = async () => {
     return cipas
 }
 
+async function getCipas() {
+    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig`)
+    
+    const cipas = rows.sort((a, b) => b.ativa - a.ativa)
+
+    return cipas
+
+}
+
 
 module.exports = {
     getCipaAtiva,
+    getCipas
 }

@@ -1,8 +1,26 @@
+const usuarioPorEmailouLogin = (login) => {
+    const sql = `
+    select * from usuario where email = ? or login = ?
+    `
+    const params = [login, login]
+
+    return [sql, params]
+}
+
 const usuarioPorEmail = (email) => {
     const sql = `
     select * from usuario where email = ?
     `
     const params = [email]
+
+    return [sql, params]
+}
+
+const usuarioPorLogin = (login) => {
+    const sql = `
+    select * from usuario where login = ?
+    `
+    const params = [login]
 
     return [sql, params]
 }
@@ -50,11 +68,11 @@ const getFuncComVoto = (cipaid) => {
 }
 
 
-const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado) => {
+const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid) => {
     const sql = `
-    INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default)`
+    INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default, ?)`
 
-    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado]
+    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid]
 
     return [sql, params]
 }
@@ -73,6 +91,23 @@ function suspendCipa(cipaid) {
     UPDATE cipaconfig SET ativa = 0 WHERE id = ?`
 
     const params = [cipaid]
+
+    return [sql, params]
+}
+
+const putGestor = (userid, cipaid) => {
+    const sql = `
+    update cipaconfig set gestorid = ? where id = ?;
+    `
+    const params = [userid, cipaid]
+    return [sql, params]
+}
+
+const verifyUser = (userid) => {
+    const sql = `
+    update usuario set verificado = 1 where id = ?
+    `
+    const params = [userid]
 
     return [sql, params]
 }
@@ -218,7 +253,7 @@ const funcionario = (codfilial, chapa) => { // Dados do Funcionário
     inner join PFUNCAO PF on PF.CODCOLIGADA = F.CODCOLIGADA AND PF.CODIGO = F.CODFUNCAO
     inner join PPESSOA P on P.CODIGO = F.CODPESSOA
     left join GIMAGEM I on I.ID = P.IDIMAGEM
-    where F.CODFILIAL = @codfilial AND F.CHAPA = @chapa`
+    where F.CODFILIAL = @codfilial AND F.CHAPA = @chapa AND F.CODSITUACAO NOT IN ('D', 'P', 'T', 'L')`
     const params = [
         {
             name: 'chapa',
@@ -330,10 +365,14 @@ const imagem = (imageid) => {
 
 const repository = {
     mysql: {
+        usuarioPorEmailouLogin,
         usuarioPorEmail,
+        usuarioPorLogin,
         usuarioPorId,
         candidatos,
         getVotos,
+        putGestor,
+        verifyUser,
         cadastrarCipa,
         editCipa,
         suspendCipa,

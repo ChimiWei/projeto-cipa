@@ -4,8 +4,12 @@ const asyncErrorHandler = require('../middleware/asyncErrorHandler')
 const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
 const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
-const { homeController, cipaconfigController, candidatoController, votacaoController,
-    listagemController, finalizarcipaController, userController, showTokenController } = require('../controllers/index')
+const { 
+    homeController, cipaconfigController, candidatoController, votacaoController,
+    listagemController, finalizarcipaController, userController, showTokenController, adminController 
+} = require('../controllers/index')
+const checkVerified = require('../middleware/checkVerified')
+const checkAdmin = require('../middleware/checkAdmin')
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
@@ -14,6 +18,16 @@ router.post('/login', checkNotAuthenticated, userController.postLogin)
 router.get('/register', checkNotAuthenticated, userController.renderRegister)
 
 router.post('/register', checkNotAuthenticated, asyncErrorHandler(userController.postRegister))
+
+router.get('/admin', checkAdmin, adminController.renderAdmin)
+
+router.put('/admin/:cipaid', checkAdmin, adminController.putAdmin)
+
+router.get('/admin/usuarios', checkAdmin, adminController.renderAdminUsuarios)
+
+router.put('/admin/verify/:userid', checkAdmin, adminController.putAdminVerifyUser)
+
+router.get('/nao_verificado', checkVerified, userController.renderNotVerificado)
 
 router.get('/', checkAuthenticated, asyncErrorHandler(homeController.renderHome))
 
@@ -61,6 +75,6 @@ router.get('/autorizar_finalizar/:codfilial', checkAuthenticated, finalizarcipaC
 
 router.put('/autorizar_finalizar/:codfilial', checkAuthenticated, asyncErrorHandler(finalizarcipaController.putFinalizarCipa))
 
-router.delete('/logout', checkAuthenticated, userController.deleteLogout)
+router.delete('/logout', userController.deleteLogout)
 
 module.exports = router

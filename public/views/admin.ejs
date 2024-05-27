@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('partials/head', {title: 'admin' }); %>
+</head>
+
+
+
+<body class="bg-dark">
+    <section class=" section-full-screen ">
+        <%- include('partials/adminPainel') %>
+        <div class="container p-3">
+          <div class="row text-center ">
+            <h3 class="text-white"> Cipas </h3>
+          </div>
+            <div class="row p-3">
+                <table class="table table-sm table-dark shadow table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">Filial</th>
+                        <th scope="col">Data Criação</th>
+                        <th scope="col">Ativa</th>
+                        <th scope="col">Login Gestor</th>
+                        <th class="text-center" scope="col" colspan="2">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% cipas.forEach(cipa=> { %>
+                        <tr>
+                          <td><%= cipa.filial %></td>
+                          <td><%= cipa.data_criacao.toLocaleDateString("pt-br", { day: '2-digit' , month: '2-digit' , year: 'numeric'
+                            , hour: 'numeric' , minute: 'numeric'}) %></td>
+                          <td><%= cipa.ativa == 1 ? 'Sim' : 'Não' %></td>
+                        <% if(cipa.gestorLogin) { %>
+                          <td><%= cipa.gestorLogin %></td>
+                          <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
+                          <form action="/admin/<%= cipa.id %>?_method=PUT" method="POST">
+                          <td class="text-center"><button type="submit" class="btn-no-style"><i class="fa-solid fa-circle-xmark text-danger"></i></button></td>
+                          </form>
+                        <% } else { %>
+                          <td class="text-center"><a class="btn-small btn-info" onclick="startModal('<%= cipa.id %>')"> Adicionar </a></td>
+                        <% } %>
+                        </tr>
+                        <% }) %>
+            </div>
+        </div>
+        <%- include('components/modal/modalSelect') %>
+    </section>
+    <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
+    <script src='js/admin.js'></script>
+</body>
