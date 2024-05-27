@@ -4,7 +4,7 @@ const mysqlPromise = require('../helpers/mysqlQuery')
 
 const userController = {
     renderLogin: (req, res) => {
-        res.render('login.ejs')
+        res.render('login.ejs', {message: req.flash()})
 
     },
     postLogin: passport.authenticate('local', {
@@ -22,6 +22,8 @@ const userController = {
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
             let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', default, default, default)`
             mysqlPromise.query(sql)
+
+            req.flash('notification', 'Usuário criado!')
 
             res.redirect('/login')
             /* const user = {
@@ -41,8 +43,15 @@ const userController = {
 
     },
     deleteLogout: (req, res) => {
-        req.logOut()
-        res.redirect('/login')
+        if(!req.isAuthenticated()) return res.redirect('/login')
+        req.logout(function(err) {
+            if (err) { return next(err); }
+            res.redirect('/login');
+            });
+   
+    },
+    renderNotVerificado: (req, res) => {
+        res.render('notVerificado.ejs')
     }
 }
 

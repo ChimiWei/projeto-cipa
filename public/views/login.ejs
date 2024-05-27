@@ -18,11 +18,11 @@
                 <div class="row justify-content-center">
                     <div class="col-md-6  ">
                         <h2 class=" mb-4"> Entrar </h2>
-                        <div class="login-wrap  p-md-3">
+                        <div class="login-wrap p-md-3">
 
                             <form action="/login" method="POST" class="singin-form">
                                 <div class="form-group ">
-                                    <input name="email" type="text" placeholder="Email" class="form-control mb-4"
+                                    <input name="login" type="text" placeholder="Login" class="form-control mb-4"
                                         autocomplete="one-time-code" required>
 
                                 </div>
@@ -66,6 +66,7 @@
             </div>
         </div>
         </div>
+        <%- include('components/modal/notification.ejs', { message: locals.message }); %>
     </section>
 
     <script src='js/login.js'></script>
