@@ -2,16 +2,11 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
 
-const bcrypt = require('bcrypt')
 const express = require('express')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
-const path = require('path')
-const mysql = require('../config/db_connection_mysql');
-const mssql = require('../config/db_connection_mssql')
-const repository = require('./helpers/query-repo')
 const errorHandler = require('./middleware/errorHandler')
 
 const Routes = require('./routes/Routes')

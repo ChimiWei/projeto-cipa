@@ -8,7 +8,7 @@
             <select id="selectOption" class="form-select text-center p-2" name="option" 
             aria-label="Selecione uma das opções" required>
                 <option disabled selected value="">Selecione uma das opções</option>
-                    <% if(locals.options) locals.options.forEach(option => { %>
+                    <% if(locals.selectOptions) locals.selectOptions.forEach(option => { %>
                         <option value="<%= option.id %>">
                         <%= option.filial ? option.filial : option.login %>
                         </option>

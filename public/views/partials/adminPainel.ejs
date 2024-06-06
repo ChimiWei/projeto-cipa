@@ -4,19 +4,20 @@
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto text-white">
-        <li class="nav-item text-center active">
+        <li class="nav-item text-center <%= locals.url === '/admin' ? 'active' : '' %>">
             <a href="/admin" class="nav-link text-white"> Cipas </a>
         </li>
-        <li class="nav-item text-center">
+        <li class="nav-item text-center <%= locals.url === '/admin/usuarios' ? 'active' : '' %>">
             <a href="/admin/usuarios" class="nav-link text-white" > Usuários</a>
         </li>
-        <li class="nav-item text-center">
-            <a href="/admin/usuarios" class="nav-link text-white" > Criar Usuário </a>
+        <li class="nav-item text-center <%= locals.url === '/admin/register' ? 'active' : '' %>">
+            <a href="/admin/register" class="nav-link text-white" > Criar Usuário </a>
         </li>
-        <li class="nav-item text-center">
+        <li class="nav-item text-center ">
             <form action="/logout?_method=DELETE" method="POST">
                 <button class="btn-no-style text-white p-2 " type="submit"> Sair </button>
             </form>
         </li>
+    
     </ul>
 </div>

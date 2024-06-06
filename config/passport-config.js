@@ -7,7 +7,6 @@ function initialize(passport) {
     const authenticateUser = async (login, password, done) => {
         const user = await getUserByEmailOrLogin(login)
 
-        console.log(user)
 
         if (user == null) {
             return done(null, false, { message: 'login não encontrado' })
