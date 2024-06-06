@@ -27,6 +27,10 @@ router.get('/admin/usuarios', checkAdmin, adminController.renderAdminUsuarios)
 
 router.put('/admin/verify/:userid', checkAdmin, adminController.putAdminVerifyUser)
 
+router.get('/admin/register', checkAdmin, adminController.renderAdminRegister)
+
+router.put('/admin_register', checkAdmin, adminController.putAdminRegister)
+
 router.get('/nao_verificado', checkVerified, userController.renderNotVerificado)
 
 router.get('/', checkAuthenticated, asyncErrorHandler(homeController.renderHome))
