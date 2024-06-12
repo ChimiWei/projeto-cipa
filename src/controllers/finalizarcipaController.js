@@ -12,7 +12,7 @@ const finalizarcipaController = {
         const codfilial = req.params.codfilial
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
 
         const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id))
         const { token } = rows[0]
@@ -26,10 +26,10 @@ const finalizarcipaController = {
 
             await getCipaAtiva()
 
-            return res.redirect('/')
+            return res.redirect('/cipa')
         } else {
             req.flash("error", "Token Incorreto")
-            return res.redirect(`/suspender_cipa/${codfilial}`)
+            return res.redirect(`/autorizar_finalizar/${codfilial}`)
         }
     },
 }

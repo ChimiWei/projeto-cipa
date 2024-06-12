@@ -5,11 +5,14 @@ const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
 const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
 const { 
-    homeController, cipaconfigController, candidatoController, votacaoController,
-    listagemController, finalizarcipaController, userController, showTokenController, adminController 
+    homeController, cipaController, cipaconfigController, candidatoController, votacaoController,
+    listagemController, finalizarcipaController, userController, showTokenController, adminController, 
+    
 } = require('../controllers/index')
 const checkVerified = require('../middleware/checkVerified')
 const checkAdmin = require('../middleware/checkAdmin')
+
+router.get('/', homeController.renderHome)
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
@@ -33,7 +36,7 @@ router.put('/admin_register', checkAdmin, adminController.putAdminRegister)
 
 router.get('/nao_verificado', checkVerified, userController.renderNotVerificado)
 
-router.get('/', checkAuthenticated, asyncErrorHandler(homeController.renderHome))
+router.get('/cipa', checkAuthenticated, asyncErrorHandler(cipaController.renderCipa))
 
 router.get('/cipaconfig', checkAuthenticated, asyncErrorHandler(cipaconfigController.renderCipaConfig))
 

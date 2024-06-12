@@ -49,7 +49,7 @@ app.use('/', Routes)
 app.delete('/suspender_cipa/:codfilial', /*checkAuthenticated, <////>catchAsyncErr(async (req, res) => {
     const codfilial = req.params.codfilial
     const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-    if (!cipa) return res.redirect('/')
+    if (!cipa) return res.redirect('/cipa')
     
     const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id, codfilial))
     const {token} = rows[0]
@@ -66,7 +66,7 @@ app.delete('/suspender_cipa/:codfilial', /*checkAuthenticated, <////>catchAsyncE
         
         getCipaAtiva()
 
-        return res.redirect('/')
+        return res.redirect('/cipa')
     } else {
         req.flash("error", "Token Incorreto")
         return res.redirect(`/suspender_cipa/${codfilial}`)
@@ -74,7 +74,7 @@ app.delete('/suspender_cipa/:codfilial', /*checkAuthenticated, <////>catchAsyncE
 }))
 
 app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
-    if(!deleteAuth) return res.redirect('/')
+    if(!deleteAuth) return res.redirect('/cipa')
     
     const cipaid = req.params.cipaid
 
@@ -87,7 +87,7 @@ app.delete('/solicitar_alteracao/:cipaid', catchAsyncErr(async (req, res) => {
 
     deleteAuth = false
 
-    res.redirect('/')
+    res.redirect('/cipa')
 
 }))
 

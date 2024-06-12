@@ -4,11 +4,11 @@ const mysqlPromise = require('../helpers/mysqlQuery')
 
 const userController = {
     renderLogin: (req, res) => {
-        res.render('login.ejs', {message: req.flash()})
+        res.render('login.ejs', { message: req.flash() })
 
     },
     postLogin: passport.authenticate('local', {
-        successRedirect: '/',
+        successRedirect: '/cipa',
         failureRedirect: '/login',
         failureFlash: true
     }),
@@ -43,12 +43,12 @@ const userController = {
 
     },
     deleteLogout: (req, res) => {
-        if(!req.isAuthenticated()) return res.redirect('/login')
-        req.logout(function(err) {
+        if (!req.isAuthenticated()) return res.redirect('/login')
+        req.logout(function (err) {
             if (err) { return next(err); }
             res.redirect('/login');
-            });
-   
+        });
+
     },
     renderNotVerificado: (req, res) => {
         res.render('notVerificado.ejs')

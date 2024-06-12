@@ -16,7 +16,7 @@ const listagemController = {
         const cipas = await getCipaAtiva()
         const codfilial = req.params.codfilial
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
 
         const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id))
         const { token } = rows[0]
@@ -31,18 +31,18 @@ const listagemController = {
     },
     renderListCandidato: async (req, res) => {
         var candidatosPageAuth = getCandidatosPageAuth()
-        if (!candidatosPageAuth) return res.redirect('/')
+        if (!candidatosPageAuth) return res.redirect('/cipa')
         setCandidatosPageAuth(false)
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
 
         const candidatos = await getCandidatos(cipa.id)
 
-        for(let i = 0; i < candidatos.length; i++) {
+        for (let i = 0; i < candidatos.length; i++) {
             candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
         }
-        
+
         // bubble sort lets gooooooooooo
         for (let i = 0; i < candidatos.length; i++) {
             for (let j = 0; j < candidatos.length - 1; j++) {
@@ -62,11 +62,11 @@ const listagemController = {
     renderlistCandidatoSemCount: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
 
         const candidatos = await getCandidatos(cipa.id)
 
-        for(let i = 0; i < candidatos.length; i++) {
+        for (let i = 0; i < candidatos.length; i++) {
             candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
         }
 
@@ -75,7 +75,7 @@ const listagemController = {
     renderVotos: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
         const [funcionarios] = await mysqlPromise.query(...repository.mysql.getFuncComVoto(cipa.id))
         res.render('listVotos.ejs', { funcionarios, cipa })
     }

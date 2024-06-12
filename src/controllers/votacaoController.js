@@ -15,11 +15,11 @@ const votacaoController = {
         const cipas = await getCipaAtiva()
         const codfilial = req.params.codfilial
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
-        if (!cipa || !cipa.votacaoAtiva) return res.redirect('/')
+        if (!cipa || !cipa.votacaoAtiva) return res.redirect('/cipa')
         const cipaEncerrada = await checkCipaVotes(codfilial, cipa.id)
         if (req.query.chapa) {
             const func = await mssqlStmtQuery(repository.mssql.funcionario(codfilial, req.query.chapa))
-            func.forEach( func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
+            func.forEach(func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
             const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(cipa.id, req.query.chapa))
 
             res.render('iniVotacao.ejs', { func: func[0], voto: voto[0], chapa: req.query.chapa, message: req.flash() })
@@ -53,13 +53,13 @@ const votacaoController = {
         if (votante.func && cipa) {
             const candidatos = await getCandidatos(cipa.id)
 
-            for(let i = 0; i < candidatos.length; i++) {
+            for (let i = 0; i < candidatos.length; i++) {
                 candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
             }
 
             res.render('votacao.ejs', { candidatos: candidatos, func: votante.func })
         } else {
-            res.redirect('/')
+            res.redirect('/cipa')
         }
 
     },
@@ -70,21 +70,21 @@ const votacaoController = {
     },
 
     renderConfirmarVoto: async (req, res) => {
-        if (!votante.nvotacao) return res.redirect('/')
+        if (!votante.nvotacao) return res.redirect('/cipa')
         if (votante.nvotacao === "BRA" || votante.nvotacao === "NUL") return res.render('confirmarVoto.ejs',
             { candidato: null, voto: votante.nvotacao === "BRA" ? "BRANCO" : "NULO", votante, message: req.flash() })
 
         const candidatos = await getCandidatos(votante.cipaid)
         const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
         console.log(votante)
-        if (!candidato) return res.redirect('/')
-        
+        if (!candidato) return res.redirect('/cipa')
+
         candidato.imagem = await queryImageAndReturnURL(candidato.idimagem)
         res.render('confirmarVoto.ejs', { candidato, votante, message: req.flash() })
     },
 
     putConfirmarVoto: async (req, res) => {
-        if (!votante.func) return res.redirect('/')
+        if (!votante.func) return res.redirect('/cipa')
         const func = votante.func
         const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(votante.cipaid, func.chapa))
         if (voto[0]) {

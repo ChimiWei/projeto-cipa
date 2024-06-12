@@ -12,7 +12,7 @@ const cipaconfigController = {
     renderCipaConfig: async (req, res) => {
         const cipas = await getCipaAtiva()
         const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
-        
+
         res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
     },
 
@@ -32,7 +32,7 @@ const cipaconfigController = {
             return res.redirect('/cipaconfig')
         }
         const token = generateToken()
-        
+
         await mysqlPromise.query(...repository.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
             req.body.inivotacao, req.body.fimvotacao, req.body.resultado, (req.user ? req.user.id : null)))
 
@@ -54,8 +54,8 @@ const cipaconfigController = {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 60
-            })
-        
+        })
+
         res.setHeader('Set-Cookie', serialized)
         res.redirect('/cipatoken')
     },
@@ -63,19 +63,19 @@ const cipaconfigController = {
     renderCipaConfigEdit: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-        if (!cipa) return res.redirect('/')
+        if (!cipa) return res.redirect('/cipa')
         res.render('editCipa.ejs', { user: req.user, gestao: gestao, cipa, message: req.flash() })
     },
 
     putCipaConfigEdit: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
-        if (!cipa) return res.redirect('/')
-        
+        if (!cipa) return res.redirect('/cipa')
+
         const [rows] = await mysqlPromise.query(...repository.mysql.getCipaToken(cipa.id))
         const { token } = rows[0]
-        
-        if(token != req.body.token) {
+
+        if (token != req.body.token) {
             req.flash('error', 'Token Incorreto')
             res.redirect('back')
 
@@ -90,7 +90,7 @@ const cipaconfigController = {
 
         req.flash('notification', 'Data alterada com sucesso')
 
-        return res.redirect('/')
+        return res.redirect('/cipa')
 
     }
 }

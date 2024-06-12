@@ -11,7 +11,7 @@ function AuthenticateTokenJWT(req, res, next) {
         return next()
     }
 
-    return res.redirect('/')
+    return res.redirect('/cipa')
 }
 
 
