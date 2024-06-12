@@ -9,7 +9,7 @@
         <script src='/js/bootstrap-datepicker.min.js'></script>
 </head>
 
-<body onload="startup('<%= cipa.dtfimvoto %>', '<%= locals.message.error %>')">
+<body class="bg-image" onload="startup('<%= cipa.dtfimvoto %>', '<%= locals.message.error %>')">
     <%- include('partials/header'); %>
         <section class="my-3">
             <h1> </h1>
@@ -24,10 +24,12 @@
                         <img src='/img/cipa.png' class="w-50" />
                     </div>
                     <div class="col-sm rounded shadow bg-white p-3">
-                        <form id="editForm" class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT" method="POST">
+                        <form id="editForm" class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT"
+                            method="POST">
                             <div id="cadastroCipa" class="row justify-content-center">
                                 <div class="text-center">
-                                    <h2> Gestão <%= gestao %> </h2>
+                                    <h2> Gestão <%= gestao %>
+                                    </h2>
                                     <h2>
                                         <%= cipa.filial %>
                                     </h2>
@@ -50,14 +52,15 @@
                             </div>
                             <div class="row pt-2">
                                 <div class="col text-center">
-                                    <button type="submit" class="btn btn-success" onclick="handleEditSubmit(event)" > Prorrogar </button>
+                                    <button type="submit" class="btn btn-success" onclick="handleEditSubmit(event)">
+                                        Prorrogar </button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <%- include('components/modalToken', {message: locals.message} ) %>
+            <%- include('components/modal/modalToken', {message: locals.message} ) %>
 
         </section>
         <%- include('partials/footer'); %>
