@@ -36,7 +36,7 @@
                           <td><%= cipa.gestorLogin %></td>
                           <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
                           <form action="/admin/<%= cipa.id %>?_method=PUT" method="POST">
-                          <td class="text-center"><button type="submit" class="btn-no-style"><i class="fa-solid fa-circle-xmark text-danger"></i></button></td>
+                          <td class="text-center"><button type="submit" class="btn-no-style"><i class="fa-solid fa-user-xmark text-danger"></i></button></td>
                           </form>
                         <% } else { %>
                           <td class="text-center"><a class="btn-small btn-info" onclick="startModal('<%= cipa.id %>')"> Adicionar </a></td>
