@@ -14,6 +14,8 @@ const checkAdmin = require('../middleware/checkAdmin')
 
 router.get('/', homeController.renderHome)
 
+router.post('/orcamento', asyncErrorHandler(homeController.postMail))
+
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
 router.post('/login', checkNotAuthenticated, userController.postLogin)
