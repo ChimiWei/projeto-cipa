@@ -12,7 +12,7 @@ const {
 const checkVerified = require('../middleware/checkVerified')
 const checkAdmin = require('../middleware/checkAdmin')
 
-router.get('/', homeController.renderHome)
+router.get('/', asyncErrorHandler(cipaController.renderCipa))
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
