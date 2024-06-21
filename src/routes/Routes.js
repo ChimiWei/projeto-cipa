@@ -3,7 +3,7 @@ const router = express.Router()
 const asyncErrorHandler = require('../middleware/asyncErrorHandler')
 const checkAuthenticated = require('../middleware/checkAuthenticated')
 const checkNotAuthenticated = require('../middleware/checkNotAuthenticate')
-const AuthenticateTokenJWT = require('../middleware/AuthenticateTokenJWT')
+const AuthenticateTokenJWT = require('../middleware/authenticateTokenJWT')
 const { 
     homeController, cipaController, cipaconfigController, candidatoController, votacaoController,
     listagemController, finalizarcipaController, userController, showTokenController, adminController, 
@@ -24,17 +24,19 @@ router.get('/register', checkNotAuthenticated, userController.renderRegister)
 
 router.post('/register', checkNotAuthenticated, asyncErrorHandler(userController.postRegister))
 
-router.get('/admin', checkAdmin, adminController.renderAdmin)
+router.get('/admin', checkAdmin, asyncErrorHandler(adminController.renderAdmin))
 
-router.put('/admin/:cipaid', checkAdmin, adminController.putAdmin)
+router.put('/admin/:cipaid', checkAdmin, asyncErrorHandler(adminController.putAdmin))
 
-router.get('/admin/usuarios', checkAdmin, adminController.renderAdminUsuarios)
+router.get('/admin/usuarios', checkAdmin, asyncErrorHandler(adminController.renderAdminUsuarios))
 
-router.put('/admin/verify/:userid', checkAdmin, adminController.putAdminVerifyUser)
+router.put('/admin/verify/:userid', checkAdmin, asyncErrorHandler(adminController.putAdminVerifyUser))
 
 router.get('/admin/register', checkAdmin, adminController.renderAdminRegister)
 
-router.put('/admin_register', checkAdmin, adminController.putAdminRegister)
+router.put('/admin_register', checkAdmin, asyncErrorHandler(adminController.putAdminRegister))
+
+router.put('/generate_convitetoken', checkAdmin, asyncErrorHandler(adminController.putGenerateInviteToken))
 
 router.get('/nao_verificado', checkVerified, userController.renderNotVerificado)
 
