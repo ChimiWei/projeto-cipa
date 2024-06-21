@@ -18,7 +18,7 @@ router.post('/orcamento', asyncErrorHandler(homeController.postMail))
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
-router.post('/login', checkNotAuthenticated, userController.postLogin)
+router.post('/login', checkNotAuthenticated, asyncErrorHandler(userController.postLogin))
 
 router.get('/register', checkNotAuthenticated, userController.renderRegister)
 
