@@ -1,5 +1,6 @@
 const cookie = require('cookie')
 const validateJWTAndReturnPayload = require('../helpers/validateJWTAndReturnPayload')
+
 function AuthenticateTokenJWT(req, res, next) {
     const cookies = cookie.parse(req.headers.cookie || '')
 
