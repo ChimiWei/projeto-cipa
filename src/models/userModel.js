@@ -26,8 +26,8 @@ async function getUserById(id) {
     return rows[0]
 }
 
-async function getUsers() {
-    const [rows, fields] = await mysqlPromise.query('select * from usuario where admin = 0')
+async function getUsers(id_empresa) {
+    const [rows, fields] = await mysqlPromise.query(`select * from usuario where id_empresa = ${id_empresa} and id_role <> 1`)
 
     return rows
 }

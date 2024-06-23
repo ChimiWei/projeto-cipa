@@ -23,6 +23,8 @@ const cipaconfigController = {
         const iniVoto = new Date(req.body.inivotacao.split('/').reverse().join('/'))
         const fimVoto = new Date(req.body.fimvotacao.split('/').reverse().join('/'))
         const resultado = new Date(req.body.resultado.split('/').reverse().join('/'))
+        const user = req.user
+
         if (fimIns > iniVoto) {
             req.flash('error', 'data final da inscrição não pode ser maior que a data inicial da votação')
             return res.redirect('/cipaconfig')
@@ -34,7 +36,7 @@ const cipaconfigController = {
         const token = generateToken()
 
         await mysqlPromise.query(...repository.mysql.cadastrarCipa(codcoligada, codfilial, filial, ano, req.body.inscricaoini, req.body.fiminscricao,
-            req.body.inivotacao, req.body.fimvotacao, req.body.resultado, (req.user ? req.user.id : null)))
+            req.body.inivotacao, req.body.fimvotacao, req.body.resultado, user.id, user.id_empresa))
 
         const cipas = await getCipaAtiva()
 

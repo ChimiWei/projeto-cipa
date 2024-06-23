@@ -43,8 +43,8 @@ const getCipaAtivaByUserId = async (userid) => {
     return cipas
 }
 
-async function getCipas() {
-    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig`)
+async function getCipas(id_empresa) {
+    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where id_empresa = ${id_empresa}`)
     
     const cipas = rows.sort((a, b) => b.ativa - a.ativa)
 

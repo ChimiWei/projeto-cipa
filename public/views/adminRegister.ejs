@@ -11,9 +11,9 @@
     <section class=" section-full-screen ">
         <%- include('partials/adminPainel') %>
         <div class="container p-3">
-          <div class="row text-center">
-            <h3 class="text-white"> Criar Usuário </h3>
-          </div>
+            <div class="row text-center">
+                <h3 class="text-white"> Criar Usuário </h3>
+            </div>
             <div class="row justify-content-center p-3">
                 <div class="col-md-6">
                     <form action="/admin_register?_method=PUT" method="POST" id="registerForm" class="singin-form">
@@ -34,13 +34,35 @@
                                 placeholder="Confirme sua senha" onkeyup="check();" required>
                             <span id="message"></span>
                             <div class="form-group text-center">
-                                <button type="submit"
-                                    class="form-control btn btn-color rounded submit mt-3"> Cadastrar
+                                <button type="submit" class="form-control btn btn-color rounded submit mt-3"> 
+                                    Cadastrar
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
+            </div>
+            <hr class="bg-darkpurple border-2 border-top " />
+            <div class="row text-white text-center justify-content-center">
+                <% if(locals.message.token) { %>
+                    <h3> Token de Cadastro </h3>
+                    <p class="fs-5 mb-1">  Token gerado: </p>
+                    <h1>
+                        <%= locals.message.token %>
+                    </h1>
+                <% } else { %>
+                    <h3> Token de Cadastro </h3>
+                    <span> O token é usado para criar novas contas associadas a sua empresa. </span>
+                    <div class="col-md-3">
+                        <form action="/generate_convitetoken?_method=PUT" method="POST">
+                            <button type="submit" class="form-control btn btn-color rounded submit mt-3"> 
+                                Gerar Token
+                            </button>
+                        </form>
+                    </div>
+                <% } %>
+                
+                
             </div>
         </div>
         <%- include('components/modal/notification.ejs', { message: locals.message }); %>

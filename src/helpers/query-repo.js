@@ -34,6 +34,24 @@ const usuarioPorId = (id) => {
     return [sql, params]
 }
 
+const getConviteToken = (token) => {
+    const sql = `
+    select * from convitetoken where token = ?
+    `
+    const params = [token]
+
+    return [sql, params]
+}
+
+const putConviteToken = (id_empresa, token) => {
+    const sql = `
+    insert into convitetoken values (default, ?, ?, default, default, default, default)
+    `
+    const params = [id_empresa, token]
+
+    return [sql, params]
+}
+
 const candidatos = (cipaid) => {
     const sql = `
     select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, I.idimagem, V.total as votos
@@ -68,11 +86,11 @@ const getFuncComVoto = (cipaid) => {
 }
 
 
-const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid) => {
+const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid, id_empresa) => {
     const sql = `
-    INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default, ?)`
+    INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default, ?, ?)`
 
-    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid]
+    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid, id_empresa]
 
     return [sql, params]
 }
@@ -369,6 +387,8 @@ const repository = {
         usuarioPorEmail,
         usuarioPorLogin,
         usuarioPorId,
+        getConviteToken,
+        putConviteToken,
         candidatos,
         getVotos,
         putGestor,

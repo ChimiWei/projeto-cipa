@@ -1,3 +1,4 @@
+const generateToken = require("../helpers/generateToken")
 const mysqlPromise = require("../helpers/mysqlQuery")
 const repository = require("../helpers/query-repo")
 const { getCipas } = require("../models/cipaModel")
@@ -8,8 +9,9 @@ const bcrypt = require('bcrypt')
 
 const adminController = {
     renderAdmin: async (req, res) => {
-        const cipas = await getCipas()
-        const users = await getUsers()
+        const cipas = await getCipas(req.user.id_empresa)
+        const users = await getUsers(req.user.id_empresa)
+        
         let selectOptions = users
         for(const cipa of cipas) { 
             let user = cipa.gestorid ? (users.find(user => user.id == cipa.gestorid)) : null
@@ -22,15 +24,13 @@ const adminController = {
           // cipa.gestorPassword = user ? user.password : null
 
         }
-    
 
         res.render('admin.ejs', {cipas, selectOptions, url: req.url})
     },
     putAdmin: async (req, res) => {
         if(req.body.option) {
             const result = await mysqlPromise.query(...repository.mysql.putGestor(req.body.option, req.params.cipaid))
-            console.log(req.body.option)
-            console.log(result)
+            
             return res.redirect('/admin')
         } else {
 
@@ -42,8 +42,8 @@ const adminController = {
     }, 
 
     renderAdminUsuarios: async (req, res) => {
-        const users = await getUsers()
-        const cipas = await getCipas()
+        const users = await getUsers(req.user.id_empresa)
+        const cipas = await getCipas(req.user.id_empresa)
         users.forEach(user => {
             const cipa = cipas.find(cipa => cipa.gestorid == user.id)
             user.filial = cipa ? cipa.filial : null
@@ -59,33 +59,33 @@ const adminController = {
         }
     },
     renderAdminRegister: (req, res) => {
-
         res.render('adminRegister.ejs', {url: req.url, message: req.flash()})
     },
     putAdminRegister: async (req, res) => {
-        try {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10)
-            let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', 1, default, default)`
-            mysqlPromise.query(sql)
+        
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', 1, default, default)`
+        mysqlPromise.query(sql)
 
-            req.flash('notification', 'Usuário criado!')
+        req.flash('notification', 'Usuário criado!')
 
-            res.redirect('/admin/register')
-            /* const user = {
-                id: Date.now().toString(),
-                name: req.body.name,
-                email: req.body.email,
-                password: hashedPassword}
+        res.redirect('/admin/register')
             
-            users.push(user)
-            */
 
-        } catch (e) {
-            console.log(e)
-            res.redirect('/admin/register')
+    },
+
+    putGenerateInviteToken: async (req, res) => {
+        const token = generateToken()
+        const user = req.user
+        const result = await mysqlPromise.query(...repository.mysql.putConviteToken(user.id_empresa, token))
+        if (result[0].affectedRows === 0) {
+            req.flash("error", "Ocorreu um erro na criação do token")
+            res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+            return res.redirect('back');
         }
 
-
+        req.flash('token', token)
+        res.redirect('/admin/register')
     }
 
 }
