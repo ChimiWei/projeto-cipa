@@ -1,16 +1,18 @@
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
-
 const express = require('express')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+const MYSQLStore = require('express-mysql-session')(session)
 const methodOverride = require('method-override')
 const errorHandler = require('./middleware/errorHandler')
-
 const Routes = require('./routes/Routes')
+const pool = require('../config/db_connection_mysql')
 
+
+const sessionStore = new MYSQLStore({expiration: 86400000}, pool)
 
 const app = express();
 
@@ -26,9 +28,11 @@ app.set('views', 'public/views');
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+    key: process.env.PRIVATE_KEY,
+	secret: process.env.SESSION_SECRET,
+	store: sessionStore,
+	resave: false,
+	saveUninitialized: false
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -38,6 +42,7 @@ app.engine('html', require('ejs').renderFile);
 
 
 const initializePassport = require('../config/passport-config')
+
 
 initializePassport(passport)
 
