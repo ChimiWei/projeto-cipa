@@ -96,9 +96,6 @@ const votacaoController = {
             const candidato = candidatos.find(candidato => candidato.n_votacao === votante.nvotacao)
             const result = await mysqlPromise.query(...repository.mysql.addVoto(votante.cipaid, candidato ? candidato.n_votacao : votante.nvotacao))
 
-            console.log('Resultado:')
-            console.log(result[0])
-
             if (result[0].changedRows === 0) {
                 req.flash("error", "Ocorreu um erro com seu voto.")
                 res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');

@@ -1,6 +1,8 @@
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 const mysqlPromise = require('../helpers/mysqlQuery')
+const repository = require('../helpers/query-repo')
+const { getUserByEmailOrLogin } = require('../models/userModel')
 
 const userController = {
     renderLogin: (req, res) => {
@@ -14,32 +16,44 @@ const userController = {
     }),
 
     renderRegister: (req, res) => {
-        res.render('register.ejs')
+        const message = req.flash()
+        res.render('register.ejs', {error: message.error, form: message.form ? message.form[0] : null})
     },
 
     postRegister: async (req, res) => {
-        try {
-            const hashedPassword = await bcrypt.hash(req.body.password, 10)
-            let sql = `INSERT INTO usuario VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', default, default, default)`
-            mysqlPromise.query(sql)
+        const form = {
+            login: req.body.login,
+            email: req.body.email
+        }
+        req.flash('form', form)
 
-            req.flash('notification', 'Usuário criado!')
+        const userByLogin = await getUserByEmailOrLogin(req.body.login)
 
-            res.redirect('/login')
-            /* const user = {
-                id: Date.now().toString(),
-                name: req.body.name,
-                email: req.body.email,
-                password: hashedPassword}
+        const userByEmail = await getUserByEmailOrLogin(req.body.email)
+
+        if(userByLogin || userByEmail) {
             
-            users.push(user)
-            */
-
-        } catch (e) {
-            console.log(e)
-            res.redirect('/register')
+            req.flash('error', 'Nome de Usuário ou Email indisponível')
+            return res.redirect('back')
         }
 
+        const [rows, fields] = await mysqlPromise.query(...repository.mysql.getConviteToken(req.body.convitetoken))
+        const token = rows[0]
+            
+        if(!token || token.used == 1) {
+            
+            req.flash('error', 'Token inválido')
+            return res.redirect('back')
+        }
+
+            
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        let sql = `INSERT INTO usuario VALUES (default, '${req.body.login}', '${req.body.email}', '${hashedPassword}', default, ${token.id_empresa}, 3, default, default)`
+        mysqlPromise.query(sql)
+
+        req.flash('notification', 'Usuário criado!')
+
+        res.redirect('/login')
 
     },
     deleteLogout: (req, res) => {

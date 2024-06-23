@@ -19,8 +19,7 @@ const finalizarcipaController = {
 
         if (req.body.token === token) {
             const cipaid = cipa.id
-            console.log('cipa id:')
-            console.log(cipaid)
+           
             await mysqlPromise.query(...repository.mysql.suspendCipa(cipaid))
 
 
