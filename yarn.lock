@@ -518,7 +518,7 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4, debug@^4.3.3:
+debug@4, debug@4.3.4, debug@^4, debug@^4.3.3:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -699,6 +699,14 @@ express-flash@^0.0.2:
   integrity sha512-QVUR0ZZRCaa8+iPHoUQaQJrQWcQuK/Q+19M7IUIdIEtvwhrA/ifHT7y1CVJI41YfGiOQnbGtn3uvd2vOdgu58A==
   dependencies:
     connect-flash "0.1.x"
+
+express-mysql-session@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/express-mysql-session/-/express-mysql-session-3.0.2.tgz#78e7ef4ce4a547e939da71c002afb306c09d2a6b"
+  integrity sha512-OBb5RRBduYbTIDZRuYzo/CH0WB0rJHmFv9tqc6RZsnoU55t3kPvoHCexMd0FNtBY32wWc5V0NB+ggA2H05ujow==
+  dependencies:
+    debug "4.3.4"
+    mysql2 "3.9.7"
 
 express-session@^1.17.2:
   version "1.17.3"
@@ -1455,7 +1463,7 @@ mssql@^9.1.3:
     tarn "^3.0.2"
     tedious "^15.0.1"
 
-mysql2@^3.9.7:
+mysql2@3.9.7, mysql2@^3.9.7:
   version "3.9.7"
   resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-3.9.7.tgz#843755daf65b5ef08afe545fe14b8fb62824741a"
   integrity sha512-KnJT8vYRcNAZv73uf9zpXqNbvBG7DJrs+1nACsjZP1HMJ1TgXEy8wnNilXAn/5i57JizXKtrUtwDB7HxT9DDpw==
