@@ -95,11 +95,11 @@ const getFuncComVoto = (cipaid) => {
 }
 
 
-const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid, id_empresa) => {
+const cadastrarCipa = (codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, id_gestor, id_empresa) => {
     const sql = `
     INSERT INTO cipaconfig VALUES (default, ?, ?, ?, default, ?, ?, ?, ?, ?, ?, default, ?, ?)`
 
-    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, gestorid, id_empresa]
+    const params = [codcoligada, codfilial, filial, ano, inscricaoini, fiminscricao, inivotacao, fimvotacao, resultado, id_gestor, id_empresa]
 
     return [sql, params]
 }
@@ -124,7 +124,7 @@ function suspendCipa(cipaid) {
 
 const putGestor = (userid, cipaid) => {
     const sql = `
-    update cipaconfig set gestorid = ? where id = ?;
+    update cipaconfig set id_gestor = ? where id = ?;
     `
     const params = [userid, cipaid]
     return [sql, params]

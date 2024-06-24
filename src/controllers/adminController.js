@@ -14,7 +14,7 @@ const adminController = {
 
         let selectOptions = users
         for (const cipa of cipas) {
-            let user = cipa.gestorid ? (users.find(user => user.id == cipa.gestorid)) : null
+            let user = cipa.id_gestor ? (users.find(user => user.id == cipa.id_gestor)) : null
 
             cipa.gestorLogin = user ? user.login : null
 
@@ -45,7 +45,7 @@ const adminController = {
         const users = await getUsers(req.user.id_empresa)
         const cipas = await getCipas(req.user.id_empresa)
         users.forEach(user => {
-            const cipa = cipas.find(cipa => cipa.gestorid == user.id)
+            const cipa = cipas.find(cipa => cipa.id_gestor == user.id)
             user.filial = cipa ? cipa.filial : null
         })
 

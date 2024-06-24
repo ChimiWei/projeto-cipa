@@ -23,7 +23,7 @@ const getCipaAtiva = async () => {
 }
 
 const getCipaAtivaByUserId = async (userid) => {
-    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where ativa=1 and gestorid = ?`, [userid])
+    const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where ativa=1 and id_gestor = ?`, [userid])
 
     rows.forEach((cipa) => {
         if (cipa.inscricaoAtiva === undefined) {
@@ -45,7 +45,7 @@ const getCipaAtivaByUserId = async (userid) => {
 
 async function getCipas(id_empresa) {
     const [rows, fields] = await mysqlPromise.query(`select * from cipaconfig where id_empresa = ${id_empresa}`)
-    
+
     const cipas = rows.sort((a, b) => b.ativa - a.ativa)
 
     return cipas
