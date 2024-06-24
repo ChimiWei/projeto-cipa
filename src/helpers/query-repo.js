@@ -34,6 +34,15 @@ const usuarioPorId = (id) => {
     return [sql, params]
 }
 
+const postUsuario = (login, email, hashedPassword, id_empresa) => {
+    const sql = `
+    INSERT INTO usuarios VALUES (default, ?, ?, ?, default, ?, 3, default, default)
+    `
+    const params = [login, email, hashedPassword, id_empresa]
+
+    return [sql, params]
+}
+
 const getConviteToken = (token) => {
     const sql = `
     select * from convitetoken where token = ?
@@ -387,6 +396,7 @@ const repository = {
         usuarioPorEmail,
         usuarioPorLogin,
         usuarioPorId,
+        postUsuario,
         getConviteToken,
         putConviteToken,
         candidatos,

@@ -48,8 +48,8 @@ const userController = {
 
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        let sql = `INSERT INTO usuarios VALUES (default, '${req.body.login}', '${req.body.email}', '${hashedPassword}', default, ${token.id_empresa}, 3, default, default)`
-        mysqlPromise.query(sql)
+
+        mysqlPromise.query(...repository.mysql.postUsuario(req.body.login, req.body.email, hashedPassword, token.id_empresa))
 
         req.flash('notification', 'Usuário criado!')
 
