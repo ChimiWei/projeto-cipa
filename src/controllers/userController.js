@@ -17,7 +17,7 @@ const userController = {
 
     renderRegister: (req, res) => {
         const message = req.flash()
-        res.render('register.ejs', {error: message.error, form: message.form ? message.form[0] : null})
+        res.render('register.ejs', { error: message.error, form: message.form ? message.form[0] : null })
     },
 
     postRegister: async (req, res) => {
@@ -31,24 +31,24 @@ const userController = {
 
         const userByEmail = await getUserByEmailOrLogin(req.body.email)
 
-        if(userByLogin || userByEmail) {
-            
+        if (userByLogin || userByEmail) {
+
             req.flash('error', 'Nome de Usuário ou Email indisponível')
             return res.redirect('back')
         }
 
         const [rows, fields] = await mysqlPromise.query(...repository.mysql.getConviteToken(req.body.convitetoken))
         const token = rows[0]
-            
-        if(!token || token.used == 1) {
-            
+
+        if (!token || token.used == 1) {
+
             req.flash('error', 'Token inválido')
             return res.redirect('back')
         }
 
-            
+
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        let sql = `INSERT INTO usuario VALUES (default, '${req.body.login}', '${req.body.email}', '${hashedPassword}', default, ${token.id_empresa}, 3, default, default)`
+        let sql = `INSERT INTO usuarios VALUES (default, '${req.body.login}', '${req.body.email}', '${hashedPassword}', default, ${token.id_empresa}, 3, default, default)`
         mysqlPromise.query(sql)
 
         req.flash('notification', 'Usuário criado!')

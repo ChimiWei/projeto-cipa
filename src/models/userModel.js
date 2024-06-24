@@ -7,11 +7,11 @@ async function getUserByEmailOrLogin(login) {
     return rows[0]
 }
 
-async function getUserByEmail(email) {  
+async function getUserByEmail(email) {
     const [rows, fields] = await mysqlPromise.query(...repository.mysql.usuarioPorEmail(email))
-    
+
     return rows[0]
-} 
+}
 
 async function getUserByLogin(login) {
     const [rows, fields] = await mysqlPromise.query(...repository.mysql.usuarioPorLogin(login))
@@ -27,7 +27,7 @@ async function getUserById(id) {
 }
 
 async function getUsers(id_empresa) {
-    const [rows, fields] = await mysqlPromise.query(`select * from usuario where id_empresa = ${id_empresa} and id_role <> 1`)
+    const [rows, fields] = await mysqlPromise.query(`select * from usuarios where id_empresa = ${id_empresa} and id_role <> 1`)
 
     return rows
 }

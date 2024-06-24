@@ -1,6 +1,6 @@
 const usuarioPorEmailouLogin = (login) => {
     const sql = `
-    select * from usuario where email = ? or login = ?
+    select * from usuarios where email = ? or login = ?
     `
     const params = [login, login]
 
@@ -9,7 +9,7 @@ const usuarioPorEmailouLogin = (login) => {
 
 const usuarioPorEmail = (email) => {
     const sql = `
-    select * from usuario where email = ?
+    select * from usuarios where email = ?
     `
     const params = [email]
 
@@ -18,7 +18,7 @@ const usuarioPorEmail = (email) => {
 
 const usuarioPorLogin = (login) => {
     const sql = `
-    select * from usuario where login = ?
+    select * from usuarios where login = ?
     `
     const params = [login]
 
@@ -27,7 +27,7 @@ const usuarioPorLogin = (login) => {
 
 const usuarioPorId = (id) => {
     const sql = `
-    select * from usuario where id = ?
+    select * from usuarios where id = ?
     `
     const params = [id]
 
@@ -123,7 +123,7 @@ const putGestor = (userid, cipaid) => {
 
 const verifyUser = (userid) => {
     const sql = `
-    update usuario set verificado = 1 where id = ?
+    update usuarios set verificado = 1 where id = ?
     `
     const params = [userid]
 
