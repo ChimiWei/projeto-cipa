@@ -8,9 +8,9 @@ const homeController = {
     },
 
     postMail: async (req, res) => {
-        await mailRepo.budget(req.body.email)
+        await mailRepo.budget(req.body.name, req.body.email)
 
-        res.redirect('/')
+        res.redirect('/#contact')
     }
 }
 
