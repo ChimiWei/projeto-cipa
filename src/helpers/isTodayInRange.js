@@ -6,7 +6,7 @@ function isTodayInRange(firstDate, lastDate) {
         year: 'numeric',
     })
 
-    const first = new Date(Date.UTC(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), firstDate.getUTCDate())).toLocaleDateString('en-US', {
+    const first = new Date(Date.UTC(firstDate.getUTCFullYear(), firstDate.getUTCMonth(), firstDate.getUTCDate() + 1)).toLocaleDateString('en-US', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric',
