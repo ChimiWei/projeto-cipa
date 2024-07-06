@@ -39,10 +39,6 @@ const listagemController = {
 
         const candidatos = await getCandidatos(cipa.id)
 
-        for (let i = 0; i < candidatos.length; i++) {
-            candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
-        }
-
         // bubble sort lets gooooooooooo
         for (let i = 0; i < candidatos.length; i++) {
             for (let j = 0; j < candidatos.length - 1; j++) {
@@ -57,7 +53,7 @@ const listagemController = {
         const [rows] = await mysqlPromise.query(...repository.mysql.getVotos(cipa.id))
         const [branco, nulo] = rows
 
-        res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo })
+        res.render('listCandidato.ejs', { user: req.user, candidatos: candidatos, branco, nulo, url: apiRequest.url, encodedUser: apiRequest.encodedUser })
     },
     renderlistCandidatoSemCount: async (req, res) => {
         const cipas = await getCipaAtiva()
@@ -66,11 +62,16 @@ const listagemController = {
 
         const candidatos = await getCandidatos(cipa.id)
 
-        for (let i = 0; i < candidatos.length; i++) {
-            candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        if(!api) return res.redirect('/cipa')
+        
+        const apiRequest = {
+            url: `${api.url}/CI.006/1/P?parameters=IDIMAGEM=`,
+            encodedUser: api.encoded_user
         }
 
-        res.render('listCandidatoSemCount.ejs', { candidatos: candidatos, cipa: cipa })
+        res.render('listCandidatoSemCount.ejs', { candidatos: candidatos, cipa: cipa, url: apiRequest.url, encodedUser: apiRequest.encodedUser })
     },
     renderVotos: async (req, res) => {
         const cipas = await getCipaAtiva()

@@ -23,9 +23,9 @@
     }
 </style>
 
-<body class="bg-image">
+<body class="bg-image" onload="getAPIData('<%= locals.apiUrl %>', '<%= locals.apiUser %>')">
     <%- include('partials/header'); %>
-        <% if (locals.func) { %>
+        
             <section>
 
                 <div class="container bg-white rounded mt-2 pt-2 pb-2 printable">
@@ -35,26 +35,25 @@
                         </div>
                         <div class="col-sm-8">
                             <div class="text-center">
-                                <h1>
-                                    <%= func.GCNOME %>
+                                <h1 class="empresa">
+                                    
                                 </h1>
-                                <p>
-                                    <%= func.GCRUA %>,<%= func.GCNUMERO %> - <%= func.GCBAIRRO %> - <%= func.GCCIDADE %>
-                                                    /<%= func.GCESTADO %>
+                                <p id="endereco">
+                        
                                 </p>
-                                <p> C.G.C: <%= func.GCCGC %> Fone: <%= func.GCTELEFONE %>
+                                <p id="contato"> 
                                 </p>
                                 <h2>Comissão Interna de Prevenção de Acidentes</h2>
                                 <h4> FICHA DE INSCRIÇÃO </h4>
                             </div>
                             <ul class="list-group">
-                                <li class="list-item heavy-fontweight">Nome: <%= func.NOME %>
+                                <li class="list-item heavy-fontweight">Nome: <text class="nome heavy-fontweight"></text>
                                 </li>
                                 <li class="list-item heavy-fontweight">Nº de Votação: <%= n_votacao %>
                                 </li>
-                                <li class="list-item heavy-fontweight">Setor: <%= func.SECAO %>
+                                <li class="list-item heavy-fontweight">Setor: <text class="secao heavy-fontweight"></text>
                                 </li>
-                                <li class="list-item heavy-fontweight ">Matrícula: <%= func.CHAPA %>
+                                <li class="list-item heavy-fontweight ">Matrícula: <text class="chapa heavy-fontweight"></text>
                                 </li>
                             </ul>
                         </div>
@@ -72,8 +71,8 @@
                     <div class="row text-center ">
                         <div class="col-md-6">
                             <p> ___________________________________________________ </p>
-                            <p class="fw-bold">
-                                <%= func.NOME %>
+                            <p class="fw-bold nome">
+                                
                             </p>
                         </div>
                         <div class="col-md-6">
@@ -88,14 +87,13 @@
                         <table class="w-75 m-auto border border-dark">
                             <tr class="border border-dark">
                                 <td width="232" class="border border-dark">
-                                    <div align="right"><img src="/img/ELEICOES.JPG" width="232" height="50"></div>
-                                </td>
-                                <td>
-                                    <div align="center">
-                                        <h1>
-                                            <%= func.GCNOME %>
-                                        </h1>
+                                    <div align="center" style="white-space: nowrap;"> 
+                                        <h1 class="empresa">  </h1> 
                                     </div>
+                                    
+                                </td>
+                                <td> 
+                                    <div align="right"><img src="/img/ELEICOES.JPG" width="232" height="50"></div> 
                                 </td>
                             </tr>
                             <tr>
@@ -109,7 +107,7 @@
                             <tr>
                                 <td>
                                     <div class="border border-dark p-1 fw-normal">
-                                        Matrícula: <%= func.CHAPA %>
+                                        Matrícula: <text class="chapa"></text>
                                     </div>
                                 </td>
                                 <td>
@@ -121,21 +119,21 @@
                             <tr>
                                 <td colspan="2">
                                     <div class="border border-dark p-1 fw-normal">
-                                        Nome: <%= func.NOME %>
+                                        Nome: <text class="nome"></text>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
                                     <div class="border border-dark p-1 fw-normal">
-                                        Seção: <%= func.SECAO %>
+                                        Seção: <text class="secao"></text>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td>
+                                <td class="w-75">
                                     <div class="border border-dark p-1 fw-normal">
-                                        Função: <%= func.FUNCAO %>
+                                        Função: <text class="funcao"></text>
                                     </div>
                                 </td>
                                 <td>
@@ -151,8 +149,8 @@
                         <div class="row text-center ">
                             <div class="col-md-6">
                                 <p> ___________________________________________________ </p>
-                                <p class="fw-bold">
-                                    <%= func.NOME %>
+                                <p class="fw-bold nome">
+                                    
                                 </p>
                             </div>
                             <div class="col-md-6">
@@ -165,21 +163,20 @@
                 <div class="container mt-2 text-center">
                     <text id="info" class="text-danger text-shadow"> Para confirmar o cadastro, imprima a ficha </text>
                     <form method="POST" action="/fichaCandidato?_method=PUT">
-                        <input type="hidden" id="chapa" name="chapa" value="<%= func.CHAPA %>">
+                        <input type="hidden" id="chapa" name="chapa" value="">
                         <input type="hidden" id="nvotacao" name="nvotacao" value="<%= n_votacao %>">
-                        <input type="hidden" id="codcoligada" name="codcoligada" value="<%= func.CODCOLIGADA %>">
-                        <input type="hidden" id="codfilial" name="codfilial" value="<%= func.CODFILIAL %>">
-                        <input type="hidden" id="nome" name="nome" value="<%= func.NOME %>">
-                        <input type="hidden" id="funcao" name="funcao" value="<%= func.FUNCAO %>">
-                        <input type="hidden" id="secao" name="secao" value="<%= func.SECAO %>">
-                        <input type="hidden" id="idimagem" name="idimagem" value="<%= func.IDIMAGEM %>">
+                        <input type="hidden" id="codcoligada" name="codcoligada" value="">
+                        <input type="hidden" id="codfilial" name="codfilial" value="">
+                        <input type="hidden" id="nome" name="nome" value="">
+                        <input type="hidden" id="funcao" name="funcao" value="">
+                        <input type="hidden" id="secao" name="secao" value="">
+                        <input type="hidden" id="idimagem" name="idimagem" value="">
                         <button id="btnConfirm" disabled class="btn btn-color"> Confirmar Cadastro </button>
                     </form>
                     <button onclick="printForm()" class="btn btn-success"> Imprimir </button>
                     <a href="javascript:history.back()" class="btn btn-dark"> Voltar </a>
                 </div>
             </section>
-            <% } %>
                 <%- include('partials/footer'); %>
                     <script src="/js/fichacandidato.js"></script>
 </body>

@@ -11,9 +11,17 @@ const cipaconfigController = {
 
     renderCipaConfig: async (req, res) => {
         const cipas = await getCipaAtiva()
-        const filiais = await mssqlQuery('select codcoligada, codfilial, nome from gfilial where codcoligada = 1')
 
-        res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, filiais: filiais, cipas: cipas, message: req.flash() })
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        if(!api) return res.redirect('/cipa')
+        
+        const apiRequest = {
+            url: `${api.url}/CI.002/1/P`,
+            encodedUser: api.encoded_user
+        }
+
+        res.render('cipaconfig.ejs', { user: req.user, gestao: gestao, cipas: cipas, message: req.flash(), apiRequest})
     },
 
     postCipaConfig: async (req, res) => {
