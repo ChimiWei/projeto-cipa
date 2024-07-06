@@ -40,11 +40,13 @@
                         <%= candidato.n_votacao %>
                       </text></li>
                     <% } %>
-                      <form action="/confirmar_voto/<%= votante.nvotacao %>?_method=PUT" method="POST">
+                      <form id="formConfirmacao" onsubmit="formSubmit(event, '<%= locals.apiUrl %>', '<%= locals.apiUser %>')" action="/confirmar_voto/<%= votante.nvotacao %>?_method=PUT" method="POST">
                         <li class="list-item-pd-0 p-1 text-center">
                           Para confirmar seu voto, insira os 3 últimos digitos do seu cpf:
-                          <input name="confirmacao" type="password" value="" placeholder="CPF" class="input-style "
+                          <input id="digitos" name="digitos" type="password" value="" placeholder="CPF" class="input-style "
                             minlength="3" maxlength="3" autocomplete="off" required />
+                            <input id="confirmacao" name="confirmacao" type="hidden" value=""
+                            minlength="1" maxlength="1" autocomplete="off" required />
                           <% if (locals.message) { %>
                             <p class="text-danger">
                               <%= message.error %>
@@ -67,7 +69,7 @@
     </div>
   </section>
 
-
+  <script src="/js/confirmarVoto.js"></script>
   <script src="https://kit.fontawesome.com/49ddb56ecf.js" crossorigin="anonymous"></script>
 </body>
 

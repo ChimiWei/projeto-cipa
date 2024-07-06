@@ -64,7 +64,8 @@ const adminController = {
     putAdminRegister: async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        let sql = `INSERT INTO usuarios VALUES (default, '${req.body.name}', '${req.body.email}', '${hashedPassword}', 1, default, default)`
+        let sql = `INSERT INTO usuarios VALUES (default, '${req.body.name}', '${req.body.email}',
+         '${hashedPassword}', 1, ${req.user.id_empresa}, 2, default, default)`
         mysqlPromise.query(sql)
 
         req.flash('notification', 'Usuário criado!')

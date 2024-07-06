@@ -61,6 +61,15 @@ const putConviteToken = (id_empresa, token) => {
     return [sql, params]
 }
 
+const getApi = (id_empresa) => {
+    const sql = `
+        select id_empresa, url, encoded_user from api where id_empresa = ?
+    `
+    const params = [id_empresa]
+
+    return [sql, params]
+}
+
 const candidatos = (cipaid) => {
     const sql = `
     select I.n_votacao, I.chapa, I.nome, I.funcao, I.secao, I.idimagem, V.total as votos
@@ -175,6 +184,14 @@ const addVoto = (cipaid, n_votacao) => {
     const sql = 'update votos set total = total + 1 where cipaid = ? and voto = ?;'
 
     const params = [cipaid, n_votacao]
+    return [sql, params]
+}
+
+const getCipaVotos = (cipaid) => {
+    const sql =
+        'select chapa from pfvoto where cipaid = ?;'
+
+    const params = [cipaid]
     return [sql, params]
 }
 
@@ -399,6 +416,7 @@ const repository = {
         postUsuario,
         getConviteToken,
         putConviteToken,
+        getApi,
         candidatos,
         getVotos,
         putGestor,
@@ -412,6 +430,7 @@ const repository = {
         addToken,
         addVoto,
         registrarVoto,
+        getCipaVotos,
         checarVoto,
         getTotalVotos,
         getFuncComVoto,

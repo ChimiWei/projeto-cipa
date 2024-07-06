@@ -47,7 +47,7 @@
                                     <h5 class="fs-5">
                                         <%= func.n_votacao %> - <%= func.nome %>
                                     </h5>
-                                    <img class="img-small " style="z-index: 3;" src="<%= func.imagem %>" />
+                                    <img id="<%= func.idimagem %>" class="img-small " style="z-index: 3;" src="" />
                                     <ul class="list-group" style="z-index: 3;">
                                         <li class="list-item-pd-0"> Chapa: <%= func.chapa %>
                                         </li>
@@ -66,7 +66,7 @@
         </section>
         <%- include('partials/footer'); %>
 
-
+<script src="listCandidato.js"></script>
 </body>
 
 </html>

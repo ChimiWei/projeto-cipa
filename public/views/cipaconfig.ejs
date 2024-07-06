@@ -9,7 +9,7 @@
         <script src='js/bootstrap-datepicker.min.js'></script>
 </head>
 
-<body class="bg-image">
+<body class="bg-image" onload="getData('<%= apiRequest.url %>', '<%= apiRequest.encodedUser %>')">
     <%- include('partials/header'); %>
         <section class="my-3">
             <h1> </h1>
@@ -33,11 +33,7 @@
                                         aria-label="Selecione a filial"
                                         onchange="checkFilial('<%= JSON.stringify(cipas) %>', this.value)">
                                         <option disabled selected>Selecione a filial</option>
-                                        <% filiais.forEach(filial => { %>
-                                            <option value="<%= [filial.codfilial, filial.nome] %>">
-                                                <%= filial.nome %>
-                                            </option>
-                                            <% }) %>
+                                        
                                     </select>
                                 </div>
                                 <div id="errFilial" class="text-center" style="visibility: hidden;">

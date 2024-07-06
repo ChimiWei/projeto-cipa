@@ -149,3 +149,31 @@ function cipaFormSubmit() {
 function closeModal() {
     cipaModal.classList.toggle('show')
 }
+
+
+
+async function getData(url, encodedUser) {
+    if(!url) return
+    try {
+      const response = await fetch(url, {headers: new Headers({
+        'Authorization': 'Basic ' + encodedUser,
+        'Content-Type': 'application/json'
+      })});
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+  
+      const json = await response.json();
+
+      for (item of json) {
+        console.log(item)
+        let option = document.createElement('option')
+        option.text = item.NOME
+        option.value = [item.CODFILIAL, item.NOME]
+        selectFilial.appendChild(option)
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+

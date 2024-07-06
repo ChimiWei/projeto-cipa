@@ -6,69 +6,68 @@
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 </head>
 
-<body class="bg-image">
+<body class="bg-image"
+    onload="getAPIData('<%= locals.apiUrl %>', '<%= locals.apiUser %>', '<%= JSON.stringify(locals.votos) %>')">
     <%- include('partials/header'); %>
         <section class="container bg-white rounded p-2 mt-2">
             <div class="container">
                 <div class="row">
                     <div class="col-sm text-center ">
                         <form method="GET">
-                            <label for="" class="fs-3"> Para iniciar a votação, insira a sua matrícula: </label>
-                            <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula"
+                            <label for="chapa" class="fs-3"> Para iniciar a votação, insira a sua matrícula: </label>
+                            <input id="chapa" name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula"
                                 class="input-style my-3" minlength="5" maxlength="7" required />
-                            <button type="submit" class="input-style btn-success rounded submit"> Iniciar </button>
+                            <button type="submit" class="input-style btn-success rounded submit"> Procurar... </button>
                         </form>
                     </div>
                 </div>
-                <% if (!locals.func && locals.chapa) { %>
-                    <div class="row mt-2 text-center">
-                        <h1 class="text-shadow"> Funcionário não encontrado </h1>
+                <div id="funcNaoEncontrado" class="row mt-2 text-center">
+                    <h1 class="text-shadow"> Funcionário não encontrado </h1>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-2">
+                        <img id="imgFunc" src="" onload="this.onload = null" class="img-thumbnail" />
                     </div>
+                    <div class="col">
+                        <ul class="list-group">
+                            <li id="nome" class="list-item">
 
-                    <% } %>
-                        <% if (locals.func) { %>
-                            <div class="row mt-2">
-                                <div class="col-2">
-                                    <img src='<%= func.IMAGEM %>' class="img-thumbnail" />
-                                </div>
-                                <div class="col">
-                                    <ul class="list-group">
-                                        <li class="list-item">Funcionario: <%= func.CHAPA %>
-                                                <%= func.NOME %>
-                                        </li>
-                                        <li class="list-item">Função: <%= func.FUNCAO %>
-                                        </li>
-                                        <li class="list-item">Setor: <%= func.SECAO %>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col text-center">
-                                <% if (locals.voto) { %>
-                                    <h4 class="text-danger text-shadow"> Funcionário já votou! </h4>
-                                    <% } else { %>
-                                        <form method="POST">
-                                            <input hidden name="chapa" type="text" value="<%= chapa %>"
-                                                placeholder="Matrícula" class="input-style my-3" minlength="5"
-                                                maxlength="7" required />
-                                            <button type="submit" class="input-style btn-success rounded submit">
-                                                Iniciar </button>
-                                        </form>
-                                        <% } %>
-                            </div>
-                            <% } %>
-                                <% if(locals.message.error) { %>
-                                    <div class="row mt-2 text-center">
-                                        <h4 class="text-shadow">
-                                            <%= message.error %>
-                                        </h4>
-                                    </div>
-                                    <% } %>
+                            </li>
+                            <li id="funcao" class="list-item">
+
+                            </li>
+                            <li id="secao" class="list-item">
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col text-center">
+                    <h4 id="msgJaVotou" class="text-danger text-shadow"> Funcionário já votou! </h4>
+                    <form method="POST">
+                        <input type="hidden" id="inputChapa" name="chapa" value="">
+                        <input type="hidden" id="inputCodfilial" name="codfilial" value="">
+                        <input type="hidden" id="inputNome" name="nome" value="">
+                        <input type="hidden" id="inputFuncao" name="funcao" value="">
+                        <input type="hidden" id="inputSecao" name="secao" value="">
+                        <button id="btnVotante" type="submit" class="input-style btn-success rounded submit">
+                            Iniciar 
+                        </button>
+                    </form>
+                </div>
+
+                <% if(locals.message.error) { %>
+                    <div class="row mt-2 text-center">
+                        <h4 class="text-shadow">
+                            <%= message.error %>
+                        </h4>
+                    </div>
+                <% } %>
             </div>
         </section>
         <%- include('partials/footer'); %>
 
-
+<script src="/js/iniVotacao.js"></script>
 </body>
 
 </html>

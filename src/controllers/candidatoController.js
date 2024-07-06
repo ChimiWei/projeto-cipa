@@ -12,15 +12,24 @@ const candidatoController = {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/cipa')
+        
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        if(!api) return res.redirect('/cipa')
 
         if (req.query.chapa) {
             const chapa = req.query.chapa
-            const func = await mssqlStmtQuery(repository.mssql.funcionario(req.params.codfilial, chapa)) //procura o funcionário pela chapa
+            const apiRequest = {
+                url: `${api.url}/CI.001/1/P?parameters=CODFILIAL=${cipa.codfilial};CHAPA=${chapa}`,
+                encodedUser: api.encoded_user
+            }
+    
+            // const candidatos = await getCandidatos(cipa.id)
             const candidatos = await getCandidatos(cipa.id)
             console.log(candidatos)
-            func.forEach(func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
-            const candidato = candidatos.find(func => func.chapa === chapa) // checa se o funcionário já está inscrito
-            res.render('addCandidato.ejs', { user: req.user, gestao: gestao, func: func[0], chapa: chapa, candidato: candidato, message: req.flash() })
+            
+            res.render('addCandidato.ejs', { user: req.user, gestao: gestao, chapa: chapa, candidatos: candidatos, message: req.flash(),
+                apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser})
         } else {
             res.render('addCandidato.ejs', { user: req.user, gestao: gestao, message: req.flash() })
         }
@@ -34,8 +43,15 @@ const candidatoController = {
         if (candidatos.find(func => func.chapa === chapa)) res.send('Funcionário já cadastrado!')
         const [rows] = await mysqlPromise.query(...repository.mysql.novoNumeroDeVotacao(cipa.id))
         const novoNVotacao = rows[0].novonvotacao ? rows[0].novonvotacao : '001'
-        const func = await mssqlStmtQuery(repository.mssql.funcComColigada(req.params.codfilial, chapa))
-        res.render('fichaCandidato.ejs', { func: func[0], n_votacao: novoNVotacao, hoje })
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        if(!api) return res.redirect('/cipa')
+        
+        const apiRequest = {
+            url: `${api.url}/CI.004/1/P?parameters=CODFILIAL=${cipa.codfilial};CHAPA=${chapa}`,
+            encodedUser: api.encoded_user
+        }
+        res.render('fichaCandidato.ejs', { n_votacao: novoNVotacao, hoje, apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser })
     },
     putFichaCandidato: async (req, res) => {
         const cipas = await getCipaAtiva()
