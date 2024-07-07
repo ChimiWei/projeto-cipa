@@ -49,7 +49,7 @@ async function getAPIData(url, encodedUser, candidatos) {
       imgFuncEl.src = ConvertBufferAndReturnImageURL(func.IMAGEM),
       imgFuncEl.style = 'display: inline-block;'
 
-      if(candidatos.find(candidato => candidato.CHAPA == func.CHAPA)) {
+      if(candidatos.find(candidato => candidato.chapa == func.CHAPA)) {
         msgCandidatoEl.style = 'display: block;'
       } else {
         linkFichaEl.style = 'display: inline-block'

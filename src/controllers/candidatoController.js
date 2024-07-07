@@ -40,7 +40,7 @@ const candidatoController = {
         if (!cipa || !cipa.inscricaoAtiva) return res.redirect('/cipa')
         const candidatos = await getCandidatos(cipa.id)
         const chapa = req.params.chapa
-        if (candidatos.find(func => func.chapa === chapa)) res.send('Funcionário já cadastrado!')
+        if (candidatos.find(func => func.chapa === chapa)) return res.send('Funcionário já cadastrado!')
         const [rows] = await mysqlPromise.query(...repository.mysql.novoNumeroDeVotacao(cipa.id))
         const novoNVotacao = rows[0].novonvotacao ? rows[0].novonvotacao : '001'
         const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
