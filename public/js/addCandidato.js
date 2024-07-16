@@ -5,6 +5,12 @@ const secaoEl = document.getElementById('secao')
 const imgFuncEl = document.getElementById('imgFunc')
 const msgCandidatoEl = document.getElementById('msgCandidato')
 const linkFichaEl = document.getElementById('linkFicha')
+const loadingscreenEl = document.getElementById('loadingscreen')
+
+funcNaoEncontradoEl.style = 'display: none;'
+msgCandidatoEl.style = 'display: none;'
+linkFichaEl.style = 'display: none;'
+loadingscreenEl.style = 'display: none;'
 
 funcNaoEncontradoEl.style = 'display: none;'
 msgCandidatoEl.style = 'display: none;'
@@ -23,7 +29,7 @@ imgFuncEl.style = 'display: none;'
 
 async function getAPIData(url, encodedUser, candidatos) {
     if(!url) return
-
+    loadingscreenEl.style = 'display: block;'
     console.log(`trying fetch url: ${url}`)
     try {
       const response = await fetch(url, {headers: new Headers({
@@ -33,7 +39,8 @@ async function getAPIData(url, encodedUser, candidatos) {
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
-  
+      
+      loadingscreenEl.style = 'display: none;'
       const json = await response.json();
 
       if(json.length == 0 ){

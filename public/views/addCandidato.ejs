@@ -6,6 +6,7 @@
 </head>
 
 <body class="bg-image" onload="getAPIData('<%= locals.apiUrl %>', '<%= locals.apiUser %>', JSON.parse('<%= JSON.stringify(locals.candidatos) %>'))">
+    <%- include('components/modal/loading.ejs'); %>
     <%- include('partials/header'); %>
         <section>
             <div class="container bg-white rounded p-2 mt-2">

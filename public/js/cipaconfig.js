@@ -162,7 +162,8 @@ async function getData(url, encodedUser) {
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }
-  
+      document.getElementById('loadingscreen').style = "display: none;"
+      
       const json = await response.json();
 
       for (item of json) {
