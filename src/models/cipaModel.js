@@ -39,6 +39,8 @@ const getCipaAtivaByUserId = async (userid) => {
         }
     })
 
+    console.log(rows)
+
     const cipas = rows
     return cipas
 }
