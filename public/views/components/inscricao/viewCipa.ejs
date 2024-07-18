@@ -1,29 +1,44 @@
 <div class="container rounded shadow bg-grey text-white w-75 my-2 p-3">
-    <div class="row">
-      <div class="text-center">  <h2> <%= cipa.filial %> </h2> </div>
-        <div class="col-sm text-end"> 
-            <p class="fs-5 "> Gestão: <%= cipa.gestao + '/' + (cipa.gestao + 1) %> </p>
-            <p class="fs-5"> Inscrições: <%= cipa.dtiniinsc %> à <%= cipa.dtfiminsc %> </p>
-        </div>
-        <div class="col-sm"> 
-            <p class="fs-5 ">
-                Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %> 
-                <% if(!cipa.inscricaoAtiva && !cipa.votacaoAtiva) { %>
-                    <a class="btn-small btn-color position-absolute mx-2"  href="/edit_cipa/<%= cipa.codfilial %>"> Prorrogar </a> 
-                <% } %>
-            </p>
-            <p class="fs-5"> Resultado: <%= cipa.dtresultado %> </p>
-        </div>
+  <div class="row">
+    <div class="text-center">
+      <h2>
+        <%= cipa.filial %>
+      </h2>
     </div>
-    <div class="row">
-        <div class="col-sm-4 text-start">
-            <a class="btn btn-color" href="/candidatos/<%= cipa.codfilial %>"> Candidatos </a>
-            <a class="btn btn-color" href="/votos/<%= cipa.codfilial %>"> Funcionários </a>
-        </div>
-        <div class="col-sm text-end">
-            <a class="btn btn-success <%= cipa.votacaoAtiva ? '' : 'disabled' %>" href="/iniciar_votacao/<%= cipa.codfilial %>" > Iniciar Votação </a>
-            <a class="btn btn-color <%= cipa.inscricaoAtiva ? '' : 'disabled' %>" href="/cadastro_candidato/<%= cipa.codfilial %>"> Cadastrar Candidatos </a>
-            <a class="btn btn-danger" href="/autorizar_finalizar/<%= cipa.codfilial %>"> Finalizar CIPA </a>
-        </div>
+    <div class="col-sm text-end">
+      <p class="fs-5 "> Gestão: <%= cipa.gestao + '/' + (cipa.gestao + 1) %>
+      </p>
+      <p class="fs-5"> Inscrições: <%= cipa.dtiniinsc %> à <%= cipa.dtfiminsc %>
+      </p>
+      <p class="text-center"> 
+        <a class="btn btn-color mt-2 <%= cipa.inscricaoAtiva ? '' : 'disabled' %>"
+        href="/cadastro_candidato/<%= cipa.codfilial %>"> Nova Inscrição </a> 
+        <a class="btn btn-color mt-2" href="/candidatos/<%= cipa.codfilial %>"> Candidatos </a>
+      </p>
+          
     </div>
+    <div class="col-sm">
+      <p class="fs-5"> Resultado: <%= cipa.dtresultado %>
+      </p>
+      <p class="fs-5 ">
+        Votação: <%= cipa.dtinivoto %> à <%= cipa.dtfimvoto %>
+            <% if(!cipa.inscricaoAtiva && !cipa.votacaoAtiva) { %>
+              <a class="link-grey px-1 position-absolute mx-2" href="/edit_cipa/<%= cipa.codfilial %>">
+                <i class="fa-solid fa-plus"></i> </a>
+            <% } %>
+      </p>
+      <p class="text-center">
+        <a class="btn btn-success mt-2 <%= cipa.votacaoAtiva ? '' : 'disabled' %>"
+        href="/iniciar_votacao/<%= cipa.codfilial %>"> Iniciar Votação </a>
+        <a class="btn btn-color mt-2" href="/votos/<%= cipa.codfilial %>"> Votantes </a>
+
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm text-center">
+      
+      <a class="btn btn-danger mt-2" href="/autorizar_finalizar/<%= cipa.codfilial %>"> Finalizar CIPA </a>
+    </div>
+  </div>
 </div>
