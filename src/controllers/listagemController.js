@@ -33,6 +33,16 @@ const listagemController = {
         var candidatosPageAuth = getCandidatosPageAuth()
         if (!candidatosPageAuth) return res.redirect('/cipa')
         setCandidatosPageAuth(false)
+
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        if(!api) return res.redirect('/cipa')
+          
+        const apiRequest = {
+            url: `${api.url}/CI.006/1/P?parameters=IDIMAGEM=`,
+            encodedUser: api.encoded_user
+        }
+
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/cipa')
