@@ -16,16 +16,9 @@ funcNaoEncontradoEl.style = 'display: none;'
 msgJaVotouEl.style = 'display: none;'
 btnVotanteEl.style = 'display: none;'
 
-function ConvertBufferAndReturnImageURL(ImageBuffer) {
-    if(!ImageBuffer) return "/img/profile-icon.png"
-    const b64 = Buffer.from(ImageBuffer).toString('base64');
-    const imageSrc = `data:image/jpg;base64, ${b64}`
-    
-    return imageSrc
+
   
-  }
-  
-  imgFuncEl.style = 'display: none;'
+imgFuncEl.style = 'display: none;'
 
 async function getAPIData(url, encodedUser, votos) {
     if(!url) return

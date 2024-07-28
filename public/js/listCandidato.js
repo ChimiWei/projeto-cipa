@@ -5,27 +5,20 @@ async function getImgSrc() {
     for (img of imgs){
         console.log(img.id)
     
-        img.src = await getAPIData(url, encodedUser, img.id)
+        let imgBuffer = await getAPIData(url, encodedUser, img.id)
+        img.src = ConvertBufferAndReturnImageURL(imgBuffer)
     }
 }
 
 getImgSrc()
 
 
-function ConvertBufferAndReturnImageURL(ImageBuffer) {
-    if(!ImageBuffer) return "/img/profile-icon.png"
-    const b64 = Buffer.from(ImageBuffer).toString('base64');
-    const imageSrc = `data:image/jpg;base64, ${b64}`
-    
-    return imageSrc
-  
-  }
 
 async function getAPIData(url, encodedUser, idimagem) {
     if(!url) return 
     if(idimagem == 'undefined') return "/img/profile-icon.png"
     
-    console.log(`trying fetch url: ${url}`)
+    console.log(`trying fetch url: ${url + idimagem}`)
 
     try {
         const response = await fetch((url + idimagem), {headers: new Headers({
@@ -40,7 +33,7 @@ async function getAPIData(url, encodedUser, idimagem) {
 
         const result = json[0]
 
-        return result.imagem
+        return result.IMAGEM
 
     } catch (e) {
         console.log(e)

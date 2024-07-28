@@ -1,3 +1,4 @@
+
 const funcNaoEncontradoEl = document.getElementById('funcNaoEncontrado')
 const nomeEl = document.getElementById('nome')
 const funcaoEl = document.getElementById('funcao')
@@ -15,15 +16,6 @@ loadingscreenEl.style = 'display: none;'
 funcNaoEncontradoEl.style = 'display: none;'
 msgCandidatoEl.style = 'display: none;'
 linkFichaEl.style = 'display: none;'
-
-function ConvertBufferAndReturnImageURL(ImageBuffer) {
-  if(!ImageBuffer) return "/img/profile-icon.png"
-  const b64 = Buffer.from(ImageBuffer).toString('base64');
-  const imageSrc = `data:image/jpg;base64, ${b64}`
-  
-  return imageSrc
-
-}
 
 imgFuncEl.style = 'display: none;'
 

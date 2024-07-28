@@ -2,62 +2,65 @@
 <html>
 
 <head>
-    <%- include('partials/head', {title: 'Cadastrar Candidato' }); %>
+  <%- include('partials/head', {title: 'Cadastrar Candidato' }); %>
 </head>
 
-<body class="bg-image" onload="getAPIData('<%= locals.apiUrl %>', '<%= locals.apiUser %>', JSON.parse('<%= JSON.stringify(locals.candidatos) %>'))">
-    <%- include('components/modal/loading.ejs'); %>
+<body class="bg-image"
+  onload="getAPIData('<%= locals.apiUrl %>', '<%= locals.apiUser %>', JSON.parse('<%= JSON.stringify(locals.candidatos) %>'))">
+  <%- include('components/modal/loading.ejs'); %>
     <%- include('partials/header'); %>
-        <section>
-            <div class="container bg-white rounded p-2 mt-2">
-                <div class="row">
-                    <div class="col text-center">
-                        <h3> Cadastrar Candidato para Cipa <%= gestao %>
-                        </h3>
-                    </div>
-                </div>
-                <div>
-                    <div class="row">
-                        <div class="col-sm-3  rounded">
-                            <form method="GET" style="max-width: 210px">
-                                <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula"
-                                    class="input-style my-3" minlength="5" maxlength="7" required />
-                                <button type="submit" class="input-style btn-color rounded submit"> Procurar...
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                        <div id="funcNaoEncontrado" class="row mt-2 text-center">
-                            <h1 class="text-shadow"> Funcionário não encontrado </h1>
-                        </div>
-                                <div class="row mt-2">
-                                    <div class="col-2">
-                                        <img id="imgFunc" src="" onload="this.onload = null"  class="img-thumbnail" />
-                                    </div>
-                                    <div class="col">
-                                        <ul class="list-group">
-                                            <li id="nome" class="list-item">
-                                            
-                                            </li>
-                                            <li id="funcao" class="list-item">
-                                                
-                                            </li>
-                                            <li id="secao" class="list-item">
-
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            <div class="col text-center">
-                                <h4 id="msgCandidato" class="text-danger text-shadow"> Funcionário já cadastrado! </h4>
-                                <a id="linkFicha" href="/fichaCandidato/codfilial/chapa" class="btn btn-color"> Gerar Ficha </a>
-                            </div>
-                </div>
+      <section>
+        <div class="container bg-white rounded p-2 mt-2">
+          <div class="row">
+            <div class="col text-center">
+              <h3> Cadastrar Candidato para Cipa <%= gestao %>
+              </h3>
             </div>
-        </section>
-        <%- include('components/modal/notification.ejs', { message: locals.message }); %>
-            <%- include('partials/footer'); %>
-<script src="/js/addCandidato.js"></script>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col-sm-3  rounded">
+                <form method="GET" style="max-width: 210px">
+                  <input name="chapa" type="text" value="<%= locals.chapa %>" placeholder="Matrícula"
+                    class="input-style my-3" minlength="5" maxlength="7" required />
+                  <button type="submit" class="input-style btn-color rounded submit"> Procurar...
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="funcNaoEncontrado" class="row mt-2 text-center">
+              <h1 class="text-shadow"> Funcionário não encontrado </h1>
+            </div>
+            <div class="row mt-2">
+              <div class="col-2">
+                <img id="imgFunc" src="" onload="this.onload = null" class="img-thumbnail" />
+              </div>
+              <div class="col">
+                <ul class="list-group">
+                  <li id="nome" class="list-item">
+
+                  </li>
+                  <li id="funcao" class="list-item">
+
+                  </li>
+                  <li id="secao" class="list-item">
+
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col text-center">
+              <h4 id="msgCandidato" class="text-danger text-shadow"> Funcionário já cadastrado! </h4>
+              <a id="linkFicha" href="/fichaCandidato/codfilial/chapa" class="btn btn-color"> Gerar Ficha </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <%- include('components/modal/notification.ejs', { message: locals.message }); %>
+        <%- include('partials/footer'); %>
+
+          <script src="/js/ConvertImageBundle.js"></script>
+          <script src="/js/addCandidato.js"></script>
 </body>
 
 
