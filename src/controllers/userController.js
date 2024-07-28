@@ -52,7 +52,6 @@ const userController = {
         const result = await mysqlPromise.query(...repository.mysql.postUsuario(req.body.login, req.body.email, hashedPassword, token.id_empresa))
 
         if(result[0].affectedRows == 0) {
-            console.log('Deu ruim')
             return res.redirect('back')
         }
 
