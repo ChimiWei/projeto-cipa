@@ -132,6 +132,18 @@ h5 {
   color: white !important;
   background-color: #5C6F68 !important;
   border-color: #5C6F68 !important;
+  &:hover{
+    background-color: #4b5a54 !important;
+  }
+}
+
+.link-grey {
+  color: #21b145;
+  background-color: #5C6F68;
+  &:hover {
+    color: #21b145;
+    background-color: rgb(47, 56, 53);
+  }
 }
 
 .text-shadow {
