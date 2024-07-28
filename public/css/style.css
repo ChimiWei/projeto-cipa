@@ -135,9 +135,12 @@ h5 {
 }
 
 .text-shadow {
-  text-shadow: 0px 0px black;
+  text-shadow: 0px 1px black;
 }
 
+.bold {
+  font-weight: 600;
+}
 
 .checkbox-container {
   position: absolute;
@@ -492,8 +495,8 @@ h5 {
 
 .notification {
   position: fixed;
-  top: 3em;
-  left: 64em;
+  top: 10%;
+  right: 10%;
   opacity: 0%;
   animation: popup 5s linear forwards;
 }
