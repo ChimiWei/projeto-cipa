@@ -2,69 +2,65 @@
 <html>
 
 <head>
-    <%- include('partials/head', {title: 'Editar' }); %>
-        <!-- datepicker  -->
-        <link rel='stylesheet' type='text/css' media='screen' href='/css/bootstrap-datepicker.css'>
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-        <script src='/js/bootstrap-datepicker.min.js'></script>
+  <%- include('partials/head', {title: 'Editar' }); %>
+    <!-- datepicker  -->
+    <link rel='stylesheet' type='text/css' media='screen' href='/css/bootstrap-datepicker.css'>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src='/js/bootstrap-datepicker.min.js'></script>
 </head>
 
 <body class="bg-image" onload="startup('<%= cipa.dtfimvoto %>', '<%= locals.message.error %>')">
-    <%- include('partials/header'); %>
-        <section class="my-3">
-            <h1> </h1>
-            <!--
+  <%- include('partials/header'); %>
+    <section class="my-3">
+      <h1> </h1>
+      <!--
             <% if (user) { %>
                 <h1 class="display-5 my-3"> Olá <%= user.login %> </h1>
             <% } %>
             -->
-            <div class="container ">
-                <div class="row">
-                    <div class="col-sm text-center align-text-bottom pt-5">
-                        <img src='/img/cipa.png' class="w-50" />
-                    </div>
-                    <div class="col-sm rounded shadow bg-white p-3">
-                        <form id="editForm" class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT"
-                            method="POST">
-                            <div id="cadastroCipa" class="row justify-content-center">
-                                <div class="text-center">
-                                    <h2> Gestão <%= gestao %>
-                                    </h2>
-                                    <h2>
-                                        <%= cipa.filial %>
-                                    </h2>
-                                </div>
-                                <div id="cadastro">
-                                    <div id="votacao" class="text-center mb-2">
-                                        <h3 class="title-style pt-2"> Votação </h3>
-                                        <div class="row pt-4">
-                                            <div class="col px-2">
-                                                <div id="datavotacao"
-                                                    class="input-daterange justify-content-center input-group">
-                                                    <input class="input-sm form-control" type="text" id="fimVoto"
-                                                        onkeydown="return false;" name="fimvotacao" autocomplete="off"
-                                                        value="<%= cipa.dtfimvoto %>" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pt-2">
-                                <div class="col text-center">
-                                    <button type="submit" class="btn btn-success" onclick="handleEditSubmit(event)">
-                                        Prorrogar </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+      <div class="container ">
+        <div class="row">
+          <div class="col-sm text-center align-text-bottom pt-5">
+            <img src='/img/cipa.png' class="w-50" />
+          </div>
+          <div class="col-sm rounded shadow bg-white p-3">
+            <form id="editForm" class="formgroup" action="/edit_cipa/<%= cipa.codfilial %>?_method=PUT" method="POST">
+              <div class="row justify-content-center">
+                <div class="text-center">
+                  <h2> Gestão <%= gestao %>
+                  </h2>
+                  <h2>
+                    <%= cipa.filial %>
+                  </h2>
                 </div>
-            </div>
-            <%- include('components/modal/modalToken', {message: locals.message} ) %>
+                <div class="text-center mb-2">
+                  <h3 class="title-style pt-2"> Votação </h3>
+                  <div class="row pt-4">
+                    <div class="col px-2">
+                      <div id="datavotacao" class="input-daterange justify-content-center input-group">
+                        <input class="input-sm form-control" type="text" id="fimVoto" onkeydown="return false;"
+                          name="fimvotacao" autocomplete="off" value="<%= message.date ? message.date : cipa.dtfimvoto %>" required>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col text-center">
+                  <button class="btn btn-success" onclick="toggleModal()">
+                    Prorrogar </button>
+                </div>
+              </div>
+              <%- include('components/modal/modalToken', {message: locals.message} ) %>
+            </form>
+          </div>
+        </div>
+      </div>
+      
 
-        </section>
-        <%- include('partials/footer'); %>
-            <script src='/js/editcipa.js'></script>
+    </section>
+    <%- include('partials/footer'); %>
+      <script src='/js/editcipa.js'></script>
 
 
 </body>

@@ -87,10 +87,11 @@ const cipaconfigController = {
 
         if (token != req.body.token) {
             req.flash('error', 'Token Incorreto')
+            req.flash('date', req.body.fimvotacao)
             return res.redirect('back')
 
         }
-        const [result] = await mysqlPromise.query(...repository.mysql.editCipa(req.query.fimvotacao, cipa.id))
+        const [result] = await mysqlPromise.query(...repository.mysql.editCipa(req.body.fimvotacao, cipa.id))
         console.log(result)
 
         if (result.affectedRows === 0) {

@@ -35,15 +35,6 @@ function handleEditSubmit(e) {
 
 }
 
-function handleDeleteSubmit(e) {
-    e.preventDefault()
-
-    tokenForm.action = `${location.pathname}?_method=DELETE`
-    toggleModal()
-
-
-}
-
 
 function toggleModal() {
     modalCipa.classList.toggle('show')
