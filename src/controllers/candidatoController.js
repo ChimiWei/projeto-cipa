@@ -51,7 +51,7 @@ const candidatoController = {
             url: `${api.url}/CI.004/1/P?parameters=CODFILIAL=${cipa.codfilial};CHAPA=${chapa}`,
             encodedUser: api.encoded_user
         }
-        res.render('fichaCandidato.ejs', { n_votacao: novoNVotacao, hoje, apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser })
+        res.render('fichaCandidato.ejs', { user: req.user, n_votacao: novoNVotacao, hoje, apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser })
     },
     putFichaCandidato: async (req, res) => {
         const cipas = await getCipaAtiva()

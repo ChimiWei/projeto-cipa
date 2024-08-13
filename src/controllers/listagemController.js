@@ -10,7 +10,7 @@ const queryImageAndReturnURL = require('../helpers/queryImageAndReturnURL')
 const listagemController = {
     renderAutorizarAcesso: (req, res) => {
 
-        res.render('autorizarAcesso.ejs', { codfilial: req.params.codfilial, message: req.flash() })
+        res.render('autorizarAcesso.ejs', { user: req.user, codfilial: req.params.codfilial, message: req.flash() })
     },
     postAutorizarAcesso: async (req, res) => {
         const cipas = await getCipaAtiva()
@@ -81,14 +81,14 @@ const listagemController = {
             encodedUser: api.encoded_user
         }
 
-        res.render('listCandidatoSemCount.ejs', { candidatos: candidatos, cipa: cipa, url: apiRequest.url, encodedUser: apiRequest.encodedUser })
+        res.render('listCandidatoSemCount.ejs', { user: req.user, candidatos: candidatos, cipa: cipa, url: apiRequest.url, encodedUser: apiRequest.encodedUser })
     },
     renderVotos: async (req, res) => {
         const cipas = await getCipaAtiva()
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/cipa')
         const [funcionarios] = await mysqlPromise.query(...repository.mysql.getFuncComVoto(cipa.id))
-        res.render('listVotos.ejs', { funcionarios, cipa })
+        res.render('listVotos.ejs', { user: req.user, funcionarios, cipa })
     }
 }
 

@@ -1,28 +1,37 @@
-<header>
-    <nav class="bg-darkpurple ">
-        <div class="container-nav">
-            <a class="brand brand-color" href="/cipa">
-                CI
-            </a>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a class="btn brand-color" href="/cipa">
-                        Usuários
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn brand-color" href="/cipa">
-                        Gestão
-                    </a>
-                </li>
-            </ul>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <form action="/logout?_method=DELETE" method="POST">
-                        <button class="btn brand-color" type="submit"> Sair </button>
-                    </form>
-                </li>
-            </ul>
-        </div>
-    </nav>
+<header class="print-hide">
+  <nav class="bg-darkpurple ">
+    <div class="container-nav">
+      <a class="brand brand-color" href="/cipa">
+        CI
+      </a>
+      <div class="d-flex justify-content-between w-100">
+      <ul class="nav">
+        <li class="nav-item ps-2">
+          <a class="btn brand-color" href="/cipa">
+            Gestão
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="btn brand-color" href="/<%= locals.cipa ? 'votos/' + cipa.codfilial : 'cipa'  %>">
+            Votantes
+          </a>
+        </li>
+      </ul>
+      <ul class="nav">
+        <li class="nav-item align-middle">
+          <text class="btn brand-color text-capitalize" href="/cipa">
+            <%= user.login %>
+          </text>
+        </li>
+        <li class="nav-item">
+          <form action="/logout?_method=DELETE" method="POST">
+            <button class="btn btn-danger" type="submit"> <i class="fa-solid fa-right-from-bracket"></i></button>
+          </form>
+        </li>
+      </ul>
+      </div>  
+    </div>
+
+    </div>
+  </nav>
 </header>

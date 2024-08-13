@@ -34,11 +34,12 @@ const votacaoController = {
                 encodedUser: api.encoded_user
             }
             res.render('iniVotacao.ejs', {
+                user: req.user,
                 votos, chapa: req.query.chapa, message: req.flash(),
                 apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser
             })
         } else {
-            res.render('iniVotacao.ejs', { message: req.flash() })
+            res.render('iniVotacao.ejs', { user: req.user, message: req.flash() })
         }
 
     },
@@ -86,7 +87,7 @@ const votacaoController = {
                 candidatos[i].imagem = await queryImageAndReturnURL(candidatos[i].idimagem)
             }
 
-            res.render('votacao.ejs', { candidatos: candidatos, func: votante.func })
+            res.render('votacao.ejs', { user: req.user, candidatos: candidatos, func: votante.func })
         } else {
             res.redirect('/cipa')
         }
@@ -112,6 +113,7 @@ const votacaoController = {
 
         if (votante.nvotacao === "BRA" || votante.nvotacao === "NUL") return res.render('confirmarVoto.ejs',
             {
+                user: req.user,
                 candidato: null, voto: votante.nvotacao === "BRA" ? "BRANCO" : "NULO", votante, message: req.flash(),
                 apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser
             })
@@ -122,7 +124,7 @@ const votacaoController = {
         if (!candidato) return res.redirect('/cipa')
 
         candidato.imagem = await queryImageAndReturnURL(candidato.idimagem)
-        res.render('confirmarVoto.ejs', { candidato, votante, message: req.flash(), apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser })
+        res.render('confirmarVoto.ejs', { user: req.user, candidato, votante, message: req.flash(), apiUrl: apiRequest.url, apiUser: apiRequest.encodedUser })
     },
 
     putConfirmarVoto: async (req, res) => {
@@ -157,7 +159,7 @@ const votacaoController = {
     },
 
     renderVotoFinalizado: (req, res) => {
-        res.render('fimVoto.ejs', { gestao, message: req.flash() })
+        res.render('fimVoto.ejs', { user: req.user, gestao, message: req.flash() })
     }
 
 }
