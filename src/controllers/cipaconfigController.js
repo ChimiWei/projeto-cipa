@@ -59,7 +59,7 @@ const cipaconfigController = {
         }
 
 
-        const tokenJWT = generateJWT({ token: token })
+        const tokenJWT = generateJWT({ token: token }, '1h')
         const serialized = cookie.serialize('token', tokenJWT, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

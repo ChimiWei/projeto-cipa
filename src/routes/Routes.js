@@ -18,6 +18,10 @@ router.post('/orcamento', asyncErrorHandler(homeController.postMail))
 
 router.get('/login', checkNotAuthenticated, userController.renderLogin)
 
+router.get('/reset_password', checkNotAuthenticated, userController.renderResetPassword)
+
+router.post('/reset_password', checkNotAuthenticated, userController.postResetPassword)
+
 router.post('/login', checkNotAuthenticated, asyncErrorHandler(userController.postLogin))
 
 router.get('/register', checkNotAuthenticated, userController.renderRegister)

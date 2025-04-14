@@ -3,17 +3,32 @@ const bcrypt = require('bcrypt')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const repository = require('../helpers/query-repo')
 const { getUserByEmailOrLogin } = require('../models/userModel')
+const generateJWT = require('../helpers/generateJWT')
+const generateToken = require('../helpers/generateToken')
+
 
 const userController = {
     renderLogin: (req, res) => {
         res.render('login.ejs', { message: req.flash() })
 
     },
+
     postLogin: passport.authenticate('local', {
         successRedirect: '/cipa',
         failureRedirect: '/login',
         failureFlash: true
     }),
+
+    renderResetPassword: (req, res) => {
+        res.render('resetPassword.ejs', { message: req.flash() })
+    },
+
+    postResetPassword: (req, res) => {
+        // validar email
+        const token = generateToken()
+        const tokenJWT = generateJWT({ token: token }, '24h')
+        // salvar token no db
+    },
 
     renderRegister: (req, res) => {
         const message = req.flash()

@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-function generateJWT(payload) {
+function generateJWT(payload, lifetime) {
     
     // Define your private key
     const privateKey = process.env.PRIVATE_KEY;
 
     // Generate the JWT
-    const token = jwt.sign(payload, privateKey, { expiresIn: '1h' }); 
+    const token = jwt.sign(payload, privateKey, { expiresIn: lifetime }); 
     
     return token
 }
