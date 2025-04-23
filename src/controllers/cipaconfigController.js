@@ -2,7 +2,7 @@ const { getCipaAtiva } = require('../models/cipaModel')
 const { ano, gestao } = require('../models/dateModel')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const repository = require('../helpers/query-repo')
-const { mssqlQuery } = require('../helpers/mssqlQuery')
+
 const generateToken = require('../helpers/generateToken')
 const generateJWT = require('../helpers/generateJWT')
 const cookie = require('cookie')

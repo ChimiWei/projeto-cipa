@@ -1,4 +1,4 @@
-const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
+
 const mysqlPromise = require('../helpers/mysqlQuery')
 const repository = require('../helpers/query-repo')
 

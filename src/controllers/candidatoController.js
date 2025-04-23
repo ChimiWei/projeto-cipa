@@ -2,7 +2,6 @@ const { getCipaAtiva } = require('../models/cipaModel')
 const repository = require('../helpers/query-repo')
 const mysqlPromise = require('../helpers/mysqlQuery')
 const { gestao, hoje, ano } = require('../models/dateModel')
-const { mssqlStmtQuery } = require('../helpers/mssqlQuery')
 const getCandidatos = require('../helpers/getCandidatos')
 
 const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')

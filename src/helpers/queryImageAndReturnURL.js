@@ -1,5 +1,5 @@
 const ConvertBufferAndReturnImageURL = require("./convertBufferAndReturnImage");
-const { mssqlStmtQuery } = require("./mssqlQuery");
+
 const repository = require("./query-repo");
 
 
