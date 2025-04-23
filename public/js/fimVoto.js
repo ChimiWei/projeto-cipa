@@ -17,7 +17,7 @@ startInterval()
 
 const stopInterval = () =>{
     clearInterval(intervalId)
-    window.location.replace(`http://localhost:3000/iniciar_votacao/${currentUrl.split('/').pop()}`);
+    window.location.replace(`http://cipainova.redeargus.com.br/iniciar_votacao/${currentUrl.split('/').pop()}`);
 }
 
 
