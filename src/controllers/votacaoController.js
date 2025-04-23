@@ -19,11 +19,6 @@ const votacaoController = {
         const cipaEncerrada = await checkCipaVotes(codfilial, cipa.id)
         if (req.query.chapa) {
             const chapa = req.query.chapa
-            /*
-            const func = await mssqlStmtQuery(repository.mssql.funcionario(codfilial, req.query.chapa))
-            func.forEach(func => func.IMAGEM = ConvertBufferAndReturnImageURL(func.IMAGEM))
-            const [voto] = await mysqlPromise.query(...repository.mysql.checarVoto(cipa.id, req.query.chapa))
-            */
             const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
             const api = result[0]
             if (!api) return res.redirect('/cipa')

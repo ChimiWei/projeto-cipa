@@ -6,9 +6,9 @@ const repository = require("./query-repo");
 async function queryImageAndReturnURL(idimagem) {
     if(idimagem == 'undefined') return "/img/profile-icon.png"
     
-    const result = await mssqlStmtQuery(repository.mssql.imagem(idimagem))
+    const result = null
  
-    if(result.length === 0) return "/img/profile-icon.png"
+    if(result) return "/img/profile-icon.png"
     
     const b64 = Buffer.from(result[0].imagem).toString('base64');
     const imageSrc = `data:image/jpg;base64, ${b64}`

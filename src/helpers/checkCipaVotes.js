@@ -3,7 +3,6 @@ const mysqlPromise = require('../helpers/mysqlQuery')
 const repository = require('../helpers/query-repo')
 
 const checkCipaVotes = async (codfilial, cipaid) => {
-    const result = await mssqlStmtQuery(repository.mssql.funcTotalFilial(codfilial))
     const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipaid))
     console.log(rows)
 
