@@ -8,7 +8,7 @@ async function queryImageAndReturnURL(idimagem) {
     
     const result = null
  
-    if(result) return "/img/profile-icon.png"
+     return "/img/profile-icon.png"
     
     const b64 = Buffer.from(result[0].imagem).toString('base64');
     const imageSrc = `data:image/jpg;base64, ${b64}`
