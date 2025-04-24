@@ -23,6 +23,7 @@
                         <th scope="col">Ativa</th>
                         <th scope="col">Login Gestor</th>
                         <th class="text-center" scope="col" colspan="2">Ações</th>
+                        <th class="text-center" scope="col" colspan="2" style="width: 8%;"> Votos </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -39,8 +40,14 @@
                           <td class="text-center"><button type="submit" class="btn-no-style"><i class="fa-solid fa-user-xmark text-danger"></i></button></td>
                           </form>
                         <% } else { %>
-                          <td class="text-center"><a class="btn-small btn-info" onclick="startModal('<%= cipa.id %>')"> Adicionar </a></td>
+                          <td class="text-center"><button class="btn-small btn-info" onclick="startModal('<%= cipa.id %>')"> Adicionar </button></td>
+                          <td></td>
+                          <td></td>
                         <% } %>
+                          <td class="text-right"> <%= cipa.total %></td>
+                          <td class="text-center">
+                            <button class="btn-no-style" onclick="getVotePercentage('<%= apiRequest.url %>', '<%= apiRequest.encodedUser %>', '<%= cipa.id %>', '<%= cipa.total %>', this)"><i class="fa-solid fa-eye text-white"></i></button>    
+                          </td>
                         </tr>
                         <% }) %>
             </div>

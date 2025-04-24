@@ -9,6 +9,15 @@ const bcrypt = require('bcrypt')
 
 const adminController = {
     renderAdmin: async (req, res) => {
+        const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
+        const api = result[0]
+        
+        
+        const apiRequest = {
+            url: api ? `${api.url}/CI.002/1/P` : "",
+            encodedUser: api.encoded_user
+        }
+        
         const cipas = await getCipas(req.user.id_empresa)
         const users = await getUsers(req.user.id_empresa)
 
@@ -20,12 +29,15 @@ const adminController = {
 
             if (user) selectOptions.splice(selectOptions.findIndex(gestor => gestor.id == user.id), 1)
 
+            const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipa.id))
+            const [votos] = rows
 
+            cipa.total = votos.total
             // cipa.gestorPassword = user ? user.password : null
 
         }
 
-        res.render('admin.ejs', { cipas, selectOptions, url: req.url })
+        res.render('admin.ejs', { cipas, selectOptions, apiRequest, url: req.url })
     },
     putAdmin: async (req, res) => {
         if (req.body.option) {

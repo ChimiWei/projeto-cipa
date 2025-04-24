@@ -5,7 +5,7 @@ const mysqlPromise = require('../helpers/mysqlQuery')
 const { gestao, hoje, ano } = require('../models/dateModel')
 
 const getCandidatos = require('../helpers/getCandidatos')
-const checkCipaVotes = require('../helpers/checkCipaVotes')
+
 const ConvertBufferAndReturnImageURL = require('../helpers/convertBufferAndReturnImage')
 const queryImageAndReturnURL = require('../helpers/queryImageAndReturnURL')
 
@@ -16,7 +16,6 @@ const votacaoController = {
         const codfilial = req.params.codfilial
         const cipa = cipas.find(cipa => cipa.codfilial == codfilial)
         if (!cipa || !cipa.votacaoAtiva) return res.redirect('/cipa')
-        const cipaEncerrada = await checkCipaVotes(codfilial, cipa.id)
         if (req.query.chapa) {
             const chapa = req.query.chapa
             const [result] = await mysqlPromise.query(...repository.mysql.getApi(req.user.id_empresa))
