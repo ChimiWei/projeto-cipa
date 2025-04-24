@@ -88,6 +88,10 @@ const listagemController = {
         const cipa = cipas.find(cipa => cipa.codfilial == req.params.codfilial)
         if (!cipa) return res.redirect('/cipa')
         const [funcionarios] = await mysqlPromise.query(...repository.mysql.getFuncComVoto(cipa.id))
+        const [rows] = await mysqlPromise.query(...repository.mysql.getTotalVotos(cipa.id))
+        const [votos] = rows
+
+        cipa.total = votos.total
         res.render('listVotos.ejs', { user: req.user, funcionarios, cipa })
     }
 }
