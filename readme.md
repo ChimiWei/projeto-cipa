@@ -53,6 +53,18 @@ ou
 yarn start
 ```
 
+### .env
+```bash
+SESSION_SECRET=
+PORT=
+MYSQL_HOST=
+MYSQL_USER=
+MYSQL_PASSWORD=
+MYSQL_DATABASE=
+MYSQL_PORT=
+PRIVATE_KEY=
+```
+
 ### 🛠 Tecnologias
 
 Ferramentas utilizadas para produzir o projeto:
